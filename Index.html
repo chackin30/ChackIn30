@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CheckIn30 - Daily Engagement Tracker</title>
+    <meta name="description" content="Complete daily check-ins for 30 days and earn rewards">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="manifest" href="manifest.json">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <style>
+        /* Initial loading styles */
+        #app-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            z-index: 9999;
+        }
+        
+        .loader-logo {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        
+        .loader-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Initial Loading Screen -->
+    <div id="app-loader">
+        <div class="loader-logo">
+            <i class="fas fa-calendar-check"></i>
+        </div>
+        <div class="loader-spinner"></div>
+        <h2>CheckIn30</h2>
+        <p>Loading application...</p>
+    </div>
+
+    <!-- Main App Container (Hidden Initially) -->
+    <div id="app-container" style="display: none;">
+        <!-- Top Banner Ad -->
+        <div class="banner-ad top-banner">
+            <div class="banner-content">
+                <div class="ad-placeholder">Top Banner Ad</div>
+                <button class="close-ad" onclick="closeBanner('top')">×</button>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-container">
+                    <a href="#" onclick="showPage('dashboard'); return false;" class="logo">
+                        <i class="fas fa-calendar-check"></i>
+                        <span>CheckIn30</span>
+                    </a>
+                    
+                    <div class="nav-links" id="navLinks">
+                        <a href="#" onclick="showPage('dashboard'); return false;" class="nav-link user-link">
+                            <i class="fas fa-home"></i> Dashboard
+                        </a>
+                        <a href="#" onclick="showPage('activity'); return false;" class="nav-link user-link">
+                            <i class="fas fa-running"></i> Daily Activity
+                        </a>
+                        <a href="#" onclick="showPage('reward'); return false;" class="nav-link user-link">
+                            <i class="fas fa-gift"></i> Rewards
+                        </a>
+                        <a href="#" onclick="logout(); return false;" class="nav-link user-link">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                        <a href="#" onclick="showPage('login'); return false;" class="nav-link auth-link">
+                            <i class="fas fa-sign-in-alt"></i> Login
+                        </a>
+                    </div>
+                    
+                    <button class="mobile-menu-btn" onclick="toggleMenu()">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main id="main-content">
+            <div class="container">
+                <div id="page-container">
+                    <!-- Pages will be loaded here -->
+                </div>
+            </div>
+        </main>
+
+        <!-- Bottom Banner Ad -->
+        <div class="banner-ad bottom-banner">
+            <div class="banner-content">
+                <div class="ad-placeholder">Bottom Banner Ad</div>
+                <button class="close-ad" onclick="closeBanner('bottom')">×</button>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-section">
+                        <h3>CheckIn30</h3>
+                        <p>Daily engagement tracking platform</p>
+                        <p>Earn rewards by completing daily activities</p>
+                    </div>
+                    
+                    <div class="footer-section">
+                        <h3>Quick Links</h3>
+                        <div class="footer-links">
+                            <a href="#" onclick="showPage('dashboard'); return false;">Dashboard</a>
+                            <a href="#" onclick="showPage('activity'); return false;">Daily Activity</a>
+                            <a href="#" onclick="showPage('reward'); return false;">Rewards</a>
+                        </div>
+                    </div>
+                    
+                    <div class="footer-section">
+                        <h3>Legal</h3>
+                        <div class="footer-links">
+                            <a href="#" onclick="showPage('terms'); return false;">Terms of Service</a>
+                            <a href="#" onclick="showPage('privacy'); return false;">Privacy Policy</a>
+                            <a href="#" onclick="showPage('disclaimer'); return false;">Disclaimer</a>
+                        </div>
+                    </div>
+                    
+                    <div class="footer-section">
+                        <h3>Contact</h3>
+                        <p>For support or queries:</p>
+                        <p>Email: support@checkin30.com</p>
+                    </div>
+                </div>
+                
+                <div class="footer-bottom">
+                    <div class="footer-disclaimer">
+                        <p><strong>CheckIn30 is an engagement tracking platform.</strong></p>
+                        <p>Rewards are discretionary and not guaranteed income.</p>
+                    </div>
+                    <p class="mt-20">© 2024 CheckIn30. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Firebase Configuration -->
+    <script src="firebase-config.js"></script>
+    
+    <!-- Main Application Script -->
+    <script src="app.js"></script>
+    
+    <script>
+        // Hide loader and show app when Firebase is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                document.getElementById('app-loader').style.display = 'none';
+                document.getElementById('app-container').style.display = 'block';
+            }, 1000);
+        });
+    </script>
+</body>
+          </html>
