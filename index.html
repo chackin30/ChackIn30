@@ -52,6 +52,52 @@
             padding: 0 20px;
         }
 
+        /* ===== LOADER ===== */
+        #app-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            z-index: 9999;
+            transition: opacity 0.3s ease;
+        }
+        
+        .loader-logo {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        
+        .loader-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ===== APP CONTAINER ===== */
+        #app-container {
+            opacity: 0;
+            animation: fadeIn 0.5s ease forwards;
+        }
+        
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
         /* ===== BANNER ADS STYLES ===== */
         .banner-ad {
             background: white;
@@ -62,7 +108,7 @@
             position: relative;
             max-width: 900px;
             border: 2px solid;
-            display: none; /* Hidden by default, shown via JS */
+            display: none;
         }
 
         .banner-content {
@@ -106,13 +152,9 @@
             transform: scale(1.1);
         }
 
-        /* Different banner types */
         .banner-type-1 { border-color: #ff6b6b; background: linear-gradient(135deg, #ff6b6b, #ff8e8e); }
         .banner-type-2 { border-color: #4ecdc4; background: linear-gradient(135deg, #4ecdc4, #88d3ce); }
         .banner-type-3 { border-color: #ffd166; background: linear-gradient(135deg, #ffd166, #ffdf8c); }
-        .banner-type-4 { border-color: #06d6a0; background: linear-gradient(135deg, #06d6a0, #45e6bb); }
-        .banner-type-5 { border-color: #118ab2; background: linear-gradient(135deg, #118ab2, #4bb5e6); }
-        .banner-type-6 { border-color: #ef476f; background: linear-gradient(135deg, #ef476f, #f584a0); }
         
         .native-ad-page {
             position: fixed;
@@ -125,11 +167,6 @@
             display: flex;
             flex-direction: column;
             animation: fadeIn 0.3s ease;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
         }
         
         .native-ad-header {
@@ -763,7 +800,7 @@
         }
 
         /* ===== LOADING STATES ===== */
-        .loading {
+        .page-loading {
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -772,19 +809,13 @@
             gap: 20px;
         }
 
-        .spinner {
+        .page-spinner {
             width: 50px;
             height: 50px;
             border: 4px solid var(--gray-light);
             border-top-color: var(--primary);
             border-radius: 50%;
             animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
         }
 
         /* ===== CONNECT SECTION ===== */
@@ -896,40 +927,17 @@
             display: none !important;
         }
         
-        /* Initial loading styles */
-        #app-loader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            z-index: 9999;
+        .show {
+            display: block !important;
         }
         
-        .loader-logo {
-            font-size: 3rem;
-            margin-bottom: 20px;
-        }
-        
-        .loader-spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid rgba(255, 255, 255, 0.3);
-            border-top-color: white;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
+        .flex {
+            display: flex !important;
         }
     </style>
 </head>
 <body>
-    <!-- Initial Loading Screen -->
+    <!-- Initial Loading Screen - Only shows for 2 seconds -->
     <div id="app-loader">
         <div class="loader-logo">
             <i class="fas fa-calendar-check"></i>
@@ -940,7 +948,7 @@
     </div>
 
     <!-- Visit Notice Modal -->
-    <div id="visitNotice" class="visit-notice">
+    <div id="visitNotice" class="visit-notice hidden">
         <div class="visit-notice-content">
             <div class="visit-notice-icon">
                 <i class="fas fa-clock"></i>
@@ -958,8 +966,8 @@
         </div>
     </div>
 
-    <!-- Main App Container (Hidden Initially) -->
-    <div id="app-container" style="display: none;">
+    <!-- Main App Container -->
+    <div id="app-container" class="hidden">
         <!-- Navigation -->
         <nav class="navbar">
             <div class="container">
@@ -970,16 +978,16 @@
                     </a>
                     
                     <div class="nav-links" id="navLinks">
-                        <a href="#" onclick="showPage('dashboard'); return false;" class="nav-link user-link">
+                        <a href="#" onclick="showPage('dashboard'); return false;" class="nav-link user-link hidden">
                             <i class="fas fa-home"></i> Dashboard
                         </a>
-                        <a href="#" onclick="showPage('activity'); return false;" class="nav-link user-link">
+                        <a href="#" onclick="showPage('activity'); return false;" class="nav-link user-link hidden">
                             <i class="fas fa-running"></i> Daily Activity
                         </a>
-                        <a href="#" onclick="showPage('reward'); return false;" class="nav-link user-link">
+                        <a href="#" onclick="showPage('reward'); return false;" class="nav-link user-link hidden">
                             <i class="fas fa-gift"></i> Rewards
                         </a>
-                        <a href="#" onclick="logout(); return false;" class="nav-link user-link">
+                        <a href="#" onclick="logout(); return false;" class="nav-link user-link hidden">
                             <i class="fas fa-sign-out-alt"></i> Logout
                         </a>
                         <a href="#" onclick="showPage('login'); return false;" class="nav-link auth-link">
@@ -994,7 +1002,7 @@
             </div>
         </nav>
 
-        <!-- Banner Container - Banners will be dynamically added here -->
+        <!-- Banner Container -->
         <div id="banner-container"></div>
 
         <!-- Main Content -->
@@ -1057,50 +1065,36 @@
         const CONFIG = {
             DAILY_POINTS: 10,
             REQUIRED_DAYS: 30,
-            TIMER_DURATION: 120, // seconds
-            VISIT_DURATION: 120, // 2 minutes for website visit
-            REWARD_POPUP_DELAY: 3600000, // 1 hour in milliseconds
+            TIMER_DURATION: 120,
+            VISIT_DURATION: 120,
+            REWARD_POPUP_DELAY: 3600000,
             TELEGRAM_BOT_TOKEN: '8367971417:AAGkV30ajQdWKjM-5AQDxYZH19OPHI51HGM',
             TELEGRAM_CHAT_ID: '6225430212',
             ADMIN_EMAIL: 'admin@checkin30.com',
             
-            // Banner display intervals (in seconds)
             BANNER_INTERVALS: {
-                dashboard: [5, 15, 30, 45, 60], // Show banners at these intervals on dashboard
-                activity: [10, 25, 40, 55], // Show banners at these intervals on activity page
-                login: [10, 30], // Show banners on login page
-                reward: [5, 20, 35] // Show banners on reward page
+                dashboard: [5, 15, 30],
+                activity: [10, 25, 40],
+                login: [10],
+                reward: [5, 20]
             },
             
-            // Banner content for different positions
             BANNERS: {
-                // Top banners (shown at top of page)
                 top: [
-                    { id: 'banner-top-1', type: 'banner-type-1', text: 'Top Banner 1', adId: 'ADSTERRA_TOP_1' },
-                    { id: 'banner-top-2', type: 'banner-type-2', text: 'Top Banner 2', adId: 'ADSTERRA_TOP_2' }
+                    { id: 'banner-top-1', type: 'banner-type-1', text: 'Top Banner', adId: 'ADSTERRA_TOP_1' }
                 ],
-                // Mid banners (shown in middle of content)
                 mid: [
-                    { id: 'banner-mid-1', type: 'banner-type-3', text: 'Mid Banner 1', adId: 'ADSTERRA_MID_1' },
-                    { id: 'banner-mid-2', type: 'banner-type-4', text: 'Mid Banner 2', adId: 'ADSTERRA_MID_2' },
-                    { id: 'banner-mid-3', type: 'banner-type-5', text: 'Mid Banner 3', adId: 'ADSTERRA_MID_3' },
-                    { id: 'banner-mid-4', type: 'banner-type-6', text: 'Mid Banner 4', adId: 'ADSTERRA_MID_4' },
-                    { id: 'banner-mid-5', type: 'banner-type-1', text: 'Mid Banner 5', adId: 'ADSTERRA_MID_5' }
+                    { id: 'banner-mid-1', type: 'banner-type-2', text: 'Mid Banner 1', adId: 'ADSTERRA_MID_1' },
+                    { id: 'banner-mid-2', type: 'banner-type-3', text: 'Mid Banner 2', adId: 'ADSTERRA_MID_2' }
                 ],
-                // Bottom banners (shown near footer)
                 bottom: [
-                    { id: 'banner-bottom-1', type: 'banner-type-2', text: 'Bottom Banner 1', adId: 'ADSTERRA_BOTTOM_1' },
-                    { id: 'banner-bottom-2', type: 'banner-type-3', text: 'Bottom Banner 2', adId: 'ADSTERRA_BOTTOM_2' },
-                    { id: 'banner-bottom-3', type: 'banner-type-4', text: 'Bottom Banner 3', adId: 'ADSTERRA_BOTTOM_3' }
+                    { id: 'banner-bottom-1', type: 'banner-type-1', text: 'Bottom Banner', adId: 'ADSTERRA_BOTTOM_1' }
                 ],
-                // Popup banners (shown with popups)
                 popup: [
-                    { id: 'banner-popup-1', type: 'banner-type-5', text: 'Popup Banner 1', adId: 'ADSTERRA_POPUP_1' },
-                    { id: 'banner-popup-2', type: 'banner-type-6', text: 'Popup Banner 2', adId: 'ADSTERRA_POPUP_2' }
+                    { id: 'banner-popup-1', type: 'banner-type-2', text: 'Special Offer!', adId: 'ADSTERRA_POPUP_1' }
                 ],
-                // Native banners (shown on completion page)
                 native: [
-                    { id: 'banner-native-1', type: 'banner-type-1', text: 'Native Banner', adId: 'ADSTERRA_NATIVE_1' }
+                    { id: 'banner-native-1', type: 'banner-type-3', text: 'Congratulations!', adId: 'ADSTERRA_NATIVE_1' }
                 ]
             }
         };
@@ -1116,13 +1110,8 @@
             appId: "1:109876543210:web:abc123def456ghi789jkl"
         };
 
-        // Initialize Firebase
-        try {
-            firebase.initializeApp(firebaseConfig);
-        } catch (err) {
-            console.log("Firebase already initialized");
-        }
-        
+        // Initialize Firebase immediately
+        firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const database = firebase.database();
 
@@ -1135,7 +1124,7 @@
         let visitRemainingTime = CONFIG.VISIT_DURATION;
         let isTimerRunning = false;
         let isVisitTimerRunning = false;
-        let currentPage = 'login';
+        let currentPage = null;
         let nativeAdShown = false;
         let visitCompleted = false;
         let bannerTimers = {};
@@ -1143,67 +1132,55 @@
 
         // ===== INITIALIZE APP =====
         document.addEventListener('DOMContentLoaded', () => {
-            console.log("DOM Loaded - Initializing app...");
+            console.log("DOM Loaded");
             
-            // Hide loader and show app after 1.5 seconds
+            // Show loader for 2 seconds max, then check auth
             setTimeout(() => {
-                const appLoader = document.getElementById('app-loader');
-                const appContainer = document.getElementById('app-container');
-                
-                if (appLoader) {
-                    appLoader.style.display = 'none';
-                    console.log("Loader hidden");
-                }
-                
-                if (appContainer) {
-                    appContainer.style.display = 'block';
-                    console.log("App container shown");
-                }
-                
-                // Initialize auth state listener
-                initApp();
-                
-            }, 1500);
+                checkAuthAndLoad();
+            }, 2000);
         });
 
-        // ===== APP INITIALIZATION =====
-        function initApp() {
-            console.log("Initializing Firebase auth listener...");
+        // Check authentication and load appropriate page
+        function checkAuthAndLoad() {
+            // Hide loader
+            const appLoader = document.getElementById('app-loader');
+            if (appLoader) {
+                appLoader.style.display = 'none';
+            }
             
+            // Show app container
+            const appContainer = document.getElementById('app-container');
+            if (appContainer) {
+                appContainer.classList.remove('hidden');
+            }
+            
+            // Check if user is already logged in
             auth.onAuthStateChanged((user) => {
-                console.log("Auth state changed:", user ? "User logged in" : "No user");
-                
                 if (user) {
+                    // User is logged in - go directly to dashboard
                     currentUser = user;
-                    console.log("Current user:", user.email);
-                    
                     loadUserData();
                     updateNavigation(true);
                     showPage('dashboard');
-                    
-                    // Check if user needs to complete visit first
-                    checkVisitRequirement();
                 } else {
-                    currentUser = null;
-                    userData = null;
+                    // No user - show login page
                     updateNavigation(false);
                     showPage('login');
                 }
-            }, (error) => {
-                console.error("Auth error:", error);
             });
         }
 
+        // Update navigation based on auth state
         function updateNavigation(isLoggedIn) {
             const authLinks = document.querySelectorAll('.auth-link');
             const userLinks = document.querySelectorAll('.user-link');
             
             if (isLoggedIn) {
-                authLinks.forEach(link => link.style.display = 'none');
-                userLinks.forEach(link => link.style.display = 'flex');
+                authLinks.forEach(link => link.classList.add('hidden'));
+                userLinks.forEach(link => link.classList.remove('hidden'));
             } else {
-                authLinks.forEach(link => link.style.display = 'flex');
-                userLinks.forEach(link => link.style.display = 'none');
+                authLinks.forEach(link => link.classList.remove('hidden'));
+                userLinks.forEach(link => link.classList.add('hidden'));
             }
         }
 
@@ -1213,7 +1190,6 @@
             const lastVisitDate = localStorage.getItem('lastVisitDate');
             const visitCompletedToday = localStorage.getItem('visitCompletedToday') === 'true';
             
-            // Reset visit completed status if it's a new day
             if (lastVisitDate !== today) {
                 localStorage.removeItem('visitCompletedToday');
                 visitCompleted = false;
@@ -1225,7 +1201,8 @@
         function showVisitNotice() {
             const visitNotice = document.getElementById('visitNotice');
             if (visitNotice) {
-                visitNotice.style.display = 'flex';
+                visitNotice.classList.remove('hidden');
+                visitNotice.classList.add('flex');
                 document.getElementById('visitTimer').textContent = formatTime(CONFIG.VISIT_DURATION);
             }
         }
@@ -1244,7 +1221,6 @@
                     visitTimerElement.textContent = formatTime(visitRemainingTime);
                 }
                 
-                // Visit timer complete
                 if (visitRemainingTime <= 0) {
                     clearInterval(visitTimerInterval);
                     completeVisit();
@@ -1258,13 +1234,11 @@
             localStorage.setItem('visitCompletedToday', 'true');
             visitCompleted = true;
             
-            // Hide visit notice
             const visitNotice = document.getElementById('visitNotice');
             if (visitNotice) {
-                visitNotice.style.display = 'none';
+                visitNotice.classList.add('hidden');
             }
             
-            // Enable start timer button
             const startBtn = document.getElementById('startTimerBtn');
             if (startBtn) {
                 startBtn.disabled = false;
@@ -1278,7 +1252,6 @@
         function createBanner(bannerConfig, position) {
             const bannerId = bannerConfig.id;
             
-            // Check if banner already exists
             if (document.getElementById(bannerId)) {
                 return;
             }
@@ -1303,7 +1276,6 @@
                 bannerContainer.insertAdjacentHTML('beforeend', bannerHTML);
                 activeBanners.push(bannerId);
                 
-                // Show the banner
                 setTimeout(() => {
                     const bannerElement = document.getElementById(bannerId);
                     if (bannerElement) {
@@ -1314,7 +1286,7 @@
         }
 
         function scheduleBannersForPage(pageName) {
-            // Clear existing banner timers
+            // Clear existing timers
             Object.keys(bannerTimers).forEach(timerId => {
                 clearTimeout(bannerTimers[timerId]);
             });
@@ -1328,7 +1300,6 @@
             
             const intervals = CONFIG.BANNER_INTERVALS[pageName] || CONFIG.BANNER_INTERVALS.dashboard;
             
-            // Schedule banners at different intervals
             intervals.forEach((interval, index) => {
                 const timerId = setTimeout(() => {
                     if (currentPage !== pageName) return;
@@ -1336,17 +1307,13 @@
                     let bannerConfig;
                     let position;
                     
-                    // Choose banner based on index and page
                     if (index === 0) {
-                        // First banner - top banner
                         bannerConfig = CONFIG.BANNERS.top[0];
                         position = 'top';
                     } else if (index === intervals.length - 1) {
-                        // Last banner - bottom banner
-                        bannerConfig = CONFIG.BANNERS.bottom[Math.floor(Math.random() * CONFIG.BANNERS.bottom.length)];
+                        bannerConfig = CONFIG.BANNERS.bottom[0];
                         position = 'bottom';
                     } else {
-                        // Middle banners
                         const midIndex = Math.min(index - 1, CONFIG.BANNERS.mid.length - 1);
                         bannerConfig = CONFIG.BANNERS.mid[midIndex];
                         position = 'mid';
@@ -1366,13 +1333,11 @@
             if (banner) {
                 banner.style.display = 'none';
                 
-                // Remove from active banners
                 const index = activeBanners.indexOf(bannerId);
                 if (index > -1) {
                     activeBanners.splice(index, 1);
                 }
                 
-                // Show notice about 2-minute visit requirement for activity page
                 if (!visitCompleted && currentPage === 'activity') {
                     setTimeout(() => {
                         showVisitNotice();
@@ -1386,7 +1351,6 @@
             
             nativeAdShown = true;
             
-            // Create native banner
             const nativeBanner = CONFIG.BANNERS.native[0];
             const nativeAdHTML = `
                 <div class="native-ad-page">
@@ -1396,7 +1360,6 @@
                     <button class="native-ad-close" onclick="closeNativeAd()">✕</button>
                     <div class="native-ad-content">
                         <div style="text-align: center; max-width: 400px; width: 100%;">
-                            <!-- Native Banner -->
                             <div class="banner-ad ${nativeBanner.type}" style="margin: 20px auto; max-width: 350px;">
                                 <div class="banner-content">
                                     <div class="ad-placeholder">
@@ -1440,20 +1403,16 @@
         }
 
         // ===== PAGE SYSTEM =====
-        async function showPage(pageName) {
-            console.log("Showing page:", pageName);
+        function showPage(pageName) {
             currentPage = pageName;
             
-            // Clear current page
             const pageContainer = document.getElementById('page-container');
-            if (!pageContainer) {
-                console.error("Page container not found!");
-                return;
-            }
+            if (!pageContainer) return;
             
+            // Show page loading
             pageContainer.innerHTML = `
-                <div class="loading">
-                    <div class="spinner"></div>
+                <div class="page-loading">
+                    <div class="page-spinner"></div>
                     <p>Loading...</p>
                 </div>
             `;
@@ -1486,12 +1445,10 @@
                     html = getDashboardPage();
             }
             
+            // Show page immediately
             setTimeout(() => {
                 pageContainer.innerHTML = html;
-                
-                // Schedule banners for this page
                 scheduleBannersForPage(pageName);
-                
                 initPage(pageName);
                 
                 // Update active nav link
@@ -1500,7 +1457,6 @@
                 });
                 const activeLink = document.querySelector(`[onclick*="showPage('${pageName}')"]`);
                 if (activeLink) activeLink.classList.add('active');
-                
             }, 300);
         }
 
@@ -1886,7 +1842,6 @@
                 
                 userData = { ...userData, ...updates };
                 
-                // Show native ad page
                 setTimeout(() => {
                     showNativeAdPage();
                 }, 500);
@@ -1914,13 +1869,11 @@
         }
 
         function showRewardPopup() {
-            // Create popup banner
-            const popupBanner = CONFIG.BANNERS.popup[Math.floor(Math.random() * CONFIG.BANNERS.popup.length)];
+            const popupBanner = CONFIG.BANNERS.popup[0];
             
             const popupHTML = `
-                <div class="modal-overlay" id="rewardPopup" style="display: flex;">
+                <div class="modal-overlay" id="rewardPopup">
                     <div class="modal-content">
-                        <!-- Popup Banner -->
                         <div class="banner-ad ${popupBanner.type}" style="margin-bottom: 20px;">
                             <div class="banner-content">
                                 <div class="ad-placeholder">
@@ -1961,6 +1914,15 @@
             `;
             
             document.body.insertAdjacentHTML('beforeend', popupHTML);
+            
+            // Show the popup
+            setTimeout(() => {
+                const popup = document.getElementById('rewardPopup');
+                if (popup) {
+                    popup.style.display = 'flex';
+                }
+            }, 100);
+            
             localStorage.setItem('rewardPopupShown', Date.now());
         }
 
@@ -1992,10 +1954,7 @@
                     })
                 });
                 
-                if (!response.ok) {
-                    throw new Error('Telegram API error');
-                }
-                return true;
+                return response.ok;
             } catch (error) {
                 console.error('Error sending Telegram notification:', error);
                 return false;
@@ -2030,7 +1989,6 @@
                 
                 userData = { ...userData, ...updates };
                 
-                // Send Telegram notification
                 const telegramSent = await sendTelegramNotification(
                     `✅ Reward Request Submitted\n` +
                     `User: ${userData.email}\n` +
@@ -2065,7 +2023,6 @@
                 
                 if (snapshot.exists()) {
                     userData = snapshot.val();
-                    console.log("User data loaded:", userData);
                 } else {
                     userData = {
                         email: currentUser.email,
@@ -2079,7 +2036,6 @@
                         createdAt: Date.now()
                     };
                     await userRef.set(userData);
-                    console.log("New user data created");
                 }
                 
                 checkRewardPopup();
