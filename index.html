@@ -3,402 +3,2864 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CheckIn30 | Professional Earning & Rewards Platform</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-
-    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js"></script>
-
+    <title>CheckIn30 - Daily Check-in Rewards</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* CSS VARIABLES FOR PREMIUM LOOK */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
         :root {
-            --p-color: #6366f1;
-            --s-color: #ec4899;
-            --dark-bg: #030712;
-            --card-glass: rgba(255, 255, 255, 0.03);
-            --border-glass: rgba(255, 255, 255, 0.1);
-            --text-p: #f9fafb;
-            --text-s: #9ca3af;
+            --primary: #4361ee;
+            --primary-dark: #3a0ca3;
+            --secondary: #4cc9f0;
+            --accent: #7209b7;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --card-bg: #ffffff;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+            --border-radius: 12px;
+            --transition: all 0.3s ease;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            background: var(--dark-bg); 
-            color: var(--text-p); 
-            font-family: 'Outfit', sans-serif; 
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--dark);
+            min-height: 100vh;
             overflow-x: hidden;
-            scroll-behavior: smooth;
         }
 
-        /* CUSTOM SCROLLBAR */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--dark-bg); }
-        ::-webkit-scrollbar-thumb { background: var(--p-color); border-radius: 10px; }
-
-        /* PRELOADER */
-        #preloader {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #000; z-index: 9999; display: flex; 
-            flex-direction: column; align-items: center; justify-content: center;
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
         }
-        .loader-ring {
-            width: 80px; height: 80px; border: 4px solid var(--border-glass);
-            border-top: 4px solid var(--p-color); border-radius: 50%;
+
+        /* Header Styles */
+        .header {
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+        }
+
+        .header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            color: var(--secondary);
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 10px 24px;
+            border-radius: 50px;
+            border: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-login {
+            background: white;
+            color: var(--primary);
+        }
+
+        .btn-register {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-login:hover, .btn-register:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .app-header {
+            display: none;
+            background: white;
+            color: var(--dark);
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .app-header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .user-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .user-email {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .btn-logout {
+            background: var(--light-gray);
+            color: var(--dark);
+            padding: 8px 18px;
+            font-size: 0.9rem;
+        }
+
+        .btn-logout:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 80px 0 60px;
+            text-align: center;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.9), rgba(255,255,255,0.7));
+        }
+
+        .hero h1 {
+            font-size: 3.2rem;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto 40px;
+            line-height: 1.6;
+        }
+
+        .main-banner-ad {
+            width: 100%;
+            max-width: 728px;
+            height: 90px;
+            margin: 30px auto;
+            background: var(--light-gray);
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 60px 0;
+            background: white;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 15px;
+        }
+
+        .section-header p {
+            font-size: 1.1rem;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: var(--transition);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: white;
+            font-size: 1.8rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        .feature-card p {
+            color: var(--gray);
+            line-height: 1.6;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            padding: 60px 0;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.9), rgba(255,255,255,0.7));
+        }
+
+        .steps-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .step {
+            flex: 1;
+            min-width: 220px;
+            text-align: center;
+            position: relative;
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 30px;
+            right: -15px;
+            width: 30px;
+            height: 3px;
+            background: var(--light-gray);
+        }
+
+        .step h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        .step p {
+            color: var(--gray);
+            line-height: 1.6;
+        }
+
+        /* Login/Register Forms */
+        .auth-forms {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1100;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .auth-form-container {
+            background: white;
+            width: 90%;
+            max-width: 450px;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            animation: slideUp 0.4s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .form-header {
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .form-header h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .close-form {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+
+        .close-form:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .form-content {
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid var(--light-gray);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        .btn-submit {
+            width: 100%;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            padding: 15px;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .form-footer a {
+            color: var(--primary);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .form-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .ad-in-form {
+            width: 100%;
+            height: 90px;
+            margin: 20px 0;
+            background: var(--light-gray);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* Dashboard */
+        .dashboard {
+            display: none;
+            padding: 30px 0 80px;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: var(--transition);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: white;
+        }
+
+        .stat-icon.fire {
+            background: linear-gradient(to right, #ff9a00, #ff5e00);
+        }
+
+        .stat-icon.calendar {
+            background: linear-gradient(to right, #00b4db, #0083b0);
+        }
+
+        .stat-icon.coins {
+            background: linear-gradient(to right, #f9d423, #ff4e50);
+        }
+
+        .stat-icon.clock {
+            background: linear-gradient(to right, #9d50bb, #6e48aa);
+        }
+
+        .stat-info h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .stat-info p {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        /* Progress Bar */
+        .progress-section {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: var(--primary);
+        }
+
+        .progress-container {
+            background: var(--light-gray);
+            height: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            border-radius: 10px;
+            width: 0%;
+            transition: width 1s ease;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 500;
+        }
+
+        .progress-text .completed {
+            color: var(--success);
+        }
+
+        .progress-text .remaining {
+            color: var(--warning);
+        }
+
+        /* Timer Section */
+        .timer-section {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        .timer-display {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 20px 0;
+            font-family: monospace;
+        }
+
+        .timer-progress-container {
+            background: var(--light-gray);
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .timer-progress-bar {
+            height: 100%;
+            background: linear-gradient(to right, var(--success), var(--secondary));
+            width: 0%;
+            transition: width 1s linear;
+        }
+
+        .btn-timer {
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            color: white;
+            font-size: 1.2rem;
+            padding: 18px 40px;
+            font-weight: 600;
+        }
+
+        .btn-timer:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-checkin {
+            background: linear-gradient(to right, var(--success), #27ae60);
+            color: white;
+            font-size: 1.2rem;
+            padding: 18px 40px;
+            font-weight: 600;
+            display: none;
+        }
+
+        /* Referral Section */
+        .referral-section {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .referral-code-container {
+            background: linear-gradient(to right, #f8f9fa, #e9ecef);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            border: 2px dashed var(--primary);
+        }
+
+        .referral-code {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: var(--primary-dark);
+        }
+
+        .referral-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-copy, .btn-share {
+            padding: 10px 20px;
+            font-size: 0.9rem;
+        }
+
+        .btn-copy {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-share {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .referral-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .referral-stat {
+            background: var(--light-gray);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .referral-stat h4 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .referral-stat p {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        /* Profile Section */
+        .profile-section {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .profile-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .profile-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .profile-label {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .profile-value {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--dark);
+        }
+
+        .reward-status {
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: inline-block;
+        }
+
+        .status-not-eligible {
+            background: rgba(108, 117, 125, 0.1);
+            color: var(--gray);
+        }
+
+        .status-pending {
+            background: rgba(243, 156, 18, 0.1);
+            color: var(--warning);
+        }
+
+        .status-completed {
+            background: rgba(46, 204, 113, 0.1);
+            color: var(--success);
+        }
+
+        .btn-reward {
+            background: linear-gradient(to right, var(--warning), #e67e22);
+            color: white;
+            margin-top: 20px;
+            display: none;
+        }
+
+        /* Ad Sections */
+        .ad-section {
+            width: 100%;
+            margin: 30px 0;
+            background: var(--light-gray);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            text-align: center;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .ad-label {
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Popup Styles */
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1200;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .popup {
+            background: white;
+            width: 90%;
+            max-width: 500px;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            animation: slideUp 0.4s ease;
+        }
+
+        .popup-header {
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .popup-header h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .popup-body {
+            padding: 30px;
+            text-align: center;
+        }
+
+        .popup-footer {
+            padding: 20px;
+            background: var(--light-gray);
+            display: flex;
+            justify-content: center;
+        }
+
+        .popup-timer {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 20px 0;
+            font-family: monospace;
+        }
+
+        .native-ad-container {
+            width: 100%;
+            min-height: 300px;
+            background: var(--light-gray);
+            border-radius: 8px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .btn-close-popup {
+            background: var(--primary);
+            color: white;
+            padding: 12px 30px;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .btn-close-popup:disabled {
+            background: var(--gray);
+            cursor: not-allowed;
+        }
+
+        /* Contact Form */
+        .contact-section {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 40px;
+            margin: 30px 0;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        .contact-section h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+
+        .contact-form {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* Toast Notifications */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--dark);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: var(--shadow-lg);
+            z-index: 1300;
+            opacity: 0;
+            transition: all 0.5s ease;
+            max-width: 90%;
+            text-align: center;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        .toast.success {
+            background: var(--success);
+        }
+
+        .toast.error {
+            background: var(--danger);
+        }
+
+        .toast.warning {
+            background: var(--warning);
+        }
+
+        /* Mobile Navigation */
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: white;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            padding: 10px 0;
+        }
+
+        .mobile-nav-items {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .mobile-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            text-decoration: none;
+            color: var(--gray);
+            font-size: 0.8rem;
+            transition: var(--transition);
+            padding: 10px 5px;
+            border-radius: 8px;
+        }
+
+        .mobile-nav-item.active, .mobile-nav-item:hover {
+            color: var(--primary);
+        }
+
+        .mobile-nav-item i {
+            font-size: 1.2rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--dark);
+            color: white;
+            padding: 40px 0 20px;
+            text-align: center;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .footer-logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--secondary);
+        }
+
+        .footer-bottom {
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .mobile-nav {
+                display: block;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .timer-display {
+                font-size: 2.5rem;
+            }
+            
+            .referral-code {
+                font-size: 1.4rem;
+            }
+            
+            .section-header h2 {
+                font-size: 2rem;
+            }
+            
+            .step:not(:last-child)::after {
+                display: none;
+            }
+            
+            .auth-buttons .btn {
+                padding: 8px 16px;
+                font-size: 0.85rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .container {
+                padding: 0 15px;
+            }
+            
+            .stat-card {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+            
+            .referral-actions {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .btn-copy, .btn-share {
+                width: 100%;
+            }
+            
+            .form-content {
+                padding: 20px;
+            }
+            
+            .popup-body {
+                padding: 20px;
+            }
+            
+            .contact-section {
+                padding: 20px;
+            }
+        }
+
+        /* Animations */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .bounce {
+            animation: bounce 2s infinite;
+        }
+
+        /* Fade-in on scroll */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(67, 97, 238, 0.2);
+            border-radius: 50%;
+            border-top-color: var(--primary);
             animation: spin 1s linear infinite;
         }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
 
-        /* ANIMATIONS */
-        .fade-in { animation: fadeIn 1s ease-in forwards; opacity: 0; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* NAVIGATION */
-        nav {
-            position: fixed; top: 0; width: 100%; padding: 20px 8%;
-            display: flex; justify-content: space-between; align-items: center;
-            background: rgba(3, 7, 18, 0.8); backdrop-filter: blur(15px);
-            border-bottom: 1px solid var(--border-glass); z-index: 1000;
-        }
-        .logo { font-family: 'Space Grotesk', sans-serif; font-size: 1.8rem; font-weight: 700; color: var(--p-color); }
-
-        /* AUTH SCREEN */
-        .screen { display: none; min-height: 100vh; padding-top: 100px; }
-        .active { display: block; }
-
-        .auth-container {
-            max-width: 450px; margin: 50px auto; padding: 40px;
-            background: var(--card-glass); border: 1px solid var(--border-glass);
-            border-radius: 24px; text-align: center; backdrop-filter: blur(10px);
-        }
-        input {
-            width: 100%; padding: 15px; margin: 12px 0; border-radius: 12px;
-            border: 1px solid var(--border-glass); background: rgba(255,255,255,0.05);
-            color: #fff; outline: none; transition: 0.3s;
-        }
-        input:focus { border-color: var(--p-color); box-shadow: 0 0 10px rgba(99, 102, 241, 0.3); }
-        .btn-grad {
-            width: 100%; padding: 15px; border-radius: 12px; border: none;
-            background: linear-gradient(135deg, var(--p-color), var(--s-color));
-            color: white; font-weight: 700; cursor: pointer; transition: 0.3s;
-        }
-        .btn-grad:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(99, 102, 241, 0.4); }
-
-        /* HERO SECTION */
-        .hero { text-align: center; padding: 100px 5% 50px; background: radial-gradient(circle at top, rgba(99,102,241,0.15), transparent); }
-        .hero h1 { font-size: 4rem; font-weight: 800; line-height: 1.1; margin-bottom: 20px; }
-        .hero span { color: var(--p-color); }
-
-        /* TIMER BOX */
-        .timer-engine {
-            max-width: 600px; margin: 40px auto; padding: 30px;
-            background: rgba(255,255,255,0.02); border: 1px solid var(--p-color);
-            border-radius: 20px; box-shadow: 0 0 30px rgba(99, 102, 241, 0.1);
-        }
-        .progress-container { width: 100%; height: 12px; background: #111; border-radius: 20px; margin: 20px 0; overflow: hidden; }
-        #timer-bar { width: 0%; height: 100%; background: var(--p-color); transition: width 1s linear; box-shadow: 0 0 15px var(--p-color); }
-
-        /* ADS SECTIONS */
-        .ad-banner-wrapper { width: 100%; display: flex; justify-content: center; margin: 40px 0; min-height: 60px; }
-        .ad-placeholder { font-size: 10px; color: #444; text-transform: uppercase; letter-spacing: 2px; }
-
-        /* SECTION STYLING */
-        .content-section { padding: 80px 10%; }
-        .section-title { font-size: 2.5rem; margin-bottom: 40px; text-align: center; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
-        .card { 
-            padding: 40px; background: var(--card-glass); border: 1px solid var(--border-glass); 
-            border-radius: 20px; transition: 0.4s; position: relative; overflow: hidden;
-        }
-        .card:hover { border-color: var(--p-color); transform: translateY(-10px); }
-
-        /* MODAL POPUP FOR NATIVE AD */
-        #ad-modal {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.98); z-index: 10000; display: none;
-            align-items: center; justify-content: center;
-        }
-        .modal-inner {
-            width: 90%; max-width: 550px; background: #fff; padding: 30px;
-            border-radius: 30px; text-align: center; color: #000;
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
-        /* FOOTER */
-        footer { padding: 60px 10%; border-top: 1px solid var(--border-glass); text-align: center; margin-top: 100px; }
-        .social-btn { display: inline-block; padding: 12px 25px; background: var(--p-color); border-radius: 10px; color: white; text-decoration: none; font-weight: bold; margin-top: 20px; }
+        .loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 50px;
+            text-align: center;
+            gap: 20px;
+        }
     </style>
 </head>
 <body>
+    <!-- Public Header -->
+    <header class="header" id="publicHeader">
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-calendar-check"></i>
+                <span>CheckIn30</span>
+            </div>
+            <div class="auth-buttons" id="authButtons">
+                <button class="btn btn-login" id="loginBtn">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+                <button class="btn btn-register" id="registerBtn">
+                    <i class="fas fa-user-plus"></i> Register
+                </button>
+            </div>
+        </div>
+    </header>
 
-    <div id="preloader">
-        <div class="loader-ring"></div>
-        <p style="margin-top: 20px; color: var(--p-color); font-weight: bold;">INITIALIZING SECURE CORE...</p>
+    <!-- App Header (After Login) -->
+    <header class="app-header" id="appHeader">
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-calendar-check"></i>
+                <span>CheckIn30</span>
+            </div>
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">U</div>
+                <div class="user-details">
+                    <div class="user-name" id="userName">User</div>
+                    <div class="user-email" id="userEmail">user@example.com</div>
+                </div>
+                <button class="btn btn-logout" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="heroSection">
+        <div class="container">
+            <h1>Earn Daily Rewards</h1>
+            <p>Complete daily check-ins for 30 days and earn exciting rewards. Just 2 minutes a day to claim your reward!</p>
+            
+            <!-- Main Banner Ad -->
+            <div class="main-banner-ad" id="mainBannerAd">
+                <!-- Banner ad will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2>Why Choose CheckIn30?</h2>
+                <p>Our platform offers the easiest way to earn rewards for your daily online activities</p>
+            </div>
+            
+            <!-- Ad Section 1 -->
+            <div class="ad-section">
+                <div class="ad-label">Advertisement</div>
+                <div id="adSection1"></div>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3>Just 2 Minutes Daily</h3>
+                    <p>Spend only 2 minutes each day to complete your check-in and maintain your streak.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-gift"></i>
+                    </div>
+                    <h3>Exciting Rewards</h3>
+                    <p>Complete 30 consecutive days and claim your reward directly to your UPI account.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Referral Bonuses</h3>
+                    <p>Earn extra points by referring friends. Get +5 points for every successful referral.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Secure & Reliable</h3>
+                    <p>Your data is protected with bank-level security and transparent reward processing.</p>
+                </div>
+            </div>
+            
+            <!-- Ad Section 2 -->
+            <div class="ad-section">
+                <div class="ad-label">Advertisement</div>
+                <div id="adSection2"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="how-it-works">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2>How It Works</h2>
+                <p>Follow these simple steps to start earning rewards</p>
+            </div>
+            
+            <!-- Ad Section 3 -->
+            <div class="ad-section">
+                <div class="ad-label">Advertisement</div>
+                <div id="adSection3"></div>
+            </div>
+            
+            <div class="steps-container">
+                <div class="step fade-in">
+                    <div class="step-number">1</div>
+                    <h3>Create Account</h3>
+                    <p>Sign up for free using your email address. No personal details required.</p>
+                </div>
+                <div class="step fade-in">
+                    <div class="step-number">2</div>
+                    <h3>Daily Check-in</h3>
+                    <p>Visit daily, start the 2-minute timer, and complete your check-in.</p>
+                </div>
+                <div class="step fade-in">
+                    <div class="step-number">3</div>
+                    <h3>Track Progress</h3>
+                    <p>Monitor your 30-day progress with our visual progress bar and stats.</p>
+                </div>
+                <div class="step fade-in">
+                    <div class="step-number">4</div>
+                    <h3>Claim Reward</h3>
+                    <p>After 30 days, request your reward and receive it via UPI in 3 days.</p>
+                </div>
+            </div>
+            
+            <!-- Ad Section 4 -->
+            <div class="ad-section">
+                <div class="ad-label">Advertisement</div>
+                <div id="adSection4"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <div class="container">
+        <div class="contact-section fade-in" id="contactSection">
+            <h2><i class="fas fa-envelope"></i> Contact Us</h2>
+            <p>Have questions or need support? Send us a message!</p>
+            
+            <div class="contact-form">
+                <div class="form-group">
+                    <input type="text" id="contactName" class="form-control" placeholder="Your Name" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" id="contactEmail" class="form-control" placeholder="Your Email" required>
+                </div>
+                <div class="form-group">
+                    <textarea id="contactMessage" class="form-control" placeholder="Your Message" rows="4" required></textarea>
+                </div>
+                <button class="btn btn-submit" id="submitContact">
+                    <i class="fas fa-paper-plane"></i> Send Message
+                </button>
+            </div>
+            
+            <p style="margin-top: 20px; color: var(--gray);">
+                Or email us directly: <a href="mailto:gotmprajapat00@gmail.com" style="color: var(--primary);">gotmprajapat00@gmail.com</a>
+            </p>
+        </div>
     </div>
 
-    <nav>
-        <div class="logo">CheckIn30</div>
-        <div id="nav-stats" style="display: none;">
-            <span id="p-count" style="margin-right: 15px;">Points: 0</span>
-            <span id="d-count">Day: 0/30</span>
+    <!-- Dashboard (Hidden by default) -->
+    <section class="dashboard" id="dashboard">
+        <div class="container">
+            <!-- Stats Cards -->
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-icon fire">
+                        <i class="fas fa-fire"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="currentStreak">0</h3>
+                        <p>Current Streak</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon calendar">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="activeDays">0</h3>
+                        <p>Active Days</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon coins">
+                        <i class="fas fa-coins"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalPoints">0</h3>
+                        <p>Total Points</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon clock">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="daysLeft">30</h3>
+                        <p>Days Left</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ad Section 5 -->
+            <div class="ad-section">
+                <div class="ad-label">Advertisement</div>
+                <div id="adSection5"></div>
+            </div>
+
+            <!-- 30-Day Progress Bar -->
+            <div class="progress-section">
+                <h3 class="section-title">
+                    <i class="fas fa-chart-line"></i> 30-Day Progress
+                </h3>
+                <div class="progress-container">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+                <div class="progress-text">
+                    <span class="completed" id="completedDays">0 days completed</span>
+                    <span class="remaining" id="remainingDays">30 days remaining</span>
+                </div>
+            </div>
+
+            <!-- Ad Section 6 -->
+            <div class="ad-section">
+                <div class="ad-label">Advertisement</div>
+                <div id="adSection6"></div>
+            </div>
+
+            <!-- Timer Section -->
+            <div class="timer-section">
+                <h3 class="section-title">
+                    <i class="fas fa-hourglass-half"></i> Daily Timer
+                </h3>
+                <p>Start the 2-minute timer to complete today's check-in</p>
+                
+                <div class="timer-display" id="timerDisplay">02:00</div>
+                
+                <div class="timer-progress-container">
+                    <div class="timer-progress-bar" id="timerProgressBar"></div>
+                </div>
+                
+                <button class="btn btn-timer" id="startTimerBtn">
+                    <i class="fas fa-play-circle"></i> Start Daily Timer
+                </button>
+                
+                <button class="btn btn-checkin" id="completeCheckinBtn" style="display: none;">
+                    <i class="fas fa-check-circle"></i> Complete Daily Check-in
+                </button>
+                
+                <p id="timerStatus" style="margin-top: 15px; color: var(--gray); font-size: 0.9rem;">
+                    Timer not started yet
+                </p>
+            </div>
+
+            <!-- Ad Section 7 -->
+            <div class="ad-section">
+                <div class="ad-label">Advertisement</div>
+                <div id="adSection7"></div>
+            </div>
+
+            <!-- Referral Section -->
+            <div class="referral-section">
+                <h3 class="section-title">
+                    <i class="fas fa-user-friends"></i> Referral Program
+                </h3>
+                <p>Share your referral code with friends and earn +5 points for each successful referral (max 5 per month)</p>
+                
+                <div class="referral-code-container">
+                    <div class="referral-code" id="referralCode">CK30-XXXXXX</div>
+                    <div class="referral-actions">
+                        <button class="btn btn-copy" id="copyReferralBtn">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                        <button class="btn btn-share" id="shareReferralBtn">
+                            <i class="fas fa-share-alt"></i> Share
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="referral-stats">
+                    <div class="referral-stat">
+                        <h4 id="totalReferrals">0</h4>
+                        <p>Total Referrals</p>
+                    </div>
+                    <div class="referral-stat">
+                        <h4 id="referralPoints">0</h4>
+                        <p>Referral Points</p>
+                    </div>
+                    <div class="referral-stat">
+                        <h4 id="monthlyReferrals">0/5</h4>
+                        <p>This Month</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ad Section 8 -->
+            <div class="ad-section">
+                <div class="ad-label">Advertisement</div>
+                <div id="adSection8"></div>
+            </div>
+
+            <!-- Profile Section -->
+            <div class="profile-section">
+                <h3 class="section-title">
+                    <i class="fas fa-user-circle"></i> Profile Information
+                </h3>
+                
+                <div class="profile-info">
+                    <div class="profile-item">
+                        <span class="profile-label">Email Address</span>
+                        <span class="profile-value" id="profileEmail">user@example.com</span>
+                    </div>
+                    <div class="profile-item">
+                        <span class="profile-label">Join Date</span>
+                        <span class="profile-value" id="joinDate">2024-01-01</span>
+                    </div>
+                    <div class="profile-item">
+                        <span class="profile-label">Last Check-in</span>
+                        <span class="profile-value" id="lastCheckin">Never</span>
+                    </div>
+                    <div class="profile-item">
+                        <span class="profile-label">Reward Status</span>
+                        <span class="reward-status status-not-eligible" id="rewardStatus">NOT ELIGIBLE</span>
+                    </div>
+                </div>
+                
+                <button class="btn btn-reward" id="requestRewardBtn" style="display: none;">
+                    <i class="fas fa-gift"></i> Request Your Reward
+                </button>
+            </div>
+
+            <!-- Ad Section 9 -->
+            <div class="ad-section">
+                <div class="ad-label">Advertisement</div>
+                <div id="adSection9"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <i class="fas fa-calendar-check"></i>
+                    <span>CheckIn30</span>
+                </div>
+                <div class="footer-links">
+                    <a href="#contactSection">Contact Support</a>
+                    <a href="#" id="privacyPolicyBtn">Privacy Policy</a>
+                    <a href="#" id="termsBtn">Terms of Service</a>
+                    <a href="#" id="faqBtn">FAQ</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 CheckIn30. All rights reserved. Earn rewards responsibly.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Mobile Navigation -->
+    <nav class="mobile-nav" id="mobileNav">
+        <div class="mobile-nav-items">
+            <a href="#" class="mobile-nav-item active" data-section="dashboard">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <a href="#" class="mobile-nav-item" data-section="timer">
+                <i class="fas fa-clock"></i>
+                <span>Timer</span>
+            </a>
+            <a href="#" class="mobile-nav-item" data-section="referral">
+                <i class="fas fa-user-friends"></i>
+                <span>Referral</span>
+            </a>
+            <a href="#" class="mobile-nav-item" data-section="profile">
+                <i class="fas fa-user"></i>
+                <span>Profile</span>
+            </a>
         </div>
     </nav>
 
-    <div id="auth-screen" class="screen active">
-        <div class="auth-container fade-in">
-            <h1>Welcome to <span>CheckIn30</span></h1>
-            <p style="color: var(--text-s); margin-bottom: 30px;">Premium Verification Required to Start Earning</p>
-            <input type="email" id="email" placeholder="Email Address">
-            <input type="password" id="password" placeholder="Password">
-            <button class="btn-grad" onclick="authProcess()">Access My Dashboard</button>
-            <p id="error-box" style="margin-top: 15px; color: #ff4d4d; font-size: 0.8rem;"></p>
+    <!-- Login Form -->
+    <div class="auth-forms" id="loginForm">
+        <div class="auth-form-container">
+            <div class="form-header">
+                <h3>Login to CheckIn30</h3>
+                <button class="close-form" id="closeLoginForm">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="form-content">
+                <!-- Ad in Login Form -->
+                <div class="ad-in-form" id="loginAd">
+                    <!-- Ad will be loaded here -->
+                </div>
+                
+                <div class="form-group">
+                    <label for="loginEmail">Email Address</label>
+                    <input type="email" id="loginEmail" class="form-control" placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" class="form-control" placeholder="Enter your password">
+                </div>
+                <button class="btn btn-submit" id="submitLogin">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+                <div class="form-footer">
+                    Don't have an account? <a href="#" id="switchToRegister">Register here</a>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div id="home-screen" class="screen">
-        <section class="hero">
-            <div class="fade-in">
-                <h1>Unlock Your <span>30-Day</span><br>Premium Reward</h1>
-                <p style="color: var(--text-s); max-width: 700px; margin: 20px auto;">A intelligent system that rewards your consistency. Visit the platform daily, explore our features for 2 minutes, and secure your strike.</p>
+    <!-- Register Form -->
+    <div class="auth-forms" id="registerForm">
+        <div class="auth-form-container">
+            <div class="form-header">
+                <h3>Join CheckIn30</h3>
+                <button class="close-form" id="closeRegisterForm">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
-
-            <div class="timer-engine">
-                <h3 id="timer-status">🔍 System Monitoring Activity...</h3>
-                <div class="progress-container">
-                    <div id="timer-bar"></div>
+            <div class="form-content">
+                <!-- Ad in Register Form -->
+                <div class="ad-in-form" id="registerAd">
+                    <!-- Ad will be loaded here -->
                 </div>
-                <p id="timer-count" style="font-size: 0.9rem; color: var(--text-s);">Time Left: 120s</p>
-                <button id="strike-btn" class="btn-grad" style="display: none; margin-top: 20px;" onclick="openNativeAd()">✅ Complete Daily Sync</button>
-                <p id="daily-msg" style="display: none; color: #4ade80; font-weight: bold; margin-top: 15px;">✨ System Secured. Today's Strike is Active!</p>
-            </div>
-        </section>
-
-        <div class="ad-banner-wrapper">
-            <div class="ad-placeholder">Sponsored Section</div>
-            <script type="text/javascript">
-                atOptions = { 'key' : 'fea0b6b8341d1077ececb2db811f2e68', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} };
-            </script>
-            <script type="text/javascript" src="https://www.highperformanceformat.com/fea0b6b8341d1077ececb2db811f2e68/invoke.js"></script>
-        </div>
-
-        <section class="content-section">
-            <h2 class="section-title">Why Trust CheckIn30?</h2>
-            <div class="grid">
-                <div class="card">
-                    <h3>💎 Real-Time Accrual</h3>
-                    <p>Every second you spend on the platform is tracked by our cloud-based hashing system to ensure data integrity.</p>
+                
+                <div class="form-group">
+                    <label for="registerEmail">Email Address</label>
+                    <input type="email" id="registerEmail" class="form-control" placeholder="Enter your email">
                 </div>
-                <div class="card">
-                    <h3>🛡️ Secure Vault</h3>
-                    <p>Your points are stored in a Firebase Realtime Database with 256-bit encryption for maximum security.</p>
+                <div class="form-group">
+                    <label for="registerPassword">Password</label>
+                    <input type="password" id="registerPassword" class="form-control" placeholder="Create a password (min. 6 characters)">
                 </div>
-                <div class="card">
-                    <h3>🚀 Rapid Payouts</h3>
-                    <p>Once you reach the 30-day milestone, your rewards are processed and dispatched within 72 hours via UPI.</p>
+                <div class="form-group">
+                    <label for="referralCodeInput">Referral Code (Optional)</label>
+                    <input type="text" id="referralCodeInput" class="form-control" placeholder="Enter referral code if you have one">
+                </div>
+                <button class="btn btn-submit" id="submitRegister">
+                    <i class="fas fa-user-plus"></i> Create Account
+                </button>
+                <div class="form-footer">
+                    Already have an account? <a href="#" id="switchToLogin">Login here</a>
                 </div>
             </div>
-        </section>
-
-        <div class="ad-banner-wrapper">
-            <script type="text/javascript">
-                atOptions = { 'key' : 'fea0b6b8341d1077ececb2db811f2e68', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} };
-            </script>
-            <script type="text/javascript" src="https://www.highperformanceformat.com/fea0b6b8341d1077ececb2db811f2e68/invoke.js"></script>
-        </div>
-
-        <section class="content-section" style="background: rgba(255,255,255,0.01);">
-            <div class="grid">
-                <div class="card" style="grid-column: span 2;">
-                    <h2>Invite & Amplify</h2>
-                    <p style="margin: 15px 0;">Share your unique identifier with your circle. Earn +5 premium points for every referral that completes 3 daily syncs.</p>
-                    <div id="ref-box" style="font-size: 1.5rem; font-weight: bold; color: var(--p-color); border: 2px dashed var(--p-color); padding: 15px; display: inline-block; border-radius: 12px;">CK30-LOADING...</div>
-                </div>
-                <div class="ad-banner-wrapper">
-                    <script type="text/javascript">
-                        atOptions = { 'key' : 'fea0b6b8341d1077ececb2db811f2e68', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} };
-                    </script>
-                    <script type="text/javascript" src="https://www.highperformanceformat.com/fea0b6b8341d1077ececb2db811f2e68/invoke.js"></script>
-                </div>
-            </div>
-        </section>
-
-        <section class="content-section">
-            <h2 class="section-title">Platform Guidelines</h2>
-            <div class="grid">
-                <div class="card"><h4>Consistency is Key</h4><p>Missing a day might reset your algorithmic trust score. Try to maintain a streak.</p></div>
-                <div class="card"><h4>Verification Task</h4><p>The 2-minute timer ensures that you are a real user and not a bot.</p></div>
-                <div class="card"><h4>No VPN Usage</h4><p>Using VPN or proxy will result in immediate permanent suspension of your account.</p></div>
-            </div>
-        </section>
-
-        <div class="ad-banner-wrapper">
-            <script type="text/javascript">
-                atOptions = { 'key' : 'fea0b6b8341d1077ececb2db811f2e68', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} };
-            </script>
-            <script type="text/javascript" src="https://www.highperformanceformat.com/fea0b6b8341d1077ececb2db811f2e68/invoke.js"></script>
-        </div>
-        <div class="ad-banner-wrapper">
-             </div>
-        <div class="ad-banner-wrapper">
-             </div>
-        <div class="ad-banner-wrapper">
-             </div>
-        <div class="ad-banner-wrapper">
-             </div>
-
-        <footer>
-            <h2>Direct Connection</h2>
-            <p style="color: var(--text-s); margin-top: 10px;">For support, inquiries, or business details:</p>
-            <p style="font-weight: bold;">gotmprajapat00@gmail.com</p>
-            <a href="mailto:gotmprajapat00@gmail.com?subject=CheckIn30%20Support" class="social-btn">📩 Send Message Now</a>
-            <p style="margin-top: 40px; font-size: 0.7rem; color: #444;">&copy; 2026 CheckIn30 - Powered by Uplodify Ecosystem</p>
-        </footer>
-    </div>
-
-    <div id="ad-modal">
-        <div class="modal-inner">
-            <h2 style="margin-bottom: 5px;">Security Verification</h2>
-            <p style="font-size: 0.8rem; color: #777; margin-bottom: 20px;">Please interact with this sponsor to verify your daily activity.</p>
-            
-            <div style="min-height: 250px; background: #f0f0f0; border-radius: 20px; padding: 10px;">
-                <script async="async" data-cfasync="false" src="https://pl28624266.effectivegatecpm.com/6bc4ee56d47d8bd07693b3f7aff17fd1/invoke.js"></script>
-                <div id="container-6bc4ee56d47d8bd07693b3f7aff17fd1"></div>
-            </div>
-
-            <button id="final-btn" class="btn-grad" disabled style="margin-top: 20px; background: #000;" onclick="confirmStrike()">Wait 10s...</button>
         </div>
     </div>
 
+    <!-- Welcome Popup -->
+    <div class="popup-overlay" id="welcomePopup">
+        <div class="popup">
+            <div class="popup-header">
+                <h3>Welcome to CheckIn30! 🎉</h3>
+            </div>
+            <div class="popup-body">
+                <p>Congratulations on joining CheckIn30! Start your journey to earn rewards by completing daily check-ins for 30 days.</p>
+                
+                <!-- Native Ad in Welcome Popup -->
+                <div class="native-ad-container" id="welcomeNativeAd">
+                    <!-- Native ad will be loaded here -->
+                </div>
+                
+                <p>Click the button below to get started with your first daily check-in!</p>
+            </div>
+            <div class="popup-footer">
+                <button class="btn btn-close-popup" id="closeWelcomePopup">
+                    <i class="fas fa-play-circle"></i> Get Started
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Timer Popup -->
+    <div class="popup-overlay" id="timerPopup">
+        <div class="popup">
+            <div class="popup-header">
+                <h3>Daily Timer Running ⏳</h3>
+            </div>
+            <div class="popup-body">
+                <p>Please keep this window open while the timer runs. You can continue browsing other sections.</p>
+                
+                <div class="popup-timer" id="popupTimerDisplay">02:00</div>
+                
+                <div class="timer-progress-container">
+                    <div class="timer-progress-bar" id="popupTimerProgressBar"></div>
+                </div>
+                
+                <p id="timerPopupStatus">Timer is running... Please wait.</p>
+            </div>
+            <div class="popup-footer">
+                <button class="btn btn-close-popup" id="closeTimerPopup">
+                    <i class="fas fa-external-link-alt"></i> Continue Browsing
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Check-in Popup -->
+    <div class="popup-overlay" id="checkinPopup">
+        <div class="popup">
+            <div class="popup-header">
+                <h3>Complete Your Daily Check-in ✅</h3>
+            </div>
+            <div class="popup-body">
+                <p>Please view the ad below for 5 seconds to complete your daily check-in.</p>
+                
+                <!-- Native Ad in Check-in Popup -->
+                <div class="native-ad-container" id="checkinNativeAd">
+                    <!-- Native ad will be loaded here -->
+                </div>
+                
+                <div class="popup-timer" id="checkinCountdown">5</div>
+                
+                <p id="checkinPopupStatus">Please wait 5 seconds before you can complete check-in...</p>
+            </div>
+            <div class="popup-footer">
+                <button class="btn btn-close-popup" id="completeCheckinPopupBtn" disabled>
+                    <i class="fas fa-check-circle"></i> Close & Complete (5s)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reward Request Popup -->
+    <div class="popup-overlay" id="rewardPopup">
+        <div class="popup">
+            <div class="popup-header">
+                <h3>Claim Your Reward! 🎁</h3>
+            </div>
+            <div class="popup-body">
+                <p>Congratulations! You've completed 30 days of daily check-ins. Enter your UPI ID to claim your reward.</p>
+                
+                <div class="form-group">
+                    <label for="upiId">UPI ID</label>
+                    <input type="text" id="upiId" class="form-control" placeholder="example@upi">
+                    <small style="color: var(--gray); display: block; margin-top: 5px;">Ensure your UPI ID is correct. Reward will be sent within 3 business days.</small>
+                </div>
+                
+                <p style="margin-top: 20px; padding: 10px; background: rgba(46, 204, 113, 0.1); border-radius: 8px; color: var(--success);">
+                    <i class="fas fa-info-circle"></i> After submission, your reward status will change to PENDING for 3 days before being COMPLETED.
+                </p>
+            </div>
+            <div class="popup-footer">
+                <button class="btn btn-close-popup" id="submitRewardRequest">
+                    <i class="fas fa-paper-plane"></i> Submit Request
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    
     <script>
-        // --- FIREBASE SETUP ---
-        const config = {
+        // Firebase Configuration
+        const firebaseConfig = {
             apiKey: "AIzaSyCVRlmw3-PCtGd5s3R-a0fJQsBF1YjPRWI",
             authDomain: "uplodify-9eb07.firebaseapp.com",
             databaseURL: "https://uplodify-9eb07-default-rtdb.firebaseio.com",
             projectId: "uplodify-9eb07",
             storageBucket: "uplodify-9eb07.firebasestorage.app",
             messagingSenderId: "158848017856",
-            appId: "1:158848017856:web:94aaaf14320490d52a5425"
+            appId: "1:158848017856:web:94aaaf14320490d52a5425",
+            measurementId: "G-1PLGMECD19"
         };
-        firebase.initializeApp(config);
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
-        const db = firebase.database();
+        const database = firebase.database();
 
+        // Telegram Bot Configuration
+        const TELEGRAM_BOT_TOKEN = '8367971417:AAGkV30ajQdWKjM-5AQDxYZH19OPHI51HGM';
+        const TELEGRAM_CHAT_ID = '6225430212';
+
+        // Global variables
+        let currentUser = null;
         let userData = null;
-        let activeTimer = 0;
-        const DURATION = 120; // 2 Mins
+        let timerInterval = null;
+        let timerSeconds = 120; // 2 minutes
+        let checkinCountdownInterval = null;
+        let checkinSeconds = 5;
+        let isTimerRunning = false;
+        let todayCheckedIn = false;
+        let adScriptsLoaded = false;
 
-        // --- PRELOADER REMOVAL ---
-        window.onload = () => {
-            setTimeout(() => { document.getElementById('preloader').style.display = 'none'; }, 1500);
-        };
+        // DOM Elements
+        const publicHeader = document.getElementById('publicHeader');
+        const appHeader = document.getElementById('appHeader');
+        const heroSection = document.getElementById('heroSection');
+        const dashboard = document.getElementById('dashboard');
+        const mobileNav = document.getElementById('mobileNav');
+        const contactSection = document.getElementById('contactSection');
+        const authButtons = document.getElementById('authButtons');
+        
+        // Auth buttons
+        const loginBtn = document.getElementById('loginBtn');
+        const registerBtn = document.getElementById('registerBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        
+        // Forms
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const closeLoginForm = document.getElementById('closeLoginForm');
+        const closeRegisterForm = document.getElementById('closeRegisterForm');
+        const switchToRegister = document.getElementById('switchToRegister');
+        const switchToLogin = document.getElementById('switchToLogin');
+        const submitLogin = document.getElementById('submitLogin');
+        const submitRegister = document.getElementById('submitRegister');
+        
+        // Contact form
+        const submitContact = document.getElementById('submitContact');
+        
+        // User info
+        const userAvatar = document.getElementById('userAvatar');
+        const userName = document.getElementById('userName');
+        const userEmail = document.getElementById('userEmail');
+        
+        // Stats
+        const currentStreak = document.getElementById('currentStreak');
+        const activeDays = document.getElementById('activeDays');
+        const totalPoints = document.getElementById('totalPoints');
+        const daysLeft = document.getElementById('daysLeft');
+        const progressBar = document.getElementById('progressBar');
+        const completedDays = document.getElementById('completedDays');
+        const remainingDays = document.getElementById('remainingDays');
+        
+        // Timer
+        const startTimerBtn = document.getElementById('startTimerBtn');
+        const completeCheckinBtn = document.getElementById('completeCheckinBtn');
+        const timerDisplay = document.getElementById('timerDisplay');
+        const timerProgressBar = document.getElementById('timerProgressBar');
+        const timerStatus = document.getElementById('timerStatus');
+        
+        // Referral
+        const referralCode = document.getElementById('referralCode');
+        const copyReferralBtn = document.getElementById('copyReferralBtn');
+        const shareReferralBtn = document.getElementById('shareReferralBtn');
+        const totalReferrals = document.getElementById('totalReferrals');
+        const referralPoints = document.getElementById('referralPoints');
+        const monthlyReferrals = document.getElementById('monthlyReferrals');
+        
+        // Profile
+        const profileEmail = document.getElementById('profileEmail');
+        const joinDate = document.getElementById('joinDate');
+        const lastCheckin = document.getElementById('lastCheckin');
+        const rewardStatus = document.getElementById('rewardStatus');
+        const requestRewardBtn = document.getElementById('requestRewardBtn');
+        
+        // Popups
+        const welcomePopup = document.getElementById('welcomePopup');
+        const closeWelcomePopup = document.getElementById('closeWelcomePopup');
+        const timerPopup = document.getElementById('timerPopup');
+        const closeTimerPopup = document.getElementById('closeTimerPopup');
+        const popupTimerDisplay = document.getElementById('popupTimerDisplay');
+        const popupTimerProgressBar = document.getElementById('popupTimerProgressBar');
+        const timerPopupStatus = document.getElementById('timerPopupStatus');
+        const checkinPopup = document.getElementById('checkinPopup');
+        const checkinCountdown = document.getElementById('checkinCountdown');
+        const checkinPopupStatus = document.getElementById('checkinPopupStatus');
+        const completeCheckinPopupBtn = document.getElementById('completeCheckinPopupBtn');
+        const rewardPopup = document.getElementById('rewardPopup');
+        const submitRewardRequest = document.getElementById('submitRewardRequest');
+        const upiId = document.getElementById('upiId');
+        
+        // Toast
+        const toast = document.getElementById('toast');
+        
+        // Mobile nav items
+        const mobileNavItems = document.querySelectorAll('.mobile-nav-item');
+        
+        // Ad containers
+        const mainBannerAd = document.getElementById('mainBannerAd');
+        const loginAd = document.getElementById('loginAd');
+        const registerAd = document.getElementById('registerAd');
+        const welcomeNativeAd = document.getElementById('welcomeNativeAd');
+        const checkinNativeAd = document.getElementById('checkinNativeAd');
+        const adSections = [
+            document.getElementById('adSection1'),
+            document.getElementById('adSection2'),
+            document.getElementById('adSection3'),
+            document.getElementById('adSection4'),
+            document.getElementById('adSection5'),
+            document.getElementById('adSection6'),
+            document.getElementById('adSection7'),
+            document.getElementById('adSection8'),
+            document.getElementById('adSection9')
+        ];
 
-        // --- AUTH LOGIC ---
-        function authProcess() {
-            const e = document.getElementById('email').value;
-            const p = document.getElementById('password').value;
-            if(!e || !p) return;
-
-            auth.signInWithEmailAndPassword(e, p)
-                .catch(() => auth.createUserWithEmailAndPassword(e, p))
-                .catch(err => document.getElementById('error-box').innerText = err.message);
+        // Utility Functions
+        function showToast(message, type = 'info') {
+            toast.textContent = message;
+            toast.className = 'toast';
+            toast.classList.add(type);
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
         }
 
-        auth.onAuthStateChanged(user => {
-            if(user) {
-                switchScreen('home-screen');
-                document.getElementById('nav-stats').style.display = 'block';
-                fetchUser(user.uid);
+        function formatDate(date) {
+            return date.toISOString().split('T')[0];
+        }
+
+        function getCurrentMonth() {
+            return new Date().getMonth(); // 0-11
+        }
+
+        function generateReferralCode() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let code = 'CK30-';
+            for (let i = 0; i < 6; i++) {
+                code += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return code;
+        }
+
+        function loadAds() {
+            if (adScriptsLoaded) return;
+            
+            // Main banner ad - 728x90
+            if (mainBannerAd) {
+                const bannerScript = document.createElement('script');
+                bannerScript.innerHTML = `atOptions = { 'key' : '77505fdc9e6831daaf1eca8467e91c3c', 'format' : 'iframe', 'height' : 90, 'width' : 728, 'params' : {} };`;
+                mainBannerAd.appendChild(bannerScript);
+                
+                const bannerScript2 = document.createElement('script');
+                bannerScript2.src = 'https://www.highperformanceformat.com/77505fdc9e6831daaf1eca8467e91c3c/invoke.js';
+                mainBannerAd.appendChild(bannerScript2);
+            }
+            
+            // Native ad script for popups
+            const nativeAdScript = document.createElement('script');
+            nativeAdScript.async = true;
+            nativeAdScript.dataset.cfasync = false;
+            nativeAdScript.src = 'https://pl28624266.effectivegatecpm.com/6bc4ee56d47d8bd07693b3f7aff17fd1/invoke.js';
+            document.head.appendChild(nativeAdScript);
+            
+            // Load ads in all sections with different IDs
+            adSections.forEach((section, index) => {
+                if (section) {
+                    const adDiv = document.createElement('div');
+                    // Different ad IDs for each section
+                    const adIds = [
+                        '77505fdc9e6831daaf1eca8467e91c3c',
+                        'fea0b6b8341d1077ececb2db811f2e68',
+                        'abcdef1234567890abcdef1234567890',
+                        '1234567890abcdef1234567890abcdef',
+                        'a1b2c3d4e5f67890abcdef1234567890',
+                        '0987654321fedcba0987654321fedcba',
+                        'xyz123abc456def789ghi012jkl345mno',
+                        'p1q2r3s4t5u6v7w8x9y0z1a2b3c4d5e6',
+                        'f7e6d5c4b3a298765432109876543210'
+                    ];
+                    
+                    const adId = adIds[index] || '77505fdc9e6831daaf1eca8467e91c3c';
+                    adDiv.innerHTML = `<script>atOptions = { 'key' : '${adId}', 'format' : 'iframe', 'height' : 250, 'width' : 300, 'params' : {} }; </script><script src="https://www.highperformanceformat.com/${adId}/invoke.js"></script>`;
+                    section.appendChild(adDiv);
+                }
+            });
+            
+            // Login/Register form ads
+            if (loginAd) {
+                const loginAdDiv = document.createElement('div');
+                loginAdDiv.innerHTML = `<script>atOptions = { 'key' : '77505fdc9e6831daaf1eca8467e91c3c', 'format' : 'iframe', 'height' : 90, 'width' : 728, 'params' : {} }; </script><script src="https://www.highperformanceformat.com/77505fdc9e6831daaf1eca8467e91c3c/invoke.js"></script>`;
+                loginAd.appendChild(loginAdDiv);
+            }
+            
+            if (registerAd) {
+                const registerAdDiv = document.createElement('div');
+                registerAdDiv.innerHTML = `<script>atOptions = { 'key' : '77505fdc9e6831daaf1eca8467e91c3c', 'format' : 'iframe', 'height' : 90, 'width' : 728, 'params' : {} }; </script><script src="https://www.highperformanceformat.com/77505fdc9e6831daaf1eca8467e91c3c/invoke.js"></script>`;
+                registerAd.appendChild(registerAdDiv);
+            }
+            
+            // Native ads for popups
+            setTimeout(() => {
+                if (welcomeNativeAd) {
+                    const welcomeAdDiv = document.createElement('div');
+                    welcomeAdDiv.id = 'container-6bc4ee56d47d8bd07693b3f7aff17fd1';
+                    welcomeNativeAd.appendChild(welcomeAdDiv);
+                }
+                
+                if (checkinNativeAd) {
+                    const checkinAdDiv = document.createElement('div');
+                    checkinAdDiv.id = 'container-6bc4ee56d47d8bd07693b3f7aff17fd1';
+                    checkinNativeAd.appendChild(checkinAdDiv);
+                }
+            }, 1000);
+            
+            adScriptsLoaded = true;
+        }
+
+        // Firebase Functions
+        function sendTelegramNotification(message) {
+            const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+            const data = {
+                chat_id: TELEGRAM_CHAT_ID,
+                text: message,
+                parse_mode: 'HTML'
+            };
+            
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            }).then(response => {
+                console.log('Telegram notification sent');
+            }).catch(error => {
+                console.error('Telegram notification error:', error);
+            });
+        }
+
+        async function registerUser(email, password, referralCodeInput = null) {
+            try {
+                showToast('Creating your account...', 'info');
+                
+                // Create user with Firebase Auth
+                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+                
+                // Generate unique referral code for the new user
+                const userReferralCode = generateReferralCode();
+                
+                // Prepare user data
+                const userData = {
+                    email: email,
+                    points: 0,
+                    activeDays: 0,
+                    lastCheckIn: null,
+                    streak: 0,
+                    rewardStatus: 'NOT_ELIGIBLE',
+                    rewardRequestDate: null,
+                    upi: null,
+                    referralCode: userReferralCode,
+                    referredBy: referralCodeInput || null,
+                    referralRewarded: false,
+                    referrals: 0,
+                    referralPoints: 0,
+                    monthlyReferrals: 0,
+                    lastReferralMonth: getCurrentMonth(),
+                    joinDate: formatDate(new Date())
+                };
+                
+                // Save user data to Firebase Database
+                await database.ref('users/' + user.uid).set(userData);
+                
+                // If user was referred, update referrer's data
+                if (referralCodeInput) {
+                    // Find the user who referred this user
+                    const usersRef = database.ref('users');
+                    const snapshot = await usersRef.orderByChild('referralCode').equalTo(referralCodeInput).once('value');
+                    
+                    if (snapshot.exists()) {
+                        const referrerData = snapshot.val();
+                        const referrerId = Object.keys(referrerData)[0];
+                        const referrer = referrerData[referrerId];
+                        
+                        // Check if referrer has reached monthly limit
+                        const currentMonth = getCurrentMonth();
+                        let monthlyReferrals = referrer.monthlyReferrals || 0;
+                        let lastReferralMonth = referrer.lastReferralMonth || 0;
+                        
+                        // Reset monthly referrals if month changed
+                        if (lastReferralMonth !== currentMonth) {
+                            monthlyReferrals = 0;
+                            lastReferralMonth = currentMonth;
+                        }
+                        
+                        // Check if referrer can get more referrals this month
+                        if (monthlyReferrals < 5) {
+                            // Update referrer's data
+                            await database.ref('users/' + referrerId).update({
+                                referrals: (referrer.referrals || 0) + 1,
+                                monthlyReferrals: monthlyReferrals + 1,
+                                lastReferralMonth: currentMonth,
+                                referralPoints: (referrer.referralPoints || 0) + 5,
+                                points: (referrer.points || 0) + 5
+                            });
+                            
+                            // Send Telegram notification
+                            sendTelegramNotification(`🎉 New referral for ${referrer.email}!\nNew user: ${email}\nReferral Code: ${referralCodeInput}\nTotal referrals: ${(referrer.referrals || 0) + 1}`);
+                        }
+                    }
+                }
+                
+                // Send Telegram notification for new user
+                sendTelegramNotification(`👤 New user registered!\nEmail: ${email}\nReferral Code: ${userReferralCode}\nReferred by: ${referralCodeInput || 'None'}\nDate: ${new Date().toLocaleDateString()}`);
+                
+                showToast('Account created successfully!', 'success');
+                return user;
+            } catch (error) {
+                console.error('Registration error:', error);
+                showToast(error.message, 'error');
+                throw error;
+            }
+        }
+
+        async function loginUser(email, password) {
+            try {
+                showToast('Logging in...', 'info');
+                const userCredential = await auth.signInWithEmailAndPassword(email, password);
+                showToast('Login successful!', 'success');
+                return userCredential.user;
+            } catch (error) {
+                console.error('Login error:', error);
+                showToast(error.message, 'error');
+                throw error;
+            }
+        }
+
+        async function loadUserData(userId) {
+            try {
+                const snapshot = await database.ref('users/' + userId).once('value');
+                return snapshot.val();
+            } catch (error) {
+                console.error('Error loading user data:', error);
+                showToast('Error loading user data', 'error');
+                return null;
+            }
+        }
+
+        async function updateUserData(userId, updates) {
+            try {
+                await database.ref('users/' + userId).update(updates);
+                return true;
+            } catch (error) {
+                console.error('Error updating user data:', error);
+                showToast('Error updating data', 'error');
+                return false;
+            }
+        }
+
+        async function completeDailyCheckin(userId) {
+            try {
+                const today = formatDate(new Date());
+                const userRef = database.ref('users/' + userId);
+                const snapshot = await userRef.once('value');
+                const userData = snapshot.val();
+                
+                // Check if already checked in today
+                if (userData.lastCheckIn === today) {
+                    showToast('You have already checked in today!', 'warning');
+                    return false;
+                }
+                
+                // Calculate new streak
+                let newStreak = userData.streak || 0;
+                if (userData.lastCheckIn) {
+                    const lastCheckInDate = new Date(userData.lastCheckIn);
+                    const yesterday = new Date();
+                    yesterday.setDate(yesterday.getDate() - 1);
+                    
+                    if (formatDate(lastCheckInDate) === formatDate(yesterday)) {
+                        newStreak += 1;
+                    } else {
+                        newStreak = 1; // Reset streak if missed a day
+                    }
+                } else {
+                    newStreak = 1; // First check-in
+                }
+                
+                // Update user data
+                const updates = {
+                    lastCheckIn: today,
+                    activeDays: (userData.activeDays || 0) + 1,
+                    streak: newStreak,
+                    points: (userData.points || 0) + 10 // 10 points per check-in
+                };
+                
+                // Check if user completed 30 days
+                if (updates.activeDays >= 30) {
+                    updates.rewardStatus = 'ELIGIBLE';
+                }
+                
+                await userRef.update(updates);
+                
+                // Send Telegram notification
+                sendTelegramNotification(`✅ Daily Check-in Completed!\nUser: ${userData.email}\nStreak: ${newStreak} days\nTotal Days: ${updates.activeDays}\nTotal Points: ${updates.points}\nDate: ${today}`);
+                
+                showToast('Daily check-in completed! +10 points', 'success');
+                return true;
+            } catch (error) {
+                console.error('Error completing check-in:', error);
+                showToast('Error completing check-in', 'error');
+                return false;
+            }
+        }
+
+        async function requestReward(userId, upi) {
+            try {
+                // Update user data
+                await database.ref('users/' + userId).update({
+                    rewardStatus: 'PENDING',
+                    rewardRequestDate: new Date().toISOString(),
+                    upi: upi
+                });
+                
+                // Send Telegram notification for reward request
+                sendTelegramNotification(`🎁 REWARD REQUESTED!\nUser: ${userData.email}\nUPI ID: ${upi}\nActive Days: ${userData.activeDays}\nTotal Points: ${userData.points}\nStatus: PENDING\nDate: ${new Date().toLocaleDateString()}\n\n⚠️ Process within 3 days!`);
+                
+                showToast('Reward request submitted! It will be processed within 3 days.', 'success');
+                return true;
+            } catch (error) {
+                console.error('Error requesting reward:', error);
+                showToast('Error requesting reward', 'error');
+                return false;
+            }
+        }
+
+        // Timer Functions
+        function startTimer() {
+            if (isTimerRunning) return;
+            
+            isTimerRunning = true;
+            timerSeconds = 120; // Reset to 2 minutes
+            
+            // Update UI
+            startTimerBtn.style.display = 'none';
+            timerStatus.textContent = 'Timer running... Please wait.';
+            timerStatus.style.color = 'var(--warning)';
+            
+            // Show timer popup
+            timerPopup.style.display = 'flex';
+            
+            // Start timer interval
+            timerInterval = setInterval(() => {
+                timerSeconds--;
+                
+                // Update timer displays
+                const minutes = Math.floor(timerSeconds / 60);
+                const seconds = timerSeconds % 60;
+                const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                timerDisplay.textContent = timeString;
+                popupTimerDisplay.textContent = timeString;
+                
+                // Update progress bars
+                const progressPercentage = ((120 - timerSeconds) / 120) * 100;
+                timerProgressBar.style.width = `${progressPercentage}%`;
+                popupTimerProgressBar.style.width = `${progressPercentage}%`;
+                
+                // Check if timer completed
+                if (timerSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    timerCompleted();
+                }
+            }, 1000);
+        }
+
+        function timerCompleted() {
+            isTimerRunning = false;
+            
+            // Update UI
+            completeCheckinBtn.style.display = 'inline-flex';
+            timerStatus.textContent = 'Timer completed! Click "Complete Daily Check-in" to finish.';
+            timerStatus.style.color = 'var(--success)';
+            
+            // Close timer popup
+            timerPopup.style.display = 'none';
+            
+            showToast('Timer completed! You can now complete your daily check-in.', 'success');
+        }
+
+        function startCheckinCountdown() {
+            checkinSeconds = 5;
+            checkinCountdown.textContent = checkinSeconds;
+            completeCheckinPopupBtn.disabled = true;
+            completeCheckinPopupBtn.innerHTML = '<i class="fas fa-check-circle"></i> Close & Complete (5s)';
+            checkinPopupStatus.textContent = 'Please wait 5 seconds before you can complete check-in...';
+            
+            checkinCountdownInterval = setInterval(() => {
+                checkinSeconds--;
+                checkinCountdown.textContent = checkinSeconds;
+                completeCheckinPopupBtn.innerHTML = `<i class="fas fa-check-circle"></i> Close & Complete (${checkinSeconds}s)`;
+                
+                if (checkinSeconds <= 0) {
+                    clearInterval(checkinCountdownInterval);
+                    completeCheckinPopupBtn.disabled = false;
+                    completeCheckinPopupBtn.innerHTML = '<i class="fas fa-check-circle"></i> Close & Complete';
+                    checkinPopupStatus.textContent = 'You can now complete your daily check-in!';
+                }
+            }, 1000);
+        }
+
+        // Contact Form Function
+        async function sendContactMessage(name, email, message) {
+            try {
+                // Send to Telegram
+                const telegramMessage = `📧 New Contact Message\nName: ${name}\nEmail: ${email}\nMessage: ${message}\nDate: ${new Date().toLocaleDateString()}`;
+                sendTelegramNotification(telegramMessage);
+                
+                // Also send to your email (using mailto as fallback)
+                const mailtoLink = `mailto:gotmprajapat00@gmail.com?subject=CheckIn30 Contact&body=Name: ${name}%0AEmail: ${email}%0AMessage: ${message}`;
+                window.location.href = mailtoLink;
+                
+                return true;
+            } catch (error) {
+                console.error('Error sending contact message:', error);
+                return false;
+            }
+        }
+
+        // UI Update Functions
+        function updateUIWithUserData() {
+            if (!currentUser || !userData) return;
+            
+            // Update user info in header
+            const email = currentUser.email;
+            const name = email.split('@')[0];
+            const firstLetter = name.charAt(0).toUpperCase();
+            
+            userAvatar.textContent = firstLetter;
+            userName.textContent = name;
+            userEmail.textContent = email;
+            
+            // Update stats
+            currentStreak.textContent = userData.streak || 0;
+            activeDays.textContent = userData.activeDays || 0;
+            totalPoints.textContent = userData.points || 0;
+            
+            const daysCompleted = userData.activeDays || 0;
+            const daysRemaining = Math.max(0, 30 - daysCompleted);
+            
+            daysLeft.textContent = daysRemaining;
+            
+            // Update progress bar
+            const progressPercentage = (daysCompleted / 30) * 100;
+            progressBar.style.width = `${progressPercentage}%`;
+            completedDays.textContent = `${daysCompleted} days completed`;
+            remainingDays.textContent = `${daysRemaining} days remaining`;
+            
+            // Update referral section
+            referralCode.textContent = userData.referralCode || 'CK30-XXXXXX';
+            totalReferrals.textContent = userData.referrals || 0;
+            referralPoints.textContent = userData.referralPoints || 0;
+            
+            const currentMonth = getCurrentMonth();
+            const lastReferralMonth = userData.lastReferralMonth || 0;
+            let monthlyRefs = userData.monthlyReferrals || 0;
+            
+            // Reset monthly referrals if month changed
+            if (lastReferralMonth !== currentMonth) {
+                monthlyRefs = 0;
+            }
+            
+            monthlyReferrals.textContent = `${monthlyRefs}/5`;
+            
+            // Update profile section
+            profileEmail.textContent = email;
+            joinDate.textContent = userData.joinDate || '2024-01-01';
+            lastCheckin.textContent = userData.lastCheckIn || 'Never';
+            
+            // Update reward status
+            let statusText = 'NOT ELIGIBLE';
+            let statusClass = 'status-not-eligible';
+            
+            if (userData.rewardStatus === 'PENDING') {
+                statusText = 'PENDING';
+                statusClass = 'status-pending';
+            } else if (userData.rewardStatus === 'COMPLETED') {
+                statusText = 'COMPLETED';
+                statusClass = 'status-completed';
+            } else if (daysCompleted >= 30 && userData.rewardStatus === 'NOT_ELIGIBLE') {
+                statusText = 'ELIGIBLE';
+                statusClass = 'status-pending';
+            } else if (daysCompleted >= 30) {
+                statusText = userData.rewardStatus || 'ELIGIBLE';
+                statusClass = 'status-pending';
+            }
+            
+            rewardStatus.textContent = statusText;
+            rewardStatus.className = `reward-status ${statusClass}`;
+            
+            // Show/hide request reward button
+            if (daysCompleted >= 30 && (userData.rewardStatus === 'NOT_ELIGIBLE' || userData.rewardStatus === 'ELIGIBLE')) {
+                requestRewardBtn.style.display = 'inline-flex';
             } else {
-                switchScreen('auth-screen');
+                requestRewardBtn.style.display = 'none';
+            }
+            
+            // Check if user already checked in today
+            const today = formatDate(new Date());
+            todayCheckedIn = userData.lastCheckIn === today;
+            
+            // Update timer section based on today's check-in
+            if (todayCheckedIn) {
+                startTimerBtn.style.display = 'none';
+                timerStatus.textContent = 'You have already checked in today. Come back tomorrow!';
+                timerStatus.style.color = 'var(--success)';
+                timerDisplay.textContent = '02:00';
+                timerProgressBar.style.width = '0%';
+            } else {
+                startTimerBtn.style.display = 'inline-flex';
+                completeCheckinBtn.style.display = 'none';
+                timerStatus.textContent = 'Start the 2-minute timer to check-in today';
+                timerStatus.style.color = 'var(--gray)';
+                timerDisplay.textContent = '02:00';
+                timerProgressBar.style.width = '0%';
+                
+                // Reset timer if it was running
+                if (isTimerRunning) {
+                    clearInterval(timerInterval);
+                    isTimerRunning = false;
+                }
+            }
+        }
+
+        function showLandingPage() {
+            publicHeader.style.display = 'block';
+            appHeader.style.display = 'none';
+            heroSection.style.display = 'block';
+            dashboard.style.display = 'none';
+            mobileNav.style.display = 'none';
+            contactSection.style.display = 'block';
+            authButtons.style.display = 'flex';
+            
+            // Show features and how-it-works sections
+            document.querySelector('.features').style.display = 'block';
+            document.querySelector('.how-it-works').style.display = 'block';
+            document.querySelector('.footer').style.display = 'block';
+            
+            // Hide all popups
+            document.querySelectorAll('.popup-overlay').forEach(popup => {
+                popup.style.display = 'none';
+            });
+            
+            // Hide auth forms
+            loginForm.style.display = 'none';
+            registerForm.style.display = 'none';
+            
+            // Load ads on landing page
+            loadAds();
+        }
+
+        function showDashboard() {
+            publicHeader.style.display = 'none';
+            appHeader.style.display = 'block';
+            heroSection.style.display = 'none';
+            dashboard.style.display = 'block';
+            contactSection.style.display = 'none';
+            authButtons.style.display = 'none';
+            
+            // Hide features and how-it-works sections
+            document.querySelector('.features').style.display = 'none';
+            document.querySelector('.how-it-works').style.display = 'none';
+            document.querySelector('.footer').style.display = 'none';
+            
+            // Show mobile nav on mobile devices
+            if (window.innerWidth <= 992) {
+                mobileNav.style.display = 'block';
+            }
+            
+            // Update UI with user data
+            updateUIWithUserData();
+            
+            // Load ads for dashboard
+            loadAds();
+        }
+
+        // Event Listeners
+        loginBtn.addEventListener('click', () => {
+            loginForm.style.display = 'flex';
+        });
+
+        registerBtn.addEventListener('click', () => {
+            registerForm.style.display = 'flex';
+        });
+
+        closeLoginForm.addEventListener('click', () => {
+            loginForm.style.display = 'none';
+        });
+
+        closeRegisterForm.addEventListener('click', () => {
+            registerForm.style.display = 'none';
+        });
+
+        switchToRegister.addEventListener('click', (e) => {
+            e.preventDefault();
+            loginForm.style.display = 'none';
+            registerForm.style.display = 'flex';
+        });
+
+        switchToLogin.addEventListener('click', (e) => {
+            e.preventDefault();
+            registerForm.style.display = 'none';
+            loginForm.style.display = 'flex';
+        });
+
+        submitLogin.addEventListener('click', async () => {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!email || !password) {
+                showToast('Please fill in all fields', 'error');
+                return;
+            }
+            
+            try {
+                const user = await loginUser(email, password);
+                currentUser = user;
+                userData = await loadUserData(user.uid);
+                
+                // Close login form
+                loginForm.style.display = 'none';
+                
+                // Clear form fields
+                document.getElementById('loginEmail').value = '';
+                document.getElementById('loginPassword').value = '';
+                
+                // Show dashboard
+                showDashboard();
+                
+                // Show welcome popup if first login
+                const today = formatDate(new Date());
+                if (!userData.lastCheckIn) {
+                    setTimeout(() => {
+                        welcomePopup.style.display = 'flex';
+                    }, 500);
+                }
+            } catch (error) {
+                console.error('Login failed:', error);
             }
         });
 
-        // --- DATA ENGINE ---
-        function fetchUser(uid) {
-            db.ref('users/' + uid).on('value', snap => {
-                userData = snap.val() || createUser(uid);
-                document.getElementById('p-count').innerText = "Points: " + userData.points;
-                document.getElementById('d-count').innerText = "Day: " + userData.activeDays + "/30";
-                document.getElementById('ref-box').innerText = "CODE: " + (userData.refCode || "GENERATING...");
-                
-                initTimerLogic();
-            });
-        }
-
-        function createUser(uid) {
-            const data = { points: 0, activeDays: 0, lastCheck: "", refCode: "CK30-" + Math.random().toString(36).substr(2, 5).toUpperCase() };
-            db.ref('users/' + uid).set(data);
-            return data;
-        }
-
-        // --- CORE TIMER LOGIC ---
-        function initTimerLogic() {
-            const today = new Date().toDateString();
-            if(userData.lastCheck === today) {
-                document.getElementById('timer-status').innerText = "Daily Sync Complete";
-                document.getElementById('timer-bar').style.width = "100%";
-                document.getElementById('timer-count').style.display = "none";
-                document.getElementById('daily-msg').style.display = "block";
-                document.getElementById('strike-btn').style.display = "none";
-            } else {
-                startMonitoring();
+        submitRegister.addEventListener('click', async () => {
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const referralCodeInput = document.getElementById('referralCodeInput').value;
+            
+            if (!email || !password) {
+                showToast('Please fill in all required fields', 'error');
+                return;
             }
-        }
+            
+            if (password.length < 6) {
+                showToast('Password must be at least 6 characters', 'error');
+                return;
+            }
+            
+            try {
+                const user = await registerUser(email, password, referralCodeInput);
+                currentUser = user;
+                userData = await loadUserData(user.uid);
+                
+                // Close register form
+                registerForm.style.display = 'none';
+                
+                // Clear form fields
+                document.getElementById('registerEmail').value = '';
+                document.getElementById('registerPassword').value = '';
+                document.getElementById('referralCodeInput').value = '';
+                
+                // Show dashboard
+                showDashboard();
+                
+                // Show welcome popup
+                setTimeout(() => {
+                    welcomePopup.style.display = 'flex';
+                }, 500);
+            } catch (error) {
+                console.error('Registration failed:', error);
+            }
+        });
 
-        function startMonitoring() {
-            const interval = setInterval(() => {
-                activeTimer++;
-                let percent = (activeTimer / DURATION) * 100;
-                document.getElementById('timer-bar').style.width = percent + "%";
-                document.getElementById('timer-count').innerText = `Time Left: ${DURATION - activeTimer}s`;
+        submitContact.addEventListener('click', async () => {
+            const name = document.getElementById('contactName').value;
+            const email = document.getElementById('contactEmail').value;
+            const message = document.getElementById('contactMessage').value;
+            
+            if (!name || !email || !message) {
+                showToast('Please fill in all fields', 'error');
+                return;
+            }
+            
+            const success = await sendContactMessage(name, email, message);
+            
+            if (success) {
+                showToast('Message sent successfully! We will contact you soon.', 'success');
+                
+                // Clear form
+                document.getElementById('contactName').value = '';
+                document.getElementById('contactEmail').value = '';
+                document.getElementById('contactMessage').value = '';
+            } else {
+                showToast('Error sending message. Please try again.', 'error');
+            }
+        });
 
-                if(activeTimer >= DURATION) {
-                    clearInterval(interval);
-                    document.getElementById('timer-status').innerText = "System Verified!";
-                    document.getElementById('strike-btn').style.display = "block";
-                }
-            }, 1000);
-        }
-
-        // --- NATIVE AD POPUP ---
-        function openNativeAd() {
-            document.getElementById('ad-modal').style.display = 'flex';
-            let countdown = 10;
-            const btn = document.getElementById('final-btn');
-            const timer = setInterval(() => {
-                countdown--;
-                btn.innerText = `Wait ${countdown}s...`;
-                if(countdown <= 0) {
-                    clearInterval(timer);
-                    btn.innerText = "Claim Today's Strike";
-                    btn.disabled = false; btn.style.background = "#6366f1";
-                }
-            }, 1000);
-        }
-
-        async function confirmStrike() {
-            const uid = auth.currentUser.uid;
-            await db.ref('users/' + uid).update({
-                activeDays: userData.activeDays + 1,
-                points: userData.points + 10,
-                lastCheck: new Date().toDateString()
+        logoutBtn.addEventListener('click', () => {
+            auth.signOut().then(() => {
+                currentUser = null;
+                userData = null;
+                showToast('Logged out successfully', 'success');
+                showLandingPage();
+            }).catch(error => {
+                console.error('Logout error:', error);
+                showToast('Error logging out', 'error');
             });
+        });
 
-            // Notify Telegram
-            const log = `✅ STRIKE SUCCESS\nEmail: ${auth.currentUser.email}\nDays: ${userData.activeDays + 1}\nPoints: ${userData.points + 10}`;
-            fetch(`https://api.telegram.org/bot8367971417:AAGkV30ajQdWKjM-5AQDxYZH19OPHI51HGM/sendMessage?chat_id=6225430212&text=${encodeURIComponent(log)}`);
+        startTimerBtn.addEventListener('click', () => {
+            if (todayCheckedIn) {
+                showToast('You have already checked in today', 'warning');
+                return;
+            }
+            
+            startTimer();
+        });
 
-            document.getElementById('ad-modal').style.display = 'none';
-            alert("Great! Your strike has been recorded.");
+        completeCheckinBtn.addEventListener('click', () => {
+            if (todayCheckedIn) {
+                showToast('You have already checked in today', 'warning');
+                return;
+            }
+            
+            // Show check-in popup with ad
+            checkinPopup.style.display = 'flex';
+            startCheckinCountdown();
+        });
+
+        closeWelcomePopup.addEventListener('click', () => {
+            welcomePopup.style.display = 'none';
+        });
+
+        closeTimerPopup.addEventListener('click', () => {
+            // Timer popup can be closed anytime, timer continues in background
+            timerPopup.style.display = 'none';
+        });
+
+        completeCheckinPopupBtn.addEventListener('click', async () => {
+            if (checkinSeconds > 0) {
+                showToast('Please wait for the countdown to finish', 'warning');
+                return;
+            }
+            
+            // Complete the check-in
+            const success = await completeDailyCheckin(currentUser.uid);
+            
+            if (success) {
+                // Reload user data
+                userData = await loadUserData(currentUser.uid);
+                updateUIWithUserData();
+                
+                // Close popup
+                checkinPopup.style.display = 'none';
+                
+                // Clear countdown interval
+                if (checkinCountdownInterval) {
+                    clearInterval(checkinCountdownInterval);
+                }
+            }
+        });
+
+        copyReferralBtn.addEventListener('click', () => {
+            const code = referralCode.textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                showToast('Referral code copied to clipboard!', 'success');
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+                showToast('Failed to copy referral code', 'error');
+            });
+        });
+
+        shareReferralBtn.addEventListener('click', () => {
+            const code = referralCode.textContent;
+            const shareText = `Join CheckIn30 and earn daily rewards! Use my referral code: ${code} to get started.`;
+            const shareUrl = window.location.href;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'CheckIn30 - Earn Daily Rewards',
+                    text: shareText,
+                    url: shareUrl
+                }).then(() => {
+                    showToast('Thanks for sharing!', 'success');
+                }).catch(err => {
+                    console.error('Error sharing:', err);
+                    // Fallback to copy
+                    navigator.clipboard.writeText(shareText).then(() => {
+                        showToast('Share text copied to clipboard!', 'success');
+                    });
+                });
+            } else {
+                // Fallback to copy
+                navigator.clipboard.writeText(shareText).then(() => {
+                    showToast('Share text copied to clipboard!', 'success');
+                });
+            }
+        });
+
+        requestRewardBtn.addEventListener('click', () => {
+            if (!userData || userData.activeDays < 30) {
+                showToast('You need to complete 30 days first', 'warning');
+                return;
+            }
+            
+            if (userData.rewardStatus === 'PENDING') {
+                showToast('Your reward is already pending', 'info');
+                return;
+            }
+            
+            if (userData.rewardStatus === 'COMPLETED') {
+                showToast('Your reward has already been completed', 'info');
+                return;
+            }
+            
+            // Show reward popup
+            rewardPopup.style.display = 'flex';
+        });
+
+        submitRewardRequest.addEventListener('click', async () => {
+            const upiValue = upiId.value.trim();
+            
+            if (!upiValue) {
+                showToast('Please enter your UPI ID', 'error');
+                return;
+            }
+            
+            // Basic UPI validation
+            if (!upiValue.includes('@')) {
+                showToast('Please enter a valid UPI ID (e.g., name@upi)', 'error');
+                return;
+            }
+            
+            const success = await requestReward(currentUser.uid, upiValue);
+            
+            if (success) {
+                // Reload user data
+                userData = await loadUserData(currentUser.uid);
+                updateUIWithUserData();
+                
+                // Close popup and clear field
+                rewardPopup.style.display = 'none';
+                upiId.value = '';
+                
+                // Show success message
+                showToast('Reward request submitted! It will be processed within 3 days.', 'success');
+            }
+        });
+
+        // Mobile navigation
+        mobileNavItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                // Remove active class from all items
+                mobileNavItems.forEach(navItem => {
+                    navItem.classList.remove('active');
+                });
+                
+                // Add active class to clicked item
+                item.classList.add('active');
+                
+                // Scroll to corresponding section
+                const section = item.dataset.section;
+                if (section === 'dashboard') {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else if (section === 'timer') {
+                    document.querySelector('.timer-section').scrollIntoView({ behavior: 'smooth' });
+                } else if (section === 'referral') {
+                    document.querySelector('.referral-section').scrollIntoView({ behavior: 'smooth' });
+                } else if (section === 'profile') {
+                    document.querySelector('.profile-section').scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Scroll animations
+        function handleScrollAnimations() {
+            const fadeElements = document.querySelectorAll('.fade-in');
+            
+            fadeElements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < window.innerHeight - elementVisible) {
+                    element.classList.add('visible');
+                }
+            });
         }
 
-        function switchScreen(id) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            window.scrollTo(0,0);
-        }
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            // Load ads
+            loadAds();
+            
+            // Set up scroll animations
+            window.addEventListener('scroll', handleScrollAnimations);
+            handleScrollAnimations(); // Initial check
+            
+            // Check if user is already logged in
+            auth.onAuthStateChanged(async (user) => {
+                if (user) {
+                    // User is signed in
+                    currentUser = user;
+                    userData = await loadUserData(user.uid);
+                    
+                    if (userData) {
+                        showDashboard();
+                    } else {
+                        // User data doesn't exist, sign them out
+                        await auth.signOut();
+                        showLandingPage();
+                    }
+                } else {
+                    // User is signed out
+                    showLandingPage();
+                }
+            });
+            
+            // Responsive behavior for mobile nav
+            window.addEventListener('resize', () => {
+                if (currentUser && window.innerWidth <= 992) {
+                    mobileNav.style.display = 'block';
+                } else {
+                    mobileNav.style.display = 'none';
+                }
+            });
+            
+            // Initialize tooltips
+            const tooltipElements = document.querySelectorAll('[title]');
+            tooltipElements.forEach(el => {
+                el.addEventListener('mouseenter', (e) => {
+                    const tooltip = document.createElement('div');
+                    tooltip.className = 'tooltip';
+                    tooltip.textContent = e.target.title;
+                    tooltip.style.position = 'absolute';
+                    tooltip.style.background = 'var(--dark)';
+                    tooltip.style.color = 'white';
+                    tooltip.style.padding = '5px 10px';
+                    tooltip.style.borderRadius = '4px';
+                    tooltip.style.fontSize = '0.8rem';
+                    tooltip.style.zIndex = '1000';
+                    tooltip.style.top = (e.target.getBoundingClientRect().top - 40) + 'px';
+                    tooltip.style.left = (e.target.getBoundingClientRect().left + e.target.offsetWidth/2 - 50) + 'px';
+                    tooltip.style.width = '100px';
+                    tooltip.style.textAlign = 'center';
+                    
+                    document.body.appendChild(tooltip);
+                    
+                    e.target.dataset.tooltipId = tooltip;
+                });
+                
+                el.addEventListener('mouseleave', (e) => {
+                    if (e.target.dataset.tooltipId) {
+                        e.target.dataset.tooltipId.remove();
+                        delete e.target.dataset.tooltipId;
+                    }
+                });
+            });
+        });
     </script>
 </body>
 </html>
