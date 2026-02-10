@@ -3,36 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CheckIn30 - Daily Check-in Rewards</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>CheckIn30 - Daily Streak Tracker</title>
     <style>
-        :root {
-            --primary: #4361ee;
-            --secondary: #3a0ca3;
-            --accent: #7209b7;
-            --success: #4cc9f0;
-            --danger: #f72585;
-            --light: #f8f9fa;
-            --dark: #212529;
-            --gray: #6c757d;
-            --light-gray: #e9ecef;
-            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            --radius: 12px;
-        }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
-            line-height: 1.6;
-            color: var(--dark);
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
+            color: #333;
         }
 
         .container {
@@ -43,13 +26,13 @@
 
         /* Header */
         header {
-            background: white;
-            box-shadow: var(--shadow);
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px 0;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
             position: fixed;
             width: 100%;
             top: 0;
             z-index: 1000;
-            padding: 15px 0;
         }
 
         .header-content {
@@ -62,124 +45,44 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            font-weight: 700;
             font-size: 1.8rem;
-            color: var(--primary);
-            text-decoration: none;
+            font-weight: 700;
+            color: #667eea;
         }
 
         .logo i {
-            color: var(--accent);
+            color: #764ba2;
         }
 
-        .auth-buttons {
-            display: flex;
-            gap: 10px;
-        }
-
-        .btn {
-            padding: 10px 20px;
-            border-radius: var(--radius);
+        .auth-buttons button {
+            padding: 10px 25px;
+            border-radius: 8px;
+            border: none;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
-            border: none;
-            font-family: 'Poppins', sans-serif;
+            margin-left: 10px;
         }
 
-        .btn-primary {
-            background-color: var(--primary);
+        .btn-login {
+            background: #667eea;
             color: white;
         }
 
-        .btn-primary:hover {
-            background-color: var(--secondary);
-            transform: translateY(-2px);
-        }
-
-        .btn-secondary {
-            background-color: var(--light-gray);
-            color: var(--dark);
-        }
-
-        .btn-secondary:hover {
-            background-color: #d8d8d8;
-        }
-
-        .btn-success {
-            background-color: var(--success);
+        .btn-register {
+            background: #ed64a6;
             color: white;
         }
 
-        .btn-danger {
-            background-color: var(--danger);
-            color: white;
-        }
-
-        .btn-accent {
-            background-color: var(--accent);
-            color: white;
-        }
-
-        .btn-small {
-            padding: 8px 15px;
-            font-size: 0.9rem;
-        }
-
-        /* Main Content */
-        main {
-            margin-top: 80px;
-            padding: 20px 0 50px;
-        }
-
-        /* Hero Section */
-        .hero {
-            text-align: center;
-            padding: 60px 20px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: var(--radius);
-            color: white;
-            margin-bottom: 30px;
-            animation: fadeIn 1s ease;
-        }
-
-        .hero h1 {
-            font-size: 2.8rem;
-            margin-bottom: 15px;
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            max-width: 800px;
-            margin: 0 auto 25px;
-            opacity: 0.9;
-        }
-
-        /* User Profile */
-        .profile-dropdown {
-            position: relative;
-        }
-
-        .profile-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
+        .user-profile {
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding: 8px 15px;
-            border-radius: var(--radius);
-            transition: all 0.3s ease;
-        }
-
-        .profile-btn:hover {
-            background: var(--light-gray);
+            gap: 15px;
         }
 
         .user-avatar {
             width: 40px;
             height: 40px;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
+            background: linear-gradient(135deg, #667eea, #764ba2);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -188,41 +91,33 @@
             font-weight: 600;
         }
 
-        .profile-menu {
-            position: absolute;
-            top: 100%;
-            right: 0;
-            background: white;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            min-width: 200px;
-            display: none;
-            z-index: 1000;
-            overflow: hidden;
+        /* Main Content */
+        main {
+            margin-top: 100px;
+            padding: 30px 0;
         }
 
-        .profile-menu.active {
-            display: block;
+        /* Hero Section */
+        .hero {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 60px 40px;
+            text-align: center;
+            margin-bottom: 40px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
         }
 
-        .profile-menu-item {
-            padding: 12px 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-decoration: none;
-            color: var(--dark);
-            transition: all 0.3s ease;
-            border-bottom: 1px solid var(--light-gray);
-            cursor: pointer;
+        .hero h1 {
+            color: #4a5568;
+            font-size: 2.8rem;
+            margin-bottom: 20px;
         }
 
-        .profile-menu-item:hover {
-            background: var(--light);
-        }
-
-        .profile-menu-item:last-child {
-            border-bottom: none;
+        .hero p {
+            color: #718096;
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
         }
 
         /* Dashboard */
@@ -230,179 +125,125 @@
             display: none;
         }
 
-        .dashboard.active {
-            display: block;
-            animation: slideUp 0.5s ease;
-        }
-
-        /* Stats */
+        /* Stats Grid */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
             margin-bottom: 40px;
         }
 
         .stat-card {
             background: white;
-            padding: 25px;
-            border-radius: var(--radius);
+            padding: 30px;
+            border-radius: 15px;
             text-align: center;
-            border-left: 5px solid var(--primary);
-            box-shadow: var(--shadow);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border-top: 5px solid #667eea;
         }
 
         .stat-value {
-            font-size: 2.5rem;
+            font-size: 3rem;
             font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 5px;
+            color: #667eea;
+            margin-bottom: 10px;
         }
 
         .stat-label {
-            color: var(--gray);
+            color: #718096;
             font-size: 1rem;
         }
 
-        /* Timer */
+        /* Timer Section */
         .timer-section {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 30px;
-            border-radius: var(--radius);
-            text-align: center;
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
             margin-bottom: 40px;
-            box-shadow: var(--shadow);
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
         }
 
         .timer-display {
-            font-size: 4rem;
+            font-size: 5rem;
             font-weight: 700;
-            margin: 20px 0;
+            color: #667eea;
+            margin: 30px 0;
             font-family: monospace;
         }
 
         .progress-container {
-            background: rgba(255, 255, 255, 0.2);
             height: 12px;
-            border-radius: 10px;
+            background: #e2e8f0;
+            border-radius: 6px;
             margin: 30px 0;
             overflow: hidden;
         }
 
         .progress-bar {
             height: 100%;
-            background: var(--success);
+            background: linear-gradient(to right, #48bb78, #38a169);
             width: 0%;
             transition: width 1s linear;
         }
 
-        /* Streak Graph */
-        .streak-section {
+        /* Streak Calendar */
+        .streak-calendar {
             background: white;
-            border-radius: var(--radius);
-            padding: 30px;
-            box-shadow: var(--shadow);
+            border-radius: 15px;
+            padding: 40px;
             margin-bottom: 40px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
         }
 
-        .streak-graph {
-            height: 200px;
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
             display: flex;
-            align-items: flex-end;
-            gap: 8px;
-            padding: 20px 0;
-            margin-bottom: 25px;
-        }
-
-        .graph-bar {
-            flex: 1;
-            background: var(--light-gray);
-            border-radius: 5px 5px 0 0;
-            position: relative;
-            min-height: 20px;
-        }
-
-        .graph-bar.active {
-            background: linear-gradient(to top, var(--primary), var(--accent));
-        }
-
-        /* Popunder Button Section */
-        .popunder-section {
-            background: white;
-            border-radius: var(--radius);
-            padding: 40px;
-            box-shadow: var(--shadow);
-            margin-bottom: 40px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .popunder-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 5px;
-            background: linear-gradient(to right, #ff9a00, #ff5e00);
-        }
-
-        .popunder-btn {
-            background: linear-gradient(135deg, #ff9a00, #ff5e00);
-            padding: 18px 50px;
-            font-size: 1.3rem;
-            border-radius: 50px;
-            margin-top: 20px;
-            animation: pulse 2s infinite;
-            border: none;
-            color: white;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
             font-weight: 600;
-            cursor: pointer;
+            font-size: 1.2rem;
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
         }
 
-        /* Ad Containers */
-        .ad-container {
-            margin: 30px 0;
-            text-align: center;
+        .calendar-day.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-color: #667eea;
         }
 
-        .ad-label {
-            color: var(--gray);
-            font-size: 0.9rem;
-            margin-bottom: 10px;
+        /* Monthly Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
         }
 
-        /* About Section */
-        .about-section {
+        .feature-card {
             background: white;
-            border-radius: var(--radius);
-            padding: 40px;
-            box-shadow: var(--shadow);
-            margin-bottom: 40px;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
             text-align: center;
         }
 
-        /* Connect Section */
-        .connect-section {
-            text-align: center;
-            padding: 50px 20px;
-            background: linear-gradient(135deg, var(--accent), var(--danger));
-            border-radius: var(--radius);
-            color: white;
-            margin-bottom: 40px;
+        .feature-icon {
+            font-size: 3rem;
+            color: #667eea;
+            margin-bottom: 20px;
         }
 
-        /* Footer */
-        footer {
-            background: var(--dark);
-            color: white;
-            padding: 40px 0;
-            text-align: center;
-        }
-
-        /* Modal Styles */
+        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -410,7 +251,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0,0,0,0.8);
             z-index: 2000;
             align-items: center;
             justify-content: center;
@@ -423,33 +264,97 @@
 
         .modal-content {
             background: white;
-            border-radius: var(--radius);
-            padding: 30px;
+            border-radius: 20px;
+            padding: 40px;
             max-width: 500px;
             width: 100%;
             position: relative;
+            animation: slideUp 0.3s ease;
         }
 
         .modal-close {
             position: absolute;
-            top: 15px;
-            right: 15px;
+            top: 20px;
+            right: 20px;
             background: none;
             border: none;
             font-size: 1.5rem;
             cursor: pointer;
-            color: var(--gray);
+            color: #718096;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+        }
+
+        .form-control:focus {
+            border-color: #667eea;
+            outline: none;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 15px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Daily Popup */
+        .daily-popup {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            color: white;
+        }
+
+        .popup-content {
+            text-align: center;
+        }
+
+        .popup-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        /* Success Modal */
+        .success-content {
+            text-align: center;
+        }
+
+        .success-icon {
+            font-size: 5rem;
+            color: #48bb78;
+            margin-bottom: 20px;
         }
 
         /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
         @keyframes slideUp {
-            from { transform: translateY(50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
 
         @keyframes pulse {
@@ -464,10 +369,10 @@
                 font-size: 2.2rem;
             }
             .timer-display {
-                font-size: 3rem;
+                font-size: 3.5rem;
             }
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
+            .calendar-grid {
+                grid-template-columns: repeat(4, 1fr);
             }
         }
     </style>
@@ -476,32 +381,20 @@
     <!-- Header -->
     <header>
         <div class="container header-content">
-            <a href="#" class="logo">
-                <i class="fas fa-calendar-check"></i>
+            <div class="logo">
+                <i>📅</i>
                 <span>CheckIn30</span>
-            </a>
-            
-            <div class="auth-buttons" id="authButtons">
-                <button class="btn btn-primary" id="loginBtn">Login</button>
-                <button class="btn btn-secondary" id="registerBtn">Register</button>
             </div>
             
-            <div class="profile-dropdown" id="profileDropdown" style="display: none;">
-                <button class="profile-btn">
-                    <div class="user-avatar" id="headerAvatar">U</div>
-                    <span id="headerUserName">User</span>
-                    <i class="fas fa-chevron-down"></i>
-                </button>
-                <div class="profile-menu" id="profileMenu">
-                    <div class="profile-menu-item" id="profileInfo">
-                        <i class="fas fa-user"></i>
-                        <span id="profileEmail">user@email.com</span>
-                    </div>
-                    <div class="profile-menu-item" id="logoutMenuItem">
-                        <i class="fas fa-sign-out-alt"></i>
-                        <span>Logout</span>
-                    </div>
-                </div>
+            <div class="auth-buttons" id="authButtons">
+                <button class="btn-login" onclick="showLoginModal()">Login</button>
+                <button class="btn-register" onclick="showRegisterModal()">Register</button>
+            </div>
+            
+            <div class="user-profile" id="userProfile" style="display: none;">
+                <div class="user-avatar" id="userAvatar">U</div>
+                <span id="userName">User</span>
+                <button class="btn-login" onclick="logout()" style="padding: 8px 20px;">Logout</button>
             </div>
         </div>
     </header>
@@ -509,103 +402,47 @@
     <!-- Main Content -->
     <main>
         <div class="container">
-            <!-- Hero Section (Visible when not logged in) -->
+            <!-- Login View -->
             <div id="loginView">
-                <section class="hero">
-                    <h1>Welcome to CheckIn30</h1>
-                    <p>Check in daily for 30 days to unlock amazing rewards! Build your streak, earn rewards, and get exciting gifts.</p>
-                    <div class="auth-buttons" style="margin-top: 30px;">
-                        <button class="btn btn-primary btn-large" id="heroLoginBtn">Login to Continue</button>
-                        <button class="btn btn-accent btn-large" id="heroRegisterBtn">Create Account</button>
-                    </div>
-                </section>
-
-                <!-- AD CODE HERE 1 -->
-                <div class="ad-container">
-                    <div class="ad-label">Advertisement</div>
-                    <div id="ad-container-1">
-                        <!-- Banner ad will load here -->
+                <div class="hero">
+                    <h1>Build Your 30-Day Streak</h1>
+                    <p>Check in daily for 30 days to unlock special rewards. Just visit daily and complete a simple task to maintain your streak!</p>
+                    <div style="margin-top: 40px;">
+                        <button class="btn-login" onclick="showLoginModal()" style="padding: 15px 40px; font-size: 1.2rem;">Start Your Journey</button>
                     </div>
                 </div>
 
-                <!-- Features -->
-                <div class="streak-section">
-                    <h2 style="text-align: center; margin-bottom: 30px; color: var(--secondary);">How It Works</h2>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
-                        <div style="text-align: center; padding: 20px;">
-                            <div style="font-size: 2.5rem; color: var(--primary); margin-bottom: 15px;">
-                                <i class="fas fa-user-plus"></i>
-                            </div>
-                            <h3>1. Register</h3>
-                            <p>Create your free account in seconds</p>
-                        </div>
-                        <div style="text-align: center; padding: 20px;">
-                            <div style="font-size: 2.5rem; color: var(--primary); margin-bottom: 15px;">
-                                <i class="fas fa-clock"></i>
-                            </div>
-                            <h3>2. Daily Timer</h3>
-                            <p>Start 2-minute timer daily</p>
-                        </div>
-                        <div style="text-align: center; padding: 20px;">
-                            <div style="font-size: 2.5rem; color: var(--primary); margin-bottom: 15px;">
-                                <i class="fas fa-fire"></i>
-                            </div>
-                            <h3>3. Build Streak</h3>
-                            <p>Complete 30 days streak</p>
-                        </div>
-                        <div style="text-align: center; padding: 20px;">
-                            <div style="font-size: 2.5rem; color: var(--primary); margin-bottom: 15px;">
-                                <i class="fas fa-gift"></i>
-                            </div>
-                            <h3>4. Claim Reward</h3>
-                            <p>Get your exciting reward</p>
-                        </div>
+                <!-- How It Works -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div style="font-size: 3rem; color: #667eea; margin-bottom: 15px;">📝</div>
+                        <h3 style="margin-bottom: 10px; color: #4a5568;">1. Register</h3>
+                        <p style="color: #718096;">Create your free account</p>
                     </div>
-                </div>
-
-                <!-- AD CODE HERE 2 -->
-                <div class="ad-container">
-                    <div class="ad-label">Advertisement</div>
-                    <div id="ad-container-2">
-                        <!-- Banner ad will load here -->
+                    <div class="stat-card">
+                        <div style="font-size: 3rem; color: #667eea; margin-bottom: 15px;">⏰</div>
+                        <h3 style="margin-bottom: 10px; color: #4a5568;">2. Daily Timer</h3>
+                        <p style="color: #718096;">Complete 2-minute daily task</p>
                     </div>
-                </div>
-
-                <!-- About -->
-                <div class="about-section">
-                    <h2 style="color: var(--secondary); margin-bottom: 20px;">About CheckIn30</h2>
-                    <p style="max-width: 800px; margin: 0 auto 20px;">CheckIn30 rewards consistent users who check in daily. Our platform is secure, reliable, and trusted by thousands of users.</p>
-                    <div style="display: flex; justify-content: center; gap: 20px; margin-top: 30px; flex-wrap: wrap;">
-                        <div style="background: var(--light); padding: 15px 25px; border-radius: var(--radius);">
-                            <i class="fas fa-shield-alt" style="color: var(--success);"></i>
-                            <span style="margin-left: 10px;">100% Secure</span>
-                        </div>
-                        <div style="background: var(--light); padding: 15px 25px; border-radius: var(--radius);">
-                            <i class="fas fa-bolt" style="color: var(--accent);"></i>
-                            <span style="margin-left: 10px;">Instant Rewards</span>
-                        </div>
-                        <div style="background: var(--light); padding: 15px 25px; border-radius: var(--radius);">
-                            <i class="fas fa-headset" style="color: var(--primary);"></i>
-                            <span style="margin-left: 10px;">24/7 Support</span>
-                        </div>
+                    <div class="stat-card">
+                        <div style="font-size: 3rem; color: #667eea; margin-bottom: 15px;">🔥</div>
+                        <h3 style="margin-bottom: 10px; color: #4a5568;">3. Build Streak</h3>
+                        <p style="color: #718096;">30 consecutive days</p>
+                    </div>
+                    <div class="stat-card">
+                        <div style="font-size: 3rem; color: #667eea; margin-bottom: 15px;">🎁</div>
+                        <h3 style="margin-bottom: 10px; color: #4a5568;">4. Get Reward</h3>
+                        <p style="color: #718096;">Claim your special gift</p>
                     </div>
                 </div>
             </div>
 
-            <!-- Dashboard (Visible after login) -->
+            <!-- Dashboard (After Login) -->
             <div class="dashboard" id="dashboard">
-                <!-- Welcome Message -->
-                <div class="hero" style="margin-bottom: 30px; padding: 40px 20px;">
-                    <h1 id="welcomeMessage">Welcome Back!</h1>
-                    <p id="userEmailDisplay">Ready for your daily check-in?</p>
-                </div>
-
-                <!-- AD CODE HERE 3 -->
-                <div class="ad-container">
-                    <div class="ad-label">Advertisement</div>
-                    <div id="ad-container-3">
-                        <!-- Banner ad will load here -->
-                    </div>
+                <!-- Welcome -->
+                <div class="hero">
+                    <h1 id="welcomeText">Welcome Back!</h1>
+                    <p id="userEmailText" style="color: #718096;">Ready for your daily check-in?</p>
                 </div>
 
                 <!-- Stats -->
@@ -623,15 +460,15 @@
                         <div class="stat-label">Days Remaining</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-value" id="rewardEligible">No</div>
+                        <div class="stat-value" id="rewardStatus">No</div>
                         <div class="stat-label">Reward Ready</div>
                     </div>
                 </div>
 
                 <!-- Timer Section -->
                 <div class="timer-section">
-                    <h2 style="font-size: 1.8rem; margin-bottom: 10px;">Daily Check-in Timer</h2>
-                    <p style="opacity: 0.9; margin-bottom: 20px;">Start timer and keep tab open for 2 minutes</p>
+                    <h2 style="color: #4a5568; margin-bottom: 20px;">Daily Check-in Task</h2>
+                    <p style="color: #718096; margin-bottom: 20px;">Complete this 2-minute task to continue your streak</p>
                     
                     <div class="timer-display" id="timerDisplay">02:00</div>
                     
@@ -639,169 +476,87 @@
                         <div class="progress-bar" id="progressBar"></div>
                     </div>
                     
-                    <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
-                        <button class="btn btn-success btn-large" id="startTimerBtn">
-                            <i class="fas fa-play"></i> Start Timer
+                    <div style="display: flex; gap: 15px; justify-content: center; margin-top: 30px;">
+                        <button class="btn-login" id="startTimerBtn" onclick="startTimer()" style="padding: 15px 40px; font-size: 1.1rem;">
+                            Start Daily Task
                         </button>
-                        <button class="btn btn-accent btn-large" id="completeCheckinBtn" style="display: none;">
-                            <i class="fas fa-check-circle"></i> Complete Check-in
+                        <button class="btn-register" id="completeBtn" onclick="completeCheckin()" style="display: none; padding: 15px 40px; font-size: 1.1rem;">
+                            Complete Check-in
                         </button>
-                        <button class="btn btn-secondary" id="resetTimerBtn" style="display: none;">
-                            <i class="fas fa-redo"></i> Reset
+                        <button class="btn-login" id="resetBtn" onclick="resetTimer()" style="display: none; padding: 15px 40px; font-size: 1.1rem; background: #718096;">
+                            Reset
                         </button>
                     </div>
                 </div>
 
-                <!-- AD CODE HERE 4 -->
-                <div class="ad-container">
-                    <div class="ad-label">Advertisement</div>
-                    <div id="ad-container-4">
-                        <!-- Banner ad will load here -->
+                <!-- Streak Calendar -->
+                <div class="streak-calendar">
+                    <h2 style="color: #4a5568; margin-bottom: 20px; text-align: center;">Your 30-Day Calendar</h2>
+                    <div class="calendar-grid" id="calendarGrid">
+                        <!-- Days will be generated by JavaScript -->
                     </div>
                 </div>
 
-                <!-- Streak Graph -->
-                <div class="streak-section">
-                    <h2 style="text-align: center; margin-bottom: 20px; color: var(--secondary);">Your 30-Day Progress</h2>
-                    <div class="streak-graph" id="streakGraph">
-                        <!-- Generated dynamically -->
-                    </div>
-                    <div style="text-align: center; margin-top: 20px;">
-                        <div style="font-size: 1.2rem; color: var(--primary); font-weight: 600;" id="streakPercentage">
-                            0% Complete
+                <!-- Monthly Features -->
+                <div class="streak-calendar">
+                    <h2 style="color: #4a5568; margin-bottom: 30px; text-align: center;">Monthly Challenges</h2>
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <div class="feature-icon">🎯</div>
+                            <h3 style="color: #4a5568; margin-bottom: 15px;">Perfect Month</h3>
+                            <p style="color: #718096;">Check in every day for a full month to earn bonus points</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">⚡</div>
+                            <h3 style="color: #4a5568; margin-bottom: 15px;">Early Bird</h3>
+                            <p style="color: #718096;">Complete check-in before 10 AM for extra streak</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">🏆</div>
+                            <h3 style="color: #4a5568; margin-bottom: 15px;">Consistency King</h3>
+                            <p style="color: #718096;">Maintain 90-day streak for elite status</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">🤝</div>
+                            <h3 style="color: #4a5568; margin-bottom: 15px;">Refer Friends</h3>
+                            <p style="color: #718096;">Invite friends to get streak multipliers</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- AD CODE HERE 5 -->
-                <div class="ad-container">
-                    <div class="ad-label">Advertisement</div>
-                    <div id="ad-container-5">
-                        <!-- Banner ad will load here -->
-                    </div>
-                </div>
-
-                <!-- Reward Claim Button -->
-                <div style="text-align: center; margin: 40px 0;">
-                    <button class="btn btn-accent" id="requestRewardBtn" style="display: none; padding: 15px 40px; font-size: 1.2rem;">
-                        <i class="fas fa-gift"></i> Claim Your Reward
-                    </button>
-                </div>
-
-                <!-- AD CODE HERE 6 -->
-                <div class="ad-container">
-                    <div class="ad-label">Advertisement</div>
-                    <div id="ad-container-6">
-                        <!-- Banner ad will load here -->
-                    </div>
-                </div>
-
-                <!-- Popunder Button Section -->
-                <div class="popunder-section">
-                    <h2 style="color: var(--accent); margin-bottom: 15px;">Boost Your Rewards!</h2>
-                    <p style="color: var(--gray); margin-bottom: 20px;">
-                        Click below to increase your reward potential. New tab will open - wait 3 seconds and return.
+                <!-- Reward Section -->
+                <div class="timer-section" id="rewardSection" style="display: none;">
+                    <h2 style="color: #4a5568; margin-bottom: 20px;">🎉 Congratulations!</h2>
+                    <p style="color: #718096; margin-bottom: 30px; font-size: 1.1rem;">
+                        You've completed 30 days! Claim your reward now.
                     </p>
-                    <div style="display: inline-flex; align-items: center; gap: 8px; background: var(--light); padding: 10px 25px; border-radius: 50px; margin-bottom: 20px;">
-                        <i class="fas fa-mouse-pointer"></i>
-                        <span>Today's Clicks: <span id="clickCount">0</span>/2</span>
-                    </div>
-                    <br>
-                    <button class="popunder-btn" id="popunderBtn">
-                        <i class="fas fa-bolt"></i> BOOST REWARDS NOW
-                    </button>
-                    <p style="margin-top: 15px; font-size: 0.9rem; color: var(--gray);">
-                        <i class="fas fa-info-circle"></i> 2 clicks allowed daily
-                    </p>
-                </div>
-
-                <!-- AD CODE HERE 7 -->
-                <div class="ad-container">
-                    <div class="ad-label">Advertisement</div>
-                    <div id="ad-container-7">
-                        <!-- Banner ad will load here -->
-                    </div>
-                </div>
-
-                <!-- About Section -->
-                <div class="about-section">
-                    <h2 style="color: var(--secondary); margin-bottom: 20px;">Secure & Trusted Platform</h2>
-                    <p style="max-width: 800px; margin: 0 auto 20px;">
-                        Your data is protected with bank-level security. We use Firebase authentication and encryption to keep your information safe.
-                    </p>
-                    <div style="display: flex; justify-content: center; gap: 20px; margin-top: 30px; flex-wrap: wrap;">
-                        <div style="text-align: center;">
-                            <i class="fas fa-lock" style="font-size: 2rem; color: var(--success);"></i>
-                            <p style="margin-top: 10px;">Encrypted Data</p>
-                        </div>
-                        <div style="text-align: center;">
-                            <i class="fas fa-shield-alt" style="font-size: 2rem; color: var(--primary);"></i>
-                            <p style="margin-top: 10px;">Firebase Security</p>
-                        </div>
-                        <div style="text-align: center;">
-                            <i class="fas fa-user-shield" style="font-size: 2rem; color: var(--accent);"></i>
-                            <p style="margin-top: 10px;">Privacy First</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- AD CODE HERE 8 -->
-                <div class="ad-container">
-                    <div class="ad-label">Advertisement</div>
-                    <div id="ad-container-8">
-                        <!-- Banner ad will load here -->
-                    </div>
-                </div>
-
-                <!-- Connect Section -->
-                <div class="connect-section">
-                    <h2 style="font-size: 2rem; margin-bottom: 20px;">Need Help?</h2>
-                    <p style="max-width: 600px; margin: 0 auto; opacity: 0.9;">
-                        Contact our support team for any questions or issues.
-                    </p>
-                    <button class="btn" style="background: white; color: var(--accent); padding: 15px 40px; font-size: 1.1rem; font-weight: 600; margin-top: 25px;" id="connectBtn">
-                        <i class="fas fa-envelope"></i> Contact Support
+                    <button class="btn-register" onclick="showRewardModal()" style="padding: 15px 50px; font-size: 1.2rem;">
+                        Claim Your Reward
                     </button>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div style="text-align: center;">
-                <div style="font-size: 2rem; color: white; margin-bottom: 20px;">
-                    <i class="fas fa-calendar-check"></i>
-                </div>
-                <div style="margin-bottom: 20px;">
-                    <a href="#" style="color: white; margin: 0 15px; text-decoration: none;">Privacy Policy</a>
-                    <a href="#" style="color: white; margin: 0 15px; text-decoration: none;">Terms</a>
-                    <a href="#" style="color: white; margin: 0 15px; text-decoration: none;">Contact</a>
-                </div>
-                <p>&copy; 2023 CheckIn30. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
-
     <!-- Login Modal -->
     <div class="modal" id="loginModal">
         <div class="modal-content">
-            <button class="modal-close" id="closeLoginModal">&times;</button>
-            <h2 style="color: var(--secondary); margin-bottom: 20px;">Login</h2>
-            <form id="loginForm">
-                <div style="margin-bottom: 20px;">
-                    <label style="display: block; margin-bottom: 8px; font-weight: 500;">Email</label>
-                    <input type="email" id="loginEmail" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: var(--radius);" placeholder="Your email" required>
+            <button class="modal-close" onclick="hideModal('loginModal')">×</button>
+            <h2 style="text-align: center; margin-bottom: 30px; color: #4a5568;">Login to CheckIn30</h2>
+            <form id="loginForm" onsubmit="event.preventDefault(); handleLogin()">
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="loginEmail" class="form-control" placeholder="Enter your email" required>
                 </div>
-                <div style="margin-bottom: 25px;">
-                    <label style="display: block; margin-bottom: 8px; font-weight: 500;">Password</label>
-                    <input type="password" id="loginPassword" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: var(--radius);" placeholder="Your password" required>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="loginPassword" class="form-control" placeholder="Enter your password" required>
                 </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%; padding: 14px;">Login</button>
+                <button type="submit" class="btn-submit">Login</button>
             </form>
-            <p style="text-align: center; margin-top: 15px; color: var(--gray);">
-                No account? <a href="#" id="showRegisterFromLogin" style="color: var(--primary); font-weight: 600;">Register</a>
+            <p style="text-align: center; margin-top: 20px; color: #718096;">
+                Don't have an account? 
+                <a href="#" onclick="showRegisterModal()" style="color: #667eea; font-weight: 600;">Register here</a>
             </p>
         </div>
     </div>
@@ -809,108 +564,78 @@
     <!-- Register Modal -->
     <div class="modal" id="registerModal">
         <div class="modal-content">
-            <button class="modal-close" id="closeRegisterModal">&times;</button>
-            <h2 style="color: var(--secondary); margin-bottom: 20px;">Register</h2>
-            <form id="registerForm">
-                <div style="margin-bottom: 20px;">
-                    <label style="display: block; margin-bottom: 8px; font-weight: 500;">Full Name</label>
-                    <input type="text" id="registerName" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: var(--radius);" placeholder="Your name" required>
+            <button class="modal-close" onclick="hideModal('registerModal')">×</button>
+            <h2 style="text-align: center; margin-bottom: 30px; color: #4a5568;">Create Account</h2>
+            <form id="registerForm" onsubmit="event.preventDefault(); handleRegister()">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="registerName" class="form-control" placeholder="Enter your full name" required>
                 </div>
-                <div style="margin-bottom: 20px;">
-                    <label style="display: block; margin-bottom: 8px; font-weight: 500;">Email</label>
-                    <input type="email" id="registerEmail" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: var(--radius);" placeholder="Your email" required>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="registerEmail" class="form-control" placeholder="Enter your email" required>
                 </div>
-                <div style="margin-bottom: 25px;">
-                    <label style="display: block; margin-bottom: 8px; font-weight: 500;">Password</label>
-                    <input type="password" id="registerPassword" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: var(--radius);" placeholder="Min. 6 characters" required>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="registerPassword" class="form-control" placeholder="Create a password (min. 6 characters)" required>
                 </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%; padding: 14px;">Create Account</button>
+                <button type="submit" class="btn-submit">Create Account</button>
             </form>
-            <p style="text-align: center; margin-top: 15px; color: var(--gray);">
-                Have account? <a href="#" id="showLoginFromRegister" style="color: var(--primary); font-weight: 600;">Login</a>
+            <p style="text-align: center; margin-top: 20px; color: #718096;">
+                Already have an account? 
+                <a href="#" onclick="showLoginModal()" style="color: #667eea; font-weight: 600;">Login here</a>
             </p>
         </div>
     </div>
 
     <!-- Daily Check-in Popup -->
-    <div class="modal" id="checkinPopup">
-        <div class="modal-content">
-            <button class="modal-close" id="closeCheckinPopup">&times;</button>
-            <div style="text-align: center;">
-                <div style="font-size: 4rem; color: var(--success); margin-bottom: 20px;">
-                    <i class="fas fa-calendar-check"></i>
-                </div>
-                <h2 style="color: var(--secondary); margin-bottom: 15px;">Daily Check-in Time!</h2>
-                <p style="color: var(--gray); margin-bottom: 25px;">
-                    Ready to continue your streak? Start your daily timer now.
-                </p>
-                
-                <!-- Native Ad in Popup -->
-                <div style="background: var(--light); padding: 20px; border-radius: var(--radius); margin-bottom: 25px;">
-                    <div style="text-align: center;">
-                        <div style="font-size: 0.9rem; color: var(--gray); margin-bottom: 10px;">Special Offer</div>
-                        <div id="nativeAdContent">Exclusive daily offer!</div>
-                    </div>
-                </div>
-                
-                <button class="btn btn-success" style="padding: 15px 40px; font-size: 1.1rem;" id="startTimerFromPopup">
-                    <i class="fas fa-play-circle"></i> Start Daily Timer
-                </button>
-            </div>
+    <div class="modal daily-popup" id="dailyPopup">
+        <div class="modal-content popup-content">
+            <button class="modal-close" onclick="hideModal('dailyPopup')">×</button>
+            <div class="popup-icon">🎯</div>
+            <h2 style="margin-bottom: 15px;">Daily Check-in Time!</h2>
+            <p style="margin-bottom: 30px; opacity: 0.9;">
+                Ready to continue your streak? Complete today's task to move closer to your reward!
+            </p>
+            <button class="btn-submit" onclick="startTimerFromPopup()" style="background: white; color: #48bb78;">
+                Start Daily Task
+            </button>
         </div>
     </div>
 
-    <!-- Reward Request Modal -->
-    <div class="modal" id="rewardRequestModal">
+    <!-- Reward Modal -->
+    <div class="modal" id="rewardModal">
         <div class="modal-content">
-            <button class="modal-close" id="closeRewardModal">&times;</button>
-            <div style="text-align: center;">
-                <div style="font-size: 4rem; color: gold; margin-bottom: 20px;">
-                    <i class="fas fa-gift"></i>
+            <button class="modal-close" onclick="hideModal('rewardModal')">×</button>
+            <h2 style="text-align: center; margin-bottom: 30px; color: #4a5568;">Claim Your Reward</h2>
+            <p style="color: #718096; margin-bottom: 30px; text-align: center;">
+                Congratulations on completing 30 days! Please provide your details to receive your reward.
+            </p>
+            <form id="rewardForm" onsubmit="event.preventDefault(); submitRewardRequest()">
+                <div class="form-group">
+                    <input type="text" id="rewardName" class="form-control" placeholder="Your full name" required>
                 </div>
-                <h2 style="color: var(--secondary); margin-bottom: 15px;">Claim Your Reward!</h2>
-                <p style="color: var(--gray); margin-bottom: 25px;">
-                    Congratulations! Complete the form to receive your reward.
-                </p>
-                
-                <!-- Native Ad -->
-                <div style="background: var(--light); padding: 20px; border-radius: var(--radius); margin-bottom: 25px;">
-                    <div style="text-align: center;">
-                        <div style="font-size: 0.9rem; color: var(--gray); margin-bottom: 10px;">Limited Time Offer</div>
-                        <div id="rewardAdContent">Special reward for our champions!</div>
-                    </div>
+                <div class="form-group">
+                    <input type="email" id="rewardEmail" class="form-control" placeholder="Your email address" required>
                 </div>
-                
-                <form id="rewardRequestForm">
-                    <div style="margin-bottom: 20px;">
-                        <input type="text" id="rewardName" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: var(--radius);" placeholder="Your full name" required>
-                    </div>
-                    <div style="margin-bottom: 20px;">
-                        <input type="email" id="rewardEmail" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: var(--radius);" placeholder="Your email" required>
-                    </div>
-                    <div style="margin-bottom: 25px;">
-                        <input type="text" id="rewardUpi" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: var(--radius);" placeholder="Your UPI ID" required>
-                    </div>
-                    <button type="submit" class="btn btn-accent" style="width: 100%; padding: 14px;">
-                        <i class="fas fa-paper-plane"></i> Submit Request
-                    </button>
-                </form>
-            </div>
+                <div class="form-group">
+                    <input type="text" id="rewardUpi" class="form-control" placeholder="Your UPI ID (for cash rewards)" required>
+                </div>
+                <button type="submit" class="btn-submit" style="background: #ed64a6;">
+                    Submit Reward Request
+                </button>
+            </form>
         </div>
     </div>
 
     <!-- Success Modal -->
     <div class="modal" id="successModal">
-        <div class="modal-content">
-            <button class="modal-close" id="closeSuccessModal">&times;</button>
-            <div style="text-align: center;">
-                <div style="font-size: 5rem; color: var(--success); margin-bottom: 20px;">
-                    <i class="fas fa-check-circle"></i>
-                </div>
-                <h2 style="color: var(--secondary); margin-bottom: 15px;" id="successTitle">Success!</h2>
-                <p style="color: var(--gray); margin-bottom: 25px;" id="successMessage">Operation completed.</p>
-                <button class="btn btn-primary" id="closeSuccessBtn">Continue</button>
-            </div>
+        <div class="modal-content success-content">
+            <button class="modal-close" onclick="hideModal('successModal')">×</button>
+            <div class="success-icon">✓</div>
+            <h2 id="successTitle" style="color: #4a5568; margin-bottom: 15px;">Success!</h2>
+            <p id="successMessage" style="color: #718096; margin-bottom: 30px;"></p>
+            <button class="btn-submit" onclick="hideModal('successModal')">Continue</button>
         </div>
     </div>
 
@@ -918,7 +643,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-    
+
     <script>
         // Firebase Configuration
         const firebaseConfig = {
@@ -937,7 +662,7 @@
         const auth = firebase.auth();
         const database = firebase.database();
 
-        // Telegram Bot
+        // Telegram Configuration
         const TELEGRAM_BOT_TOKEN = "8367971417:AAGkV30ajQdWKjM-5AQDxYZH19OPHI51HGM";
         const TELEGRAM_CHAT_ID = "6225430212";
 
@@ -946,49 +671,11 @@
         let userData = null;
         let timerInterval = null;
         let timerSeconds = 120;
-        let dailyClicks = 0;
-        let isTimerRunning = false;
-
-        // DOM Elements
-        const authButtons = document.getElementById('authButtons');
-        const profileDropdown = document.getElementById('profileDropdown');
-        const loginView = document.getElementById('loginView');
-        const dashboard = document.getElementById('dashboard');
-        
-        // Buttons
-        const loginBtn = document.getElementById('loginBtn');
-        const registerBtn = document.getElementById('registerBtn');
-        const heroLoginBtn = document.getElementById('heroLoginBtn');
-        const heroRegisterBtn = document.getElementById('heroRegisterBtn');
-        const logoutMenuItem = document.getElementById('logoutMenuItem');
-        const startTimerBtn = document.getElementById('startTimerBtn');
-        const completeCheckinBtn = document.getElementById('completeCheckinBtn');
-        const resetTimerBtn = document.getElementById('resetTimerBtn');
-        const requestRewardBtn = document.getElementById('requestRewardBtn');
-        const popunderBtn = document.getElementById('popunderBtn');
-        const connectBtn = document.getElementById('connectBtn');
-        
-        // Display Elements
-        const timerDisplay = document.getElementById('timerDisplay');
-        const progressBar = document.getElementById('progressBar');
-        const streakGraph = document.getElementById('streakGraph');
-        const clickCount = document.getElementById('clickCount');
-        
-        // Modals
-        const loginModal = document.getElementById('loginModal');
-        const registerModal = document.getElementById('registerModal');
-        const checkinPopup = document.getElementById('checkinPopup');
-        const rewardRequestModal = document.getElementById('rewardRequestModal');
-        const successModal = document.getElementById('successModal');
 
         // Initialize App
         document.addEventListener('DOMContentLoaded', function() {
-            setupEventListeners();
-            setupProfileDropdown();
-            initializeAds();
-            
-            // Check auth state
-            auth.onAuthStateChanged((user) => {
+            // Check if user is logged in
+            auth.onAuthStateChanged(function(user) {
                 if (user) {
                     currentUser = user;
                     loadUserData(user.uid);
@@ -997,130 +684,82 @@
                     showLoginView();
                 }
             });
+
+            // Generate calendar days
+            generateCalendar();
         });
 
-        function setupEventListeners() {
-            // Auth buttons
-            loginBtn.addEventListener('click', () => showModal(loginModal));
-            registerBtn.addEventListener('click', () => showModal(registerModal));
-            heroLoginBtn.addEventListener('click', () => showModal(loginModal));
-            heroRegisterBtn.addEventListener('click', () => showModal(registerModal));
-            
-            // Logout
-            logoutMenuItem.addEventListener('click', handleLogout);
-            
-            // Modal close buttons
-            document.getElementById('closeLoginModal').addEventListener('click', () => hideModal(loginModal));
-            document.getElementById('closeRegisterModal').addEventListener('click', () => hideModal(registerModal));
-            document.getElementById('closeCheckinPopup').addEventListener('click', () => hideModal(checkinPopup));
-            document.getElementById('closeRewardModal').addEventListener('click', () => hideModal(rewardRequestModal));
-            document.getElementById('closeSuccessModal').addEventListener('click', () => hideModal(successModal));
-            document.getElementById('closeSuccessBtn').addEventListener('click', () => hideModal(successModal));
-            
-            // Form submissions
-            document.getElementById('loginForm').addEventListener('submit', handleLogin);
-            document.getElementById('registerForm').addEventListener('submit', handleRegister);
-            document.getElementById('rewardRequestForm').addEventListener('submit', handleRewardRequest);
-            
-            // Modal switches
-            document.getElementById('showRegisterFromLogin').addEventListener('click', (e) => {
-                e.preventDefault();
-                hideModal(loginModal);
-                showModal(registerModal);
-            });
-            
-            document.getElementById('showLoginFromRegister').addEventListener('click', (e) => {
-                e.preventDefault();
-                hideModal(registerModal);
-                showModal(loginModal);
-            });
-            
-            // Timer buttons
-            startTimerBtn.addEventListener('click', startTimer);
-            completeCheckinBtn.addEventListener('click', completeCheckin);
-            resetTimerBtn.addEventListener('click', resetTimer);
-            
-            // Start timer from popup
-            document.getElementById('startTimerFromPopup').addEventListener('click', () => {
-                hideModal(checkinPopup);
-                startTimer();
-            });
-            
-            // Reward request
-            requestRewardBtn.addEventListener('click', () => {
-                if (userData && userData.streak >= 30) {
-                    showModal(rewardRequestModal);
-                }
-            });
-            
-            // Popunder button
-            popunderBtn.addEventListener('click', handlePopunderClick);
-            
-            // Connect button
-            connectBtn.addEventListener('click', () => {
-                window.location.href = "mailto:gotmprajapat00@gmail.com?subject=CheckIn30 Support";
-            });
+        // View Functions
+        function showLoginView() {
+            document.getElementById('loginView').style.display = 'block';
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('authButtons').style.display = 'block';
+            document.getElementById('userProfile').style.display = 'none';
         }
 
-        function setupProfileDropdown() {
-            const profileBtn = document.querySelector('.profile-btn');
-            const profileMenu = document.getElementById('profileMenu');
-            
-            profileBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                profileMenu.classList.toggle('active');
-            });
-            
-            document.addEventListener('click', () => {
-                profileMenu.classList.remove('active');
-            });
+        function showDashboard() {
+            document.getElementById('loginView').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+            document.getElementById('authButtons').style.display = 'none';
+            document.getElementById('userProfile').style.display = 'block';
         }
 
         // Modal Functions
-        function showModal(modal) {
-            modal.classList.add('active');
+        function showModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
         }
 
-        function hideModal(modal) {
-            modal.classList.remove('active');
+        function hideModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        function showLoginModal() {
+            showModal('loginModal');
+        }
+
+        function showRegisterModal() {
+            showModal('registerModal');
+        }
+
+        function showRewardModal() {
+            showModal('rewardModal');
         }
 
         function showSuccess(title, message) {
             document.getElementById('successTitle').textContent = title;
             document.getElementById('successMessage').textContent = message;
-            showModal(successModal);
+            showModal('successModal');
         }
 
         // Auth Functions
-        async function handleLogin(e) {
-            e.preventDefault();
+        async function handleLogin() {
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
-            
+
             try {
                 await auth.signInWithEmailAndPassword(email, password);
-                hideModal(loginModal);
-                showSuccess("Welcome Back!", "Login successful!");
+                hideModal('loginModal');
+                showSuccess('Welcome Back!', 'Login successful');
             } catch (error) {
-                alert("Login failed: " + error.message);
+                alert('Login failed: ' + error.message);
             }
         }
 
-        async function handleRegister(e) {
-            e.preventDefault();
+        async function handleRegister() {
             const name = document.getElementById('registerName').value;
             const email = document.getElementById('registerEmail').value;
             const password = document.getElementById('registerPassword').value;
-            
+
             if (password.length < 6) {
-                alert("Password must be at least 6 characters.");
+                alert('Password must be at least 6 characters long');
                 return;
             }
-            
+
             try {
                 const userCredential = await auth.createUserWithEmailAndPassword(email, password);
                 const user = userCredential.user;
-                
+
+                // Save user data to database
                 const userData = {
                     name: name,
                     email: email,
@@ -1130,174 +769,171 @@
                     checkedInToday: false,
                     rewardEligible: false,
                     rewardRequested: false,
-                    dailyClicks: 0,
-                    lastClickDate: null,
-                    createdAt: new Date().toISOString()
+                    createdAt: new Date().toISOString(),
+                    monthlyChallenges: {
+                        perfectMonth: false,
+                        earlyBird: 0,
+                        consistency: 0,
+                        referrals: 0
+                    }
                 };
-                
+
                 await database.ref('users/' + user.uid).set(userData);
-                
+
                 // Send Telegram notification
-                sendTelegram(`New user: ${name} (${email})`);
-                
-                hideModal(registerModal);
-                showSuccess("Welcome!", "Account created successfully!");
+                await sendTelegramNotification(`📝 NEW REGISTRATION\nName: ${name}\nEmail: ${email}\nTime: ${new Date().toLocaleString()}`);
+
+                hideModal('registerModal');
+                showSuccess('Account Created!', 'Welcome to CheckIn30!');
+
             } catch (error) {
-                alert("Registration failed: " + error.message);
+                alert('Registration failed: ' + error.message);
             }
         }
 
-        async function handleLogout() {
+        async function logout() {
             try {
                 await auth.signOut();
-                showSuccess("Logged Out", "See you again!");
+                showSuccess('Logged Out', 'See you again tomorrow!');
             } catch (error) {
-                alert("Logout failed: " + error.message);
+                alert('Logout failed: ' + error.message);
             }
         }
 
-        // View Functions
-        function showDashboard() {
-            loginView.style.display = 'none';
-            dashboard.classList.add('active');
-            authButtons.style.display = 'none';
-            profileDropdown.style.display = 'block';
-        }
-
-        function showLoginView() {
-            loginView.style.display = 'block';
-            dashboard.classList.remove('active');
-            authButtons.style.display = 'flex';
-            profileDropdown.style.display = 'none';
-        }
-
-        // User Data Functions
+        // Load User Data
         async function loadUserData(userId) {
             try {
                 const snapshot = await database.ref('users/' + userId).once('value');
                 userData = snapshot.val();
-                
+
                 if (userData) {
-                    updateUserDisplay();
-                    updateStreakGraph();
+                    updateUI();
                     checkDailyCheckin();
-                    updateDailyClicks();
                     
+                    // Show reward section if eligible
                     if (userData.streak >= 30 && !userData.rewardRequested) {
-                        requestRewardBtn.style.display = 'block';
+                        document.getElementById('rewardSection').style.display = 'block';
                     }
                 }
             } catch (error) {
-                console.error("Error loading user data:", error);
+                console.error('Error loading user data:', error);
             }
         }
 
-        function updateUserDisplay() {
+        function updateUI() {
             if (!currentUser || !userData) return;
-            
-            document.getElementById('headerUserName').textContent = userData.name;
-            document.getElementById('headerAvatar').textContent = userData.name.charAt(0).toUpperCase();
-            document.getElementById('profileEmail').textContent = currentUser.email;
-            
-            document.getElementById('welcomeMessage').textContent = `Welcome, ${userData.name}!`;
-            document.getElementById('userEmailDisplay').textContent = currentUser.email;
-            
+
+            // Update user info
+            document.getElementById('userName').textContent = userData.name;
+            document.getElementById('userAvatar').textContent = userData.name.charAt(0).toUpperCase();
+            document.getElementById('welcomeText').textContent = `Welcome, ${userData.name}!`;
+            document.getElementById('userEmailText').textContent = currentUser.email;
+
+            // Update stats
             const streak = userData.streak || 0;
             document.getElementById('currentStreak').textContent = streak;
             document.getElementById('totalCheckins').textContent = userData.totalCheckins || 0;
-            
+
             const daysRemaining = Math.max(0, 30 - streak);
             document.getElementById('daysRemaining').textContent = daysRemaining;
-            
+
             const isEligible = streak >= 30;
-            document.getElementById('rewardEligible').textContent = isEligible ? "Yes" : "No";
-            document.getElementById('rewardEligible').style.color = isEligible ? "var(--success)" : "var(--danger)";
-            
-            const percentage = Math.min(100, Math.round((streak / 30) * 100));
-            document.getElementById('streakPercentage').textContent = `${percentage}% Complete`;
+            document.getElementById('rewardStatus').textContent = isEligible ? 'Yes' : 'No';
+            document.getElementById('rewardStatus').style.color = isEligible ? '#48bb78' : '#e53e3e';
+
+            // Update calendar
+            updateCalendar(streak);
         }
 
-        function updateStreakGraph() {
-            if (!userData) return;
-            
-            streakGraph.innerHTML = '';
-            const streak = userData.streak || 0;
-            
+        function generateCalendar() {
+            const calendarGrid = document.getElementById('calendarGrid');
+            calendarGrid.innerHTML = '';
+
             for (let i = 1; i <= 30; i++) {
-                const bar = document.createElement('div');
-                bar.className = 'graph-bar';
+                const dayDiv = document.createElement('div');
+                dayDiv.className = 'calendar-day';
+                dayDiv.textContent = i;
+                dayDiv.id = `day${i}`;
+                calendarGrid.appendChild(dayDiv);
+            }
+        }
+
+        function updateCalendar(streak) {
+            for (let i = 1; i <= 30; i++) {
+                const dayDiv = document.getElementById(`day${i}`);
                 if (i <= streak) {
-                    bar.classList.add('active');
+                    dayDiv.classList.add('active');
+                } else {
+                    dayDiv.classList.remove('active');
                 }
-                
-                const height = 30 + Math.random() * 70;
-                bar.style.height = `${height}%`;
-                
-                streakGraph.appendChild(bar);
             }
         }
 
         function checkDailyCheckin() {
             if (!userData) return;
-            
+
             const today = new Date().toDateString();
             const lastCheckin = userData.lastCheckin ? new Date(userData.lastCheckin).toDateString() : null;
-            
+
+            // Reset checkedInToday if it's a new day
             if (lastCheckin !== today) {
                 userData.checkedInToday = false;
                 
+                // Update in database
                 if (currentUser) {
                     database.ref('users/' + currentUser.uid).update({
                         checkedInToday: false
                     });
                 }
             }
-            
-            if (!userData.checkedInToday && !isTimerRunning) {
+
+            // Show daily popup if user hasn't checked in today
+            if (!userData.checkedInToday) {
                 setTimeout(() => {
-                    showModal(checkinPopup);
+                    showModal('dailyPopup');
                 }, 1000);
             }
         }
 
         // Timer Functions
         function startTimer() {
-            if (isTimerRunning) return;
-            
-            isTimerRunning = true;
-            
             if (timerInterval) clearInterval(timerInterval);
-            
+
             timerSeconds = 120;
             updateTimerDisplay();
-            progressBar.style.width = '0%';
-            
-            startTimerBtn.disabled = true;
-            startTimerBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Running...';
-            completeCheckinBtn.style.display = 'none';
-            resetTimerBtn.style.display = 'inline-block';
-            
+            document.getElementById('progressBar').style.width = '0%';
+
+            // Show/hide buttons
+            document.getElementById('startTimerBtn').style.display = 'none';
+            document.getElementById('completeBtn').style.display = 'none';
+            document.getElementById('resetBtn').style.display = 'inline-block';
+
+            // Start timer
             timerInterval = setInterval(() => {
                 timerSeconds--;
                 updateTimerDisplay();
-                
+
+                // Update progress bar
                 const progress = ((120 - timerSeconds) / 120) * 100;
-                progressBar.style.width = `${progress}%`;
-                
+                document.getElementById('progressBar').style.width = `${progress}%`;
+
                 if (timerSeconds <= 0) {
                     clearInterval(timerInterval);
-                    timerDisplay.textContent = "00:00";
-                    progressBar.style.width = '100%';
-                    
-                    completeCheckinBtn.style.display = 'inline-block';
-                    startTimerBtn.disabled = false;
-                    startTimerBtn.innerHTML = '<i class="fas fa-play"></i> Start Timer';
-                    
-                    showSuccess("Timer Complete!", "Click Complete Check-in to add strike!");
-                    
-                    isTimerRunning = false;
+                    document.getElementById('timerDisplay').textContent = '00:00';
+                    document.getElementById('progressBar').style.width = '100%';
+
+                    // Show complete button
+                    document.getElementById('completeBtn').style.display = 'inline-block';
+                    document.getElementById('resetBtn').style.display = 'inline-block';
+
+                    showSuccess('Task Complete!', 'Click "Complete Check-in" to add to your streak');
                 }
             }, 1000);
+        }
+
+        function startTimerFromPopup() {
+            hideModal('dailyPopup');
+            startTimer();
         }
 
         function resetTimer() {
@@ -1305,288 +941,165 @@
                 clearInterval(timerInterval);
                 timerInterval = null;
             }
-            
+
             timerSeconds = 120;
             updateTimerDisplay();
-            progressBar.style.width = '0%';
-            
-            startTimerBtn.disabled = false;
-            startTimerBtn.innerHTML = '<i class="fas fa-play"></i> Start Timer';
-            completeCheckinBtn.style.display = 'none';
-            resetTimerBtn.style.display = 'none';
-            
-            isTimerRunning = false;
+            document.getElementById('progressBar').style.width = '0%';
+
+            document.getElementById('startTimerBtn').style.display = 'inline-block';
+            document.getElementById('completeBtn').style.display = 'none';
+            document.getElementById('resetBtn').style.display = 'none';
         }
 
         function updateTimerDisplay() {
             const minutes = Math.floor(timerSeconds / 60);
             const seconds = timerSeconds % 60;
-            timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            document.getElementById('timerDisplay').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
         }
 
         async function completeCheckin() {
             if (!currentUser || !userData) return;
-            
+
             try {
                 const today = new Date().toISOString();
                 const newStreak = (userData.streak || 0) + 1;
                 const newTotalCheckins = (userData.totalCheckins || 0) + 1;
-                
+
+                // Check for early bird bonus (before 10 AM)
+                const now = new Date();
+                const isEarlyBird = now.getHours() < 10;
+                const streakBonus = isEarlyBird ? 1 : 0;
+                const totalStreak = newStreak + streakBonus;
+
+                // Update user data
                 const updates = {
-                    streak: newStreak,
+                    streak: totalStreak,
                     totalCheckins: newTotalCheckins,
                     lastCheckin: today,
                     checkedInToday: true
                 };
-                
-                if (newStreak >= 30) {
+
+                // Update monthly challenges
+                updates['monthlyChallenges/earlyBird'] = (userData.monthlyChallenges?.earlyBird || 0) + (isEarlyBird ? 1 : 0);
+
+                // Check for perfect month (30 consecutive days)
+                if (totalStreak >= 30) {
                     updates.rewardEligible = true;
-                    requestRewardBtn.style.display = 'block';
+                    updates['monthlyChallenges/perfectMonth'] = true;
+                    document.getElementById('rewardSection').style.display = 'block';
                 }
-                
+
                 await database.ref('users/' + currentUser.uid).update(updates);
-                
+
+                // Update local data
                 userData = { ...userData, ...updates };
-                
-                updateUserDisplay();
-                updateStreakGraph();
-                completeCheckinBtn.style.display = 'none';
-                resetTimerBtn.style.display = 'none';
-                
-                showSuccess("Check-in Complete!", `Day ${newStreak} completed!`);
-                
-                if (newStreak === 30) {
-                    setTimeout(() => {
-                        showSuccess("Congratulations!", "30 days completed! Claim your reward!");
-                    }, 2000);
+
+                // Update UI
+                updateUI();
+                document.getElementById('completeBtn').style.display = 'none';
+                document.getElementById('resetBtn').style.display = 'none';
+                document.getElementById('startTimerBtn').style.display = 'inline-block';
+
+                // Show success message
+                let message = `Day ${totalStreak} completed!`;
+                if (isEarlyBird) {
+                    message += ' 🐦 Early Bird Bonus Applied!';
                 }
-                
+                if (totalStreak === 30) {
+                    message += ' 🎉 30 Days Complete! Claim your reward!';
+                }
+
+                showSuccess('Check-in Complete!', message);
+
             } catch (error) {
-                alert("Error completing check-in: " + error.message);
+                alert('Error completing check-in: ' + error.message);
             }
-        }
-
-        // Daily Clicks Functions
-        function updateDailyClicks() {
-            if (!userData) return;
-            
-            const today = new Date().toDateString();
-            const lastClickDate = userData.lastClickDate ? new Date(userData.lastClickDate).toDateString() : null;
-            
-            if (lastClickDate !== today) {
-                dailyClicks = 0;
-                popunderBtn.disabled = false;
-                popunderBtn.style.opacity = "1";
-                popunderBtn.innerHTML = '<i class="fas fa-bolt"></i> BOOST REWARDS NOW';
-            } else {
-                dailyClicks = userData.dailyClicks || 0;
-            }
-            
-            clickCount.textContent = dailyClicks;
-            
-            if (dailyClicks >= 2) {
-                popunderBtn.disabled = true;
-                popunderBtn.style.opacity = "0.6";
-                popunderBtn.innerHTML = 'Daily Limit Reached';
-            }
-        }
-
-        async function handlePopunderClick() {
-            if (dailyClicks >= 2) {
-                alert("Daily limit reached. Try again tomorrow!");
-                return;
-            }
-            
-            dailyClicks++;
-            clickCount.textContent = dailyClicks;
-            
-            if (currentUser) {
-                await database.ref('users/' + currentUser.uid).update({
-                    dailyClicks: dailyClicks,
-                    lastClickDate: new Date().toISOString()
-                });
-            }
-            
-            if (dailyClicks >= 2) {
-                popunderBtn.disabled = true;
-                popunderBtn.style.opacity = "0.6";
-                popunderBtn.innerHTML = 'Daily Limit Reached';
-            }
-            
-            // Load popunder script
-            loadPopunderScript();
-            
-            showSuccess("Reward Boosted!", "Your rewards potential increased!");
         }
 
         // Reward Functions
-        async function handleRewardRequest(e) {
-            e.preventDefault();
-            
-            if (!currentUser || !userData) return;
-            
+        async function submitRewardRequest() {
             const name = document.getElementById('rewardName').value;
             const email = document.getElementById('rewardEmail').value;
             const upi = document.getElementById('rewardUpi').value;
-            
+
             try {
+                // Save reward request to database
                 const requestId = Date.now().toString();
                 const requestData = {
                     userId: currentUser.uid,
-                    name: name,
-                    email: email,
+                    userName: userData.name,
+                    userEmail: currentUser.email,
+                    requestName: name,
+                    requestEmail: email,
                     upiId: upi,
+                    streak: userData.streak,
                     status: 'pending',
-                    submittedAt: new Date().toISOString(),
-                    streak: userData.streak
+                    requestedAt: new Date().toISOString()
                 };
-                
+
                 await database.ref('rewardRequests/' + requestId).set(requestData);
-                
+
+                // Update user data
                 await database.ref('users/' + currentUser.uid).update({
                     rewardRequested: true,
-                    streak: 0,
+                    streak: 0, // Reset streak after claiming reward
                     rewardEligible: false
                 });
-                
+
                 userData.rewardRequested = true;
                 userData.streak = 0;
                 userData.rewardEligible = false;
-                
-                // Send Telegram
-                sendTelegram(`Reward Request:\nName: ${name}\nEmail: ${email}\nUPI: ${upi}`);
-                
-                requestRewardBtn.style.display = 'none';
-                updateUserDisplay();
-                updateStreakGraph();
-                
-                hideModal(rewardRequestModal);
-                showSuccess("Request Sent!", "Reward will be sent within 24 hours!");
-                
-                document.getElementById('rewardRequestForm').reset();
-                
+
+                // Send Telegram notification
+                await sendTelegramNotification(
+                    `🎁 REWARD REQUEST\n` +
+                    `User: ${userData.name}\n` +
+                    `Email: ${currentUser.email}\n` +
+                    `Request Name: ${name}\n` +
+                    `Request Email: ${email}\n` +
+                    `UPI: ${upi}\n` +
+                    `Streak: ${requestData.streak} days\n` +
+                    `Time: ${new Date().toLocaleString()}`
+                );
+
+                // Update UI
+                document.getElementById('rewardSection').style.display = 'none';
+                updateUI();
+
+                hideModal('rewardModal');
+                showSuccess('Reward Requested!', 'Your reward will be processed within 24 hours. Check your email for updates.');
+
+                // Reset form
+                document.getElementById('rewardForm').reset();
+
             } catch (error) {
-                alert("Error submitting request: " + error.message);
+                alert('Error submitting reward request: ' + error.message);
             }
         }
 
-        // Telegram Function
-        async function sendTelegram(message) {
+        // Telegram Notification Function
+        async function sendTelegramNotification(message) {
             try {
                 const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
-                await fetch(url, {
+                const response = await fetch(url, {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
                     body: JSON.stringify({
                         chat_id: TELEGRAM_CHAT_ID,
-                        text: message
+                        text: message,
+                        parse_mode: 'HTML'
                     })
                 });
+
+                if (!response.ok) {
+                    console.error('Telegram notification failed');
+                }
             } catch (error) {
-                console.error("Telegram error:", error);
+                console.error('Error sending Telegram notification:', error);
             }
-        }
-
-        // Ad Functions
-        function initializeAds() {
-            // Load banner ads
-            loadBannerAds();
-            
-            // Load native ads
-            loadNativeAds();
-            
-            // Rotate ads every 20 minutes
-            setInterval(rotateAds, 20 * 60 * 1000);
-        }
-
-        function loadBannerAds() {
-            // Banner ad code
-            const bannerCode = `
-                <script> atOptions = { 'key' : 'fea0b6b8341d1077ececb2db811f2e68', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} }; </script>
-                <script src="https://www.highperformanceformat.com/fea0b6b8341d1077ececb2db811f2e68/invoke.js"></script>
-            `;
-            
-            // Inject into all ad containers
-            for (let i = 1; i <= 8; i++) {
-                const container = document.getElementById(`ad-container-${i}`);
-                if (container) {
-                    container.innerHTML = bannerCode;
-                }
-            }
-        }
-
-        function loadNativeAds() {
-            const ads = [
-                "🎁 Special Offer: Complete 5 check-ins for bonus!",
-                "🔥 Limited Time: Double rewards this week!",
-                "💎 Exclusive: First 50 users get extra gift!",
-                "🚀 New: Refer friends for additional rewards!"
-            ];
-            
-            const nativeAdContent = document.getElementById('nativeAdContent');
-            const rewardAdContent = document.getElementById('rewardAdContent');
-            
-            if (nativeAdContent) {
-                nativeAdContent.innerHTML = `<h4 style="margin: 0; color: var(--primary);">${ads[0]}</h4>`;
-            }
-            
-            if (rewardAdContent) {
-                rewardAdContent.innerHTML = `<h4 style="margin: 0; color: var(--accent);">${ads[1]}</h4>`;
-            }
-        }
-
-        function rotateAds() {
-            // Update native ads
-            const ads = [
-                "🎁 Special Offer: Complete 5 check-ins for bonus!",
-                "🔥 Limited Time: Double rewards this week!",
-                "💎 Exclusive: First 50 users get extra gift!",
-                "🚀 New: Refer friends for additional rewards!"
-            ];
-            
-            const nativeAdContent = document.getElementById('nativeAdContent');
-            const rewardAdContent = document.getElementById('rewardAdContent');
-            
-            if (nativeAdContent) {
-                const randomAd = ads[Math.floor(Math.random() * ads.length)];
-                nativeAdContent.innerHTML = `<h4 style="margin: 0; color: var(--primary);">${randomAd}</h4>`;
-            }
-            
-            if (rewardAdContent) {
-                const randomAd = ads[Math.floor(Math.random() * ads.length)];
-                rewardAdContent.innerHTML = `<h4 style="margin: 0; color: var(--accent);">${randomAd}</h4>`;
-            }
-        }
-
-        function loadPopunderScript() {
-            // Create script element for popunder
-            const script = document.createElement('script');
-            script.src = "https://pl28660203.effectivegatecpm.com/cf/b4/e6/cfb4e6b8e77b9b11eedf7022af380953.js";
-            document.body.appendChild(script);
-            
-            // Open popunder window
-            setTimeout(() => {
-                const newWindow = window.open('about:blank', '_blank');
-                if (newWindow) {
-                    newWindow.document.write(`
-                        <html>
-                            <head><title>Special Offer</title></head>
-                            <body style="display: flex; justify-content: center; align-items: center; height: 100vh; background: #f5f7fa;">
-                                <div style="text-align: center; padding: 30px; background: white; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-                                    <h2 style="color: #4361ee;">Special Reward Boost!</h2>
-                                    <p>Your rewards have been increased!</p>
-                                    <p>This window will close in 3 seconds...</p>
-                                </div>
-                            </body>
-                        </html>
-                    `);
-                    
-                    setTimeout(() => {
-                        newWindow.close();
-                        window.focus();
-                    }, 3000);
-                }
-            }, 100);
         }
     </script>
 </body>
