@@ -43,55 +43,28 @@
             width: 100%;
             height: 100%;
             z-index: 0;
-            opacity: 0.15;
+            opacity: 0.1;
         }
 
         .bg-circle {
             position: absolute;
             border-radius: 50%;
             background: linear-gradient(45deg, #3b82f6, #8b5cf6);
-            filter: blur(60px);
-            animation: floatAnimation 20s infinite ease-in-out;
+            filter: blur(80px);
+            animation: floatAnimation 25s infinite ease-in-out;
         }
 
         @keyframes floatAnimation {
-            0%, 100% { transform: translateY(0) translateX(0) scale(1); }
-            25% { transform: translateY(-30px) translateX(20px) scale(1.1); }
-            50% { transform: translateY(0) translateX(40px) scale(1); }
-            75% { transform: translateY(30px) translateX(-20px) scale(0.9); }
+            0%, 100% { transform: translateY(0) translateX(0); }
+            25% { transform: translateY(-50px) translateX(30px); }
+            50% { transform: translateY(0) translateX(60px); }
+            75% { transform: translateY(50px) translateX(-30px); }
         }
 
-        .bg-circle:nth-child(1) {
-            width: 400px;
-            height: 400px;
-            top: -100px;
-            left: -100px;
-            animation-delay: 0s;
-        }
-
-        .bg-circle:nth-child(2) {
-            width: 300px;
-            height: 300px;
-            bottom: -50px;
-            right: -50px;
-            animation-delay: 5s;
-        }
-
-        .bg-circle:nth-child(3) {
-            width: 350px;
-            height: 350px;
-            top: 40%;
-            left: 30%;
-            animation-delay: 2s;
-        }
-
-        .bg-circle:nth-child(4) {
-            width: 250px;
-            height: 250px;
-            bottom: 20%;
-            right: 20%;
-            animation-delay: 7s;
-        }
+        .bg-circle:nth-child(1) { width: 500px; height: 500px; top: -100px; left: -100px; animation-delay: 0s; }
+        .bg-circle:nth-child(2) { width: 400px; height: 400px; bottom: -100px; right: -100px; animation-delay: 5s; }
+        .bg-circle:nth-child(3) { width: 350px; height: 350px; top: 30%; left: 20%; animation-delay: 2s; }
+        .bg-circle:nth-child(4) { width: 300px; height: 300px; bottom: 20%; right: 15%; animation-delay: 7s; }
 
         .container {
             max-width: 1300px;
@@ -106,7 +79,6 @@
         ============================================ */
         header {
             padding: 20px 0;
-            margin-bottom: 30px;
         }
 
         .header-content {
@@ -163,7 +135,7 @@
         }
 
         /* ============================================
-           AUTH BUTTONS
+           AUTH BUTTONS - ONLY SHOW WHEN LOGGED OUT
         ============================================ */
         .auth-buttons {
             display: flex;
@@ -188,7 +160,6 @@
             background: rgba(59, 130, 246, 0.1);
             color: #60a5fa;
             border: 1px solid rgba(59, 130, 246, 0.3);
-            backdrop-filter: blur(5px);
         }
 
         .btn-login:hover {
@@ -209,45 +180,35 @@
             box-shadow: 0 20px 40px rgba(59, 130, 246, 0.5);
         }
 
-        .btn-logout {
-            background: rgba(239, 68, 68, 0.1);
-            color: #ef4444;
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            padding: 12px 20px;
-        }
-
-        .btn-logout:hover {
-            background: #ef4444;
-            color: white;
-        }
-
         /* ============================================
-           PROFILE DROPDOWN
+           USER PROFILE - SHOW WHEN LOGGED IN
         ============================================ */
-        .profile-container {
-            position: relative;
+        .user-profile {
             display: none;
+            align-items: center;
+            gap: 20px;
         }
 
-        .profile-trigger {
+        .user-card {
             display: flex;
             align-items: center;
             gap: 15px;
-            cursor: pointer;
-            padding: 8px 20px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px 20px 8px 12px;
             border-radius: 50px;
-            transition: all 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: 0.3s;
         }
 
-        .profile-trigger:hover {
+        .user-card:hover {
             background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(59, 130, 246, 0.3);
         }
 
-        .profile-avatar {
-            width: 45px;
-            height: 45px;
+        .user-avatar {
+            width: 42px;
+            height: 42px;
             background: linear-gradient(135deg, #3b82f6, #8b5cf6);
             border-radius: 50%;
             display: flex;
@@ -259,27 +220,36 @@
             border: 2px solid rgba(255, 255, 255, 0.2);
         }
 
-        .profile-info {
+        .user-details {
             text-align: left;
         }
 
-        .profile-name {
+        .user-name {
             font-weight: 700;
             color: white;
-            font-size: 16px;
+            font-size: 15px;
+            margin-bottom: 3px;
         }
 
-        .profile-email {
+        .user-badge {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #f59e0b;
             font-size: 12px;
-            color: #94a3b8;
+            font-weight: 600;
         }
 
-        .profile-dropdown {
+        .user-dropdown {
+            position: relative;
+        }
+
+        .dropdown-menu {
             position: absolute;
             top: 70px;
             right: 0;
-            width: 280px;
-            background: rgba(15, 23, 42, 0.95);
+            width: 300px;
+            background: rgba(15, 23, 42, 0.98);
             backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 20px;
@@ -289,7 +259,7 @@
             box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
         }
 
-        .profile-dropdown.active {
+        .dropdown-menu.active {
             display: block;
             animation: slideDown 0.3s ease;
         }
@@ -299,30 +269,31 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .profile-detail {
-            padding: 15px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .profile-detail-item {
+        .dropdown-item {
             display: flex;
             align-items: center;
-            gap: 12px;
-            color: #94a3b8;
-            padding: 10px 15px;
-            border-radius: 12px;
+            gap: 15px;
+            padding: 15px;
+            border-radius: 14px;
+            color: #e2e8f0;
             transition: 0.2s;
             cursor: pointer;
         }
 
-        .profile-detail-item:hover {
-            background: rgba(255, 255, 255, 0.05);
+        .dropdown-item:hover {
+            background: rgba(59, 130, 246, 0.1);
             color: white;
         }
 
-        .profile-detail-item i {
-            width: 20px;
+        .dropdown-item i {
+            width: 22px;
             color: #60a5fa;
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 15px 0;
         }
 
         /* ============================================
@@ -411,7 +382,7 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 5px;
+            height: 4px;
             background: linear-gradient(90deg, #3b82f6, #8b5cf6);
         }
 
@@ -422,11 +393,10 @@
         }
 
         .stat-value {
-            font-size: 52px;
+            font-size: 48px;
             font-weight: 800;
             color: white;
-            margin-bottom: 15px;
-            line-height: 1;
+            margin-bottom: 10px;
         }
 
         .stat-label {
@@ -450,6 +420,48 @@
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ============================================
+           WELCOME BANNER
+        ============================================ */
+        .welcome-banner {
+            background: linear-gradient(135deg, rgba(59,130,246,0.1), rgba(139,92,246,0.1));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 50px;
+            padding: 40px;
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .welcome-text h2 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .welcome-text p {
+            color: #94a3b8;
+            font-size: 18px;
+        }
+
+        .streak-badge {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            padding: 15px 30px;
+            border-radius: 60px;
+            color: white;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 18px;
+            box-shadow: 0 15px 30px rgba(245, 158, 11, 0.2);
         }
 
         /* ============================================
@@ -546,18 +558,6 @@
             color: white;
         }
 
-        .streak-badge {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            padding: 12px 25px;
-            border-radius: 60px;
-            color: white;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 16px;
-        }
-
         .calendar-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
@@ -574,7 +574,6 @@
             align-items: center;
             justify-content: center;
             transition: all 0.3s;
-            position: relative;
         }
 
         .calendar-day.active {
@@ -584,8 +583,8 @@
         }
 
         .calendar-day-number {
-            font-size: 26px;
-            font-weight: 800;
+            font-size: 24px;
+            font-weight: 700;
             color: white;
         }
 
@@ -602,7 +601,7 @@
         /* ============================================
            REWARD SECTION
         ============================================ */
-        .reward-info {
+        .reward-section {
             background: linear-gradient(135deg, rgba(59,130,246,0.1), rgba(139,92,246,0.1));
             backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.05);
@@ -612,16 +611,6 @@
             text-align: center;
             position: relative;
             overflow: hidden;
-        }
-
-        .reward-info::before {
-            content: '🎁';
-            position: absolute;
-            top: -30px;
-            right: -30px;
-            font-size: 150px;
-            opacity: 0.03;
-            transform: rotate(15deg);
         }
 
         .reward-icon {
@@ -657,7 +646,7 @@
             color: #fbbf24;
             font-weight: 700;
             background: rgba(251, 191, 36, 0.1);
-            padding: 3px 12px;
+            padding: 5px 15px;
             border-radius: 50px;
         }
 
@@ -706,13 +695,6 @@
             color: #94a3b8;
             line-height: 1.7;
             font-size: 17px;
-        }
-
-        .about-highlight {
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 700;
         }
 
         /* ============================================
@@ -922,16 +904,6 @@
             box-shadow: 0 20px 40px rgba(59, 130, 246, 0.4);
         }
 
-        .success-content {
-            text-align: center;
-        }
-
-        .success-icon {
-            font-size: 90px;
-            color: #10b981;
-            margin-bottom: 30px;
-        }
-
         /* ============================================
            TOAST NOTIFICATION
         ============================================ */
@@ -963,6 +935,23 @@
         }
 
         /* ============================================
+           LOADING SPINNER
+        ============================================ */
+        .loading-spinner {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border: 3px solid rgba(255,255,255,0.1);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 1s infinite linear;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ============================================
            RESPONSIVE
         ============================================ */
         @media (max-width: 768px) {
@@ -974,6 +963,7 @@
             .header-content { flex-direction: column; gap: 20px; }
             .footer-content { flex-direction: column; text-align: center; }
             .footer-links { justify-content: center; }
+            .welcome-banner { flex-direction: column; text-align: center; }
         }
     </style>
 </head>
@@ -1006,7 +996,7 @@
                     </div>
                 </div>
                 
-                <!-- Auth Buttons -->
+                <!-- Auth Buttons - Only show when NOT logged in -->
                 <div class="auth-buttons" id="authButtons">
                     <button class="btn btn-login" onclick="showModal('loginModal')">
                         <i class="fas fa-sign-in-alt"></i> Login
@@ -1016,57 +1006,65 @@
                     </button>
                 </div>
                 
-                <!-- Profile Container -->
-                <div class="profile-container" id="profileContainer">
-                    <div class="profile-trigger" onclick="toggleProfileDropdown()">
-                        <div class="profile-avatar" id="profileAvatar">U</div>
-                        <div class="profile-info">
-                            <div class="profile-name" id="profileName">User</div>
-                            <div class="profile-email" id="profileEmail">user@example.com</div>
+                <!-- User Profile - Only show when logged in -->
+                <div class="user-profile" id="userProfile">
+                    <div class="user-dropdown">
+                        <div class="user-card" onclick="toggleDropdown()">
+                            <div class="user-avatar" id="userAvatar">U</div>
+                            <div class="user-details">
+                                <div class="user-name" id="userName">Loading...</div>
+                                <div class="user-badge">
+                                    <i class="fas fa-fire"></i>
+                                    <span id="userStreak">0</span> day streak
+                                </div>
+                            </div>
+                            <i class="fas fa-chevron-down" style="color: #94a3b8; margin-left: 5px;"></i>
                         </div>
-                        <i class="fas fa-chevron-down" style="color: #94a3b8;"></i>
-                    </div>
-                    
-                    <!-- Profile Dropdown -->
-                    <div class="profile-dropdown" id="profileDropdown">
-                        <div class="profile-detail">
-                            <div class="profile-detail-item">
-                                <i class="fas fa-user"></i>
+                        
+                        <!-- Dropdown Menu -->
+                        <div class="dropdown-menu" id="dropdownMenu">
+                            <div class="dropdown-item">
+                                <i class="fas fa-user-circle"></i>
                                 <div>
                                     <div style="font-weight: 700; color: white;" id="dropdownName">User Name</div>
                                     <div style="color: #94a3b8; font-size: 13px;" id="dropdownEmail">user@email.com</div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="profile-detail">
-                            <div class="profile-detail-item">
+                            <div class="dropdown-divider"></div>
+                            <div class="dropdown-item">
                                 <i class="fas fa-coins"></i>
                                 <div>
                                     <div style="color: white;">Total Coins</div>
-                                    <div style="color: #f59e0b; font-weight: 700;" id="dropdownCoins">0</div>
+                                    <div style="color: #f59e0b; font-weight: 700; font-size: 18px;" id="dropdownCoins">0</div>
                                 </div>
                             </div>
-                            <div class="profile-detail-item">
-                                <i class="fas fa-fire"></i>
+                            <div class="dropdown-item">
+                                <i class="fas fa-calendar-check"></i>
                                 <div>
-                                    <div style="color: white;">Current Streak</div>
-                                    <div style="color: #60a5fa; font-weight: 700;" id="dropdownStreak">0 days</div>
+                                    <div style="color: white;">Total Visits</div>
+                                    <div style="color: #60a5fa; font-weight: 700;" id="dropdownVisits">0</div>
                                 </div>
                             </div>
-                            <div class="profile-detail-item">
+                            <div class="dropdown-item">
                                 <i class="fas fa-gift"></i>
+                                <div>
+                                    <div style="color: white;">Rewards Received</div>
+                                    <div style="color: #10b981; font-weight: 700;" id="dropdownRewards">0</div>
+                                </div>
+                            </div>
+                            <div class="dropdown-item">
+                                <i class="fas fa-qrcode"></i>
                                 <div>
                                     <div style="color: white;">UPI ID</div>
                                     <div style="color: #94a3b8; font-size: 14px;" id="dropdownUpi">Not set</div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="profile-detail">
-                            <div class="profile-detail-item" onclick="showEditProfile()">
+                            <div class="dropdown-divider"></div>
+                            <div class="dropdown-item" onclick="showEditProfile()">
                                 <i class="fas fa-edit"></i>
                                 <span>Edit Profile</span>
                             </div>
-                            <div class="profile-detail-item" onclick="logout()">
+                            <div class="dropdown-item" onclick="logout()">
                                 <i class="fas fa-sign-out-alt"></i>
                                 <span>Logout</span>
                             </div>
@@ -1080,7 +1078,7 @@
     <!-- Main Content -->
     <main>
         <div class="container">
-            <!-- Login View -->
+            <!-- LOGIN VIEW - Only visible when logged OUT -->
             <div id="loginView">
                 <div class="hero">
                     <h1>Daily 1 Minute = Daily Rewards</h1>
@@ -1101,101 +1099,57 @@
                         <div class="stat-icon"><i class="fas fa-clock"></i></div>
                         <div class="stat-value">1 min</div>
                         <div class="stat-label">Daily Visit Time</div>
-                        <p style="color: #94a3b8; margin-top: 20px;">Just 60 seconds of your time</p>
                     </div>
                     <div class="stat-card">
                         <div class="stat-icon"><i class="fas fa-gift"></i></div>
                         <div class="stat-value">2-4 Days</div>
                         <div class="stat-label">Reward Frequency</div>
-                        <p style="color: #94a3b8; margin-top: 20px;">Everyone gets reward regularly</p>
                     </div>
                     <div class="stat-card">
                         <div class="stat-icon"><i class="fas fa-users"></i></div>
                         <div class="stat-value">100%</div>
                         <div class="stat-label">Success Rate</div>
-                        <p style="color: #94a3b8; margin-top: 20px;">Every active user gets paid</p>
                     </div>
                 </div>
 
-                <!-- About CheckIn30 -->
+                <!-- About Section -->
                 <div class="about-section">
                     <h2 style="font-size: 42px; text-align: center; margin-bottom: 30px; background: linear-gradient(135deg, #60a5fa, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Why CheckIn30?</h2>
                     <div class="about-grid">
                         <div class="about-card">
                             <h3><i class="fas fa-shield-alt" style="color: #3b82f6;"></i> 100% Legitimate</h3>
-                            <p>We've been rewarding consistent users since 2024. Over <span class="about-highlight">10,000+ happy users</span> have received their rewards directly to their UPI accounts.</p>
+                            <p>Over 10,000+ happy users have received their rewards directly to their UPI accounts.</p>
                         </div>
                         <div class="about-card">
                             <h3><i class="fas fa-bolt" style="color: #f59e0b;"></i> Instant Rewards</h3>
-                            <p>Your first reward arrives <span class="about-highlight">within 24 hours</span> of registration. Then rewards every 2-4 days automatically. No minimum withdrawal!</p>
+                            <p>First reward within 24 hours. Then rewards every 2-4 days automatically.</p>
                         </div>
                         <div class="about-card">
                             <h3><i class="fas fa-check-circle" style="color: #10b981;"></i> Simple Process</h3>
-                            <p>Just visit daily for 1 minute. That's it! No surveys, no tasks, no downloads. <span class="about-highlight">Just visit and earn.</span></p>
-                        </div>
-                        <div class="about-card">
-                            <h3><i class="fas fa-headset" style="color: #8b5cf6;"></i> 24/7 Support</h3>
-                            <p>Have questions? Our support team responds <span class="about-highlight">within 2 hours</span>. We're here to help you every step of the way.</p>
+                            <p>Just visit daily for 1 minute. No surveys, no tasks, no downloads.</p>
                         </div>
                     </div>
-                </div>
-
-                <!-- How It Works -->
-                <div class="reward-info" style="background: linear-gradient(135deg, rgba(139,92,246,0.1), rgba(59,130,246,0.1));">
-                    <div class="reward-icon">📋</div>
-                    <div class="reward-title">How It Works</div>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-top: 40px;">
-                        <div>
-                            <div style="font-size: 48px; font-weight: 800; color: #3b82f6; margin-bottom: 10px;">1</div>
-                            <h3 style="color: white; margin-bottom: 10px;">Register</h3>
-                            <p style="color: #94a3b8;">Create account with your name, email & UPI ID</p>
-                        </div>
-                        <div>
-                            <div style="font-size: 48px; font-weight: 800; color: #3b82f6; margin-bottom: 10px;">2</div>
-                            <h3 style="color: white; margin-bottom: 10px;">Visit Daily</h3>
-                            <p style="color: #94a3b8;">Come to website and stay for 1 minute</p>
-                        </div>
-                        <div>
-                            <div style="font-size: 48px; font-weight: 800; color: #3b82f6; margin-bottom: 10px;">3</div>
-                            <h3 style="color: white; margin-bottom: 10px;">Get Rewards</h3>
-                            <p style="color: #94a3b8;">First reward in 24 hours, then every 2-4 days</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Reward Promise -->
-                <div class="connect-section" style="margin-bottom: 0;">
-                    <div style="font-size: 80px; margin-bottom: 20px;">🎯</div>
-                    <div class="connect-title">100% Reward Guarantee</div>
-                    <p style="color: #e2e8f0; font-size: 20px; max-width: 700px; margin: 0 auto;">
-                        Every user who visits daily receives rewards. No exceptions. 
-                        <span style="color: #fbbf24; font-weight: 700;">Your first reward arrives within 24 hours of registration!</span>
-                    </p>
                 </div>
             </div>
 
-            <!-- Dashboard (After Login) -->
+            <!-- DASHBOARD - Only visible when logged IN -->
             <div class="dashboard" id="dashboard">
                 <!-- Welcome Banner -->
-                <div class="hero" style="padding: 50px;">
-                    <h1 id="welcomeMessage">Welcome Back! 👋</h1>
-                    <p id="streakMessage" style="font-size: 22px;">Your current streak: <span id="streakCount" style="color: #60a5fa; font-weight: 800; font-size: 28px;">0</span> days</p>
-                    <div style="margin-top: 30px; display: flex; gap: 20px; justify-content: center;">
-                        <span class="streak-badge" style="background: linear-gradient(135deg, #3b82f6, #8b5cf6);">
-                            <i class="fas fa-calendar-check"></i> 
-                            <span id="totalVisits">0</span> Total Visits
-                        </span>
-                        <span class="streak-badge" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
-                            <i class="fas fa-coins"></i> 
-                            <span id="totalCoins">0</span> Coins Earned
-                        </span>
+                <div class="welcome-banner">
+                    <div class="welcome-text">
+                        <h2 id="welcomeMessage">Welcome Back! 👋</h2>
+                        <p id="streakMessage">Your current streak: <span id="streakCount" style="color: #60a5fa; font-weight: 700;">0</span> days</p>
+                    </div>
+                    <div class="streak-badge">
+                        <i class="fas fa-coins"></i>
+                        <span id="totalCoins">0</span> Coins
                     </div>
                 </div>
 
                 <!-- Timer Section -->
                 <div class="timer-section">
                     <div class="timer-title">Today's Daily Visit</div>
-                    <div class="timer-subtitle">Stay on this page for 1 minute to complete your visit</div>
+                    <div class="timer-subtitle" id="timerSubtitle">Stay on this page for 1 minute</div>
                     
                     <div class="timer-display" id="timerDisplay">01:00</div>
                     
@@ -1207,27 +1161,27 @@
                         <button class="btn btn-register timer-btn" id="visitBtn" onclick="completeVisit()" style="display: none;">
                             <i class="fas fa-check-circle"></i> Complete Visit
                         </button>
-                        <div class="loading" id="timerLoading" style="display: none; width: 30px; height: 30px; border: 3px solid rgba(255,255,255,0.1); border-top-color: white; border-radius: 50%; animation: spin 1s infinite;"></div>
+                        <div class="loading-spinner" id="timerLoading" style="display: none;"></div>
                     </div>
                     <p id="timerStatus" style="margin-top: 30px; color: #94a3b8; font-size: 16px;">
-                        <i class="fas fa-info-circle"></i> Timer starts automatically when you login
+                        <i class="fas fa-info-circle"></i> Timer starts automatically
                     </p>
                 </div>
 
-                <!-- Visit Calendar -->
+                <!-- Calendar Section -->
                 <div class="calendar-section">
                     <div class="calendar-header">
                         <div class="calendar-title">Your Visit History</div>
-                        <div class="streak-badge" id="monthDisplay">
+                        <div class="streak-badge" style="background: linear-gradient(135deg, #3b82f6, #8b5cf6);">
                             <i class="fas fa-calendar-alt"></i>
-                            <span>January 2026</span>
+                            <span id="monthDisplay">January 2026</span>
                         </div>
                     </div>
                     <div class="calendar-grid" id="calendarGrid"></div>
                 </div>
 
-                <!-- Reward Information -->
-                <div class="reward-info">
+                <!-- Reward Section -->
+                <div class="reward-section">
                     <div class="reward-icon">
                         <i class="fas fa-gift"></i>
                     </div>
@@ -1241,40 +1195,14 @@
                         <button class="btn btn-register" onclick="checkRewardStatus()" style="padding: 16px 35px;">
                             <i class="fas fa-search"></i> Check Reward Status
                         </button>
-                        <button class="btn btn-login" onclick="showRewardHistory()" style="padding: 16px 35px;">
-                            <i class="fas fa-history"></i> Reward History
-                        </button>
                     </div>
                 </div>
 
-                <!-- About CheckIn30 - Extended -->
-                <div class="about-section">
-                    <h2 style="font-size: 36px; text-align: center; margin-bottom: 40px; color: white;">Why Thousands Trust CheckIn30</h2>
-                    <div class="about-grid">
-                        <div class="about-card">
-                            <h3><i class="fas fa-check-circle" style="color: #10b981;"></i> Guaranteed Payments</h3>
-                            <p>We've never missed a payment. Every eligible user receives their reward within 24 hours of request.</p>
-                        </div>
-                        <div class="about-card">
-                            <h3><i class="fas fa-shield-alt" style="color: #3b82f6;"></i> Secure & Private</h3>
-                            <p>Your data is encrypted with Firebase. We never share your information with third parties.</p>
-                        </div>
-                        <div class="about-card">
-                            <h3><i class="fas fa-trophy" style="color: #f59e0b;"></i> Rewards for Everyone</h3>
-                            <p>Unlike other platforms, we don't have winners and losers. Every active user gets rewarded.</p>
-                        </div>
-                        <div class="about-card">
-                            <h3><i class="fas fa-clock" style="color: #8b5cf6;"></i> Lifetime Access</h3>
-                            <p>Once registered, you can earn rewards forever. No expiry, no hidden terms.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Contact Support -->
+                <!-- Connect Support -->
                 <div class="connect-section">
-                    <div class="connect-title">Need Assistance?</div>
+                    <div class="connect-title">Need Help?</div>
                     <p style="color: #e2e8f0; font-size: 20px; max-width: 600px; margin: 0 auto;">
-                        Our support team responds within 2 hours, 24/7
+                        24/7 Support - We respond within 2 hours
                     </p>
                     <button class="connect-btn" onclick="contactSupport()">
                         <i class="fas fa-headset"></i> Connect with Support
@@ -1295,7 +1223,6 @@
                     <a href="#" onclick="showTerms()">Terms</a>
                     <a href="#" onclick="showPrivacy()">Privacy</a>
                     <a href="#" onclick="contactSupport()">Contact</a>
-                    <a href="#" onclick="showAbout()">About</a>
                 </div>
             </div>
         </div>
@@ -1317,8 +1244,12 @@
                     <label>Password</label>
                     <input type="password" id="loginPassword" class="form-control" placeholder="Enter your password" required>
                 </div>
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+                    <input type="checkbox" id="rememberMe" checked style="width: 18px; height: 18px; accent-color: #3b82f6;">
+                    <label for="rememberMe" style="color: #94a3b8;">Remember me (Auto login)</label>
+                </div>
                 <button type="submit" class="btn-submit">
-                    <i class="fas fa-sign-in-alt"></i> Login to Account
+                    <i class="fas fa-sign-in-alt"></i> Login
                 </button>
             </form>
             
@@ -1334,8 +1265,7 @@
             <button class="modal-close" onclick="hideModal('registerModal')">×</button>
             <div class="modal-title">Start Earning Today</div>
             <div class="modal-subtitle">
-                <span style="color: #fbbf24; font-size: 22px; font-weight: 700;">🎁 First reward within 24 hours!</span><br>
-                Create your account and get your first reward tomorrow.
+                <span style="color: #fbbf24; font-size: 22px; font-weight: 700;">🎁 First reward within 24 hours!</span>
             </div>
             
             <form id="registerForm" onsubmit="event.preventDefault(); handleRegister()">
@@ -1350,13 +1280,14 @@
                 <div class="form-group">
                     <label>UPI ID (For Rewards)</label>
                     <input type="text" id="registerUpi" class="form-control" placeholder="e.g. username@okhdfcbank" required>
-                    <p style="color: #94a3b8; font-size: 13px; margin-top: 10px;">
-                        <i class="fas fa-info-circle"></i> All rewards will be sent to this UPI ID
-                    </p>
                 </div>
                 <div class="form-group">
                     <label>Password</label>
                     <input type="password" id="registerPassword" class="form-control" placeholder="Create password (min. 6 characters)" required>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+                    <input type="checkbox" id="rememberRegister" checked style="width: 18px; height: 18px; accent-color: #3b82f6;">
+                    <label for="rememberRegister" style="color: #94a3b8;">Keep me logged in</label>
                 </div>
                 <button type="submit" class="btn-submit">
                     <i class="fas fa-user-plus"></i> Create Account & Get First Reward
@@ -1366,23 +1297,9 @@
             <div style="background: rgba(16, 185, 129, 0.1); border-radius: 16px; padding: 20px; margin-top: 30px;">
                 <p style="color: #10b981; font-size: 15px; text-align: center; font-weight: 600;">
                     <i class="fas fa-check-circle"></i> 
-                    Your first reward will be sent to your UPI within 24 hours!<br>
-                    Then rewards every 2-4 days automatically.
+                    Your first reward will be sent to your UPI within 24 hours!
                 </p>
             </div>
-        </div>
-    </div>
-
-    <!-- Success Modal -->
-    <div class="modal" id="successModal">
-        <div class="modal-content success-content">
-            <button class="modal-close" onclick="hideModal('successModal')">×</button>
-            <div class="success-icon">
-                <i class="fas fa-check-circle"></i>
-            </div>
-            <div class="modal-title" id="successTitle">Success!</div>
-            <div class="modal-subtitle" id="successMessage">Operation completed successfully.</div>
-            <button class="btn-submit" onclick="hideModal('successModal')" style="margin-top: 20px;">Continue</button>
         </div>
     </div>
 
@@ -1409,6 +1326,19 @@
         </div>
     </div>
 
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content" style="text-align: center;">
+            <button class="modal-close" onclick="hideModal('successModal')">×</button>
+            <div style="font-size: 80px; color: #10b981; margin-bottom: 30px;">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="modal-title" id="successTitle">Success!</div>
+            <div class="modal-subtitle" id="successMessage">Operation completed successfully.</div>
+            <button class="btn-submit" onclick="hideModal('successModal')" style="margin-top: 20px;">Continue</button>
+        </div>
+    </div>
+
     <script>
         // ============================================
         // FIREBASE CONFIGURATION
@@ -1429,7 +1359,7 @@
         const database = firebase.database();
 
         // ============================================
-        // TELEGRAM BOT CONFIGURATION
+        // TELEGRAM BOT
         // ============================================
         const TELEGRAM_BOT_TOKEN = "8367971417:AAGkV30ajQdWKjM-5AQDxYZH19OPHI51HGM";
         const TELEGRAM_CHAT_ID = "6225430212";
@@ -1445,21 +1375,24 @@
         let visitCompleted = false;
 
         // ============================================
-        // INITIALIZATION
+        // INITIALIZATION - AUTO LOGIN CHECK
         // ============================================
         document.addEventListener('DOMContentLoaded', function() {
-            // Check auth state
+            // Check if user is already logged in (Firebase persists auth)
             auth.onAuthStateChanged(function(user) {
                 if (user) {
+                    // User is logged in - show dashboard immediately
                     currentUser = user;
                     loadUserData(user.uid);
                     showDashboard();
+                    showToast('Welcome back! Auto-logged in successfully.');
                 } else {
+                    // No user logged in - show login view
                     showLoginView();
                 }
             });
 
-            // Generate calendar
+            // Initialize calendar
             generateCalendar();
             updateMonthDisplay();
         });
@@ -1471,21 +1404,21 @@
             document.getElementById('loginView').style.display = 'block';
             document.getElementById('dashboard').classList.remove('active');
             document.getElementById('authButtons').style.display = 'flex';
-            document.getElementById('profileContainer').style.display = 'none';
+            document.getElementById('userProfile').style.display = 'none';
         }
 
         function showDashboard() {
             document.getElementById('loginView').style.display = 'none';
             document.getElementById('dashboard').classList.add('active');
             document.getElementById('authButtons').style.display = 'none';
-            document.getElementById('profileContainer').style.display = 'block';
+            document.getElementById('userProfile').style.display = 'block';
             
             // Auto start timer if not visited today
             setTimeout(() => {
                 if (userData && !userData.visitedToday && !isTimerRunning && !visitCompleted) {
                     startTimer();
                 }
-            }, 2000);
+            }, 1000);
         }
 
         // ============================================
@@ -1517,16 +1450,26 @@
         // ============================================
         // PROFILE FUNCTIONS
         // ============================================
-        function toggleProfileDropdown() {
-            const dropdown = document.getElementById('profileDropdown');
+        function toggleDropdown() {
+            const dropdown = document.getElementById('dropdownMenu');
             dropdown.classList.toggle('active');
         }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const userCard = document.querySelector('.user-card');
+            const dropdown = document.getElementById('dropdownMenu');
+            
+            if (userCard && !userCard.contains(event.target) && dropdown) {
+                dropdown.classList.remove('active');
+            }
+        });
 
         function showEditProfile() {
             if (userData) {
                 document.getElementById('editName').value = userData.name || '';
                 document.getElementById('editUpi').value = userData.upiId || '';
-                hideModal('profileDropdown');
+                hideModal('dropdownMenu');
                 showModal('editProfileModal');
             }
         }
@@ -1560,10 +1503,15 @@
         async function handleLogin() {
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
+            const rememberMe = document.getElementById('rememberMe').checked;
 
             try {
+                // Firebase automatically persists auth state
+                await auth.setPersistence(rememberMe ? 'local' : 'session');
                 await auth.signInWithEmailAndPassword(email, password);
+                
                 hideModal('loginModal');
+                showSuccess('Welcome Back!', 'Login successful. Timer starting automatically...');
                 
                 // Send Telegram notification
                 setTimeout(async () => {
@@ -1580,7 +1528,6 @@
                     }
                 }, 2000);
                 
-                showSuccess('Welcome Back!', 'Login successful. Timer starting automatically...');
             } catch (error) {
                 showToast('Login failed: ' + error.message);
             }
@@ -1591,6 +1538,7 @@
             const email = document.getElementById('registerEmail').value;
             const upi = document.getElementById('registerUpi').value;
             const password = document.getElementById('registerPassword').value;
+            const keepLoggedIn = document.getElementById('rememberRegister').checked;
 
             if (password.length < 6) {
                 showToast('Password must be at least 6 characters');
@@ -1603,17 +1551,19 @@
             }
 
             try {
+                // Set persistence
+                await auth.setPersistence(keepLoggedIn ? 'local' : 'session');
+                
+                // Create user
                 const userCredential = await auth.createUserWithEmailAndPassword(email, password);
                 const user = userCredential.user;
 
-                // Calculate first reward date (within 24 hours)
+                // Calculate dates
                 const now = new Date();
                 const firstRewardDate = new Date(now.getTime() + 24 * 60 * 60 * 1000);
-                
-                // Calculate next reward date (2-4 days after first reward)
                 const nextRewardDate = new Date(firstRewardDate.getTime() + (Math.floor(Math.random() * 3) + 2) * 24 * 60 * 60 * 1000);
 
-                // User data structure
+                // User data
                 const userData = {
                     name: name,
                     email: email,
@@ -1641,9 +1591,9 @@
                     `👤 Name: ${name}\n` +
                     `📧 Email: ${email}\n` +
                     `💰 UPI ID: ${upi}\n` +
-                    `🆔 User ID: ${user.uid.substring(0, 8)}...\n` +
-                    `📅 Registered: ${now.toLocaleString('en-IN')}\n` +
-                    `🌐 IP Address: ${ip}\n` +
+                    `🆔 ID: ${user.uid.substring(0, 8)}...\n` +
+                    `📅 Time: ${now.toLocaleString('en-IN')}\n` +
+                    `🌐 IP: ${ip}\n` +
                     `📱 Device: ${getDeviceInfo()}\n` +
                     `━━━━━━━━━━━━━━━━━━━━━━\n` +
                     `🎁 First Reward: Within 24 hours\n` +
@@ -1653,7 +1603,7 @@
                 hideModal('registerModal');
                 showSuccess(
                     '🎉 Registration Successful!', 
-                    `Welcome ${name}! Your first reward will be sent to ${upi} within 24 hours.\n\nKeep visiting daily to get rewards every 2-4 days!`
+                    `Welcome ${name}! Your first reward will be sent to ${upi} within 24 hours.\n\nYou are now auto-logged in. Start your first visit!`
                 );
 
                 // Clear form
@@ -1667,7 +1617,7 @@
         async function logout() {
             try {
                 // Close dropdown
-                document.getElementById('profileDropdown').classList.remove('active');
+                document.getElementById('dropdownMenu').classList.remove('active');
                 
                 await auth.signOut();
                 showSuccess('Logged Out', 'See you again tomorrow!');
@@ -1679,6 +1629,10 @@
                     clearInterval(timerInterval);
                     timerInterval = null;
                 }
+                
+                // Show login view
+                showLoginView();
+                
             } catch (error) {
                 showToast('Logout failed: ' + error.message);
             }
@@ -1705,22 +1659,22 @@
         function updateUI() {
             if (!currentUser || !userData) return;
 
-            // Update profile
-            document.getElementById('profileName').textContent = userData.name || 'User';
-            document.getElementById('profileEmail').textContent = currentUser.email || '';
-            document.getElementById('profileAvatar').textContent = (userData.name || 'U').charAt(0).toUpperCase();
+            // Update profile header
+            document.getElementById('userName').textContent = userData.name || 'User';
+            document.getElementById('userAvatar').textContent = (userData.name || 'U').charAt(0).toUpperCase();
+            document.getElementById('userStreak').textContent = userData.streak || 0;
             
             // Update dropdown
             document.getElementById('dropdownName').textContent = userData.name || 'User';
             document.getElementById('dropdownEmail').textContent = currentUser.email || '';
             document.getElementById('dropdownCoins').textContent = userData.coins || 0;
-            document.getElementById('dropdownStreak').textContent = (userData.streak || 0) + ' days';
+            document.getElementById('dropdownVisits').textContent = userData.totalVisits || 0;
+            document.getElementById('dropdownRewards').textContent = userData.rewardsReceived || 0;
             document.getElementById('dropdownUpi').textContent = userData.upiId || 'Not set';
 
             // Update dashboard
             document.getElementById('welcomeMessage').textContent = `Welcome, ${userData.name}! 👋`;
             document.getElementById('streakCount').textContent = userData.streak || 0;
-            document.getElementById('totalVisits').textContent = userData.totalVisits || 0;
             document.getElementById('totalCoins').textContent = userData.coins || 0;
 
             // Update calendar
@@ -1761,8 +1715,6 @@
         function updateCalendar() {
             if (!userData || !userData.visits) return;
             
-            const today = new Date();
-            
             for (let i = 0; i < 30; i++) {
                 const dayElement = document.getElementById(`calendar-day-${i}`);
                 if (dayElement) {
@@ -1783,7 +1735,7 @@
             const now = new Date();
             const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
                 'July', 'August', 'September', 'October', 'November', 'December'];
-            document.querySelector('#monthDisplay span').textContent = 
+            document.getElementById('monthDisplay').textContent = 
                 `${monthNames[now.getMonth()]} ${now.getFullYear()}`;
         }
 
@@ -1794,6 +1746,7 @@
             if (isTimerRunning || visitCompleted) return;
             if (userData && userData.visitedToday) {
                 document.getElementById('timerStatus').innerHTML = '<i class="fas fa-check-circle" style="color: #10b981;"></i> Today\'s visit already completed! Come back tomorrow.';
+                document.getElementById('timerSubtitle').textContent = 'You already visited today. +10 coins earned!';
                 return;
             }
 
@@ -1805,6 +1758,7 @@
             document.getElementById('timerLoading').style.display = 'inline-block';
             document.getElementById('visitBtn').style.display = 'none';
             document.getElementById('timerStatus').innerHTML = '<i class="fas fa-hourglass-half"></i> Timer running... Stay on this page';
+            document.getElementById('timerSubtitle').textContent = 'Timer running... 60 seconds remaining';
 
             if (timerInterval) clearInterval(timerInterval);
 
@@ -1821,26 +1775,11 @@
                     document.getElementById('progressBar').style.width = '100%';
                     document.getElementById('timerLoading').style.display = 'none';
                     document.getElementById('visitBtn').style.display = 'inline-block';
-                    document.getElementById('timerStatus').innerHTML = '<i class="fas fa-check-circle" style="color: #10b981;"></i> Visit complete! Click button to confirm';
+                    document.getElementById('timerStatus').innerHTML = '<i class="fas fa-check-circle" style="color: #10b981;"></i> Visit complete! Click button to earn 10 coins';
+                    document.getElementById('timerSubtitle').textContent = 'Timer complete! Click the button to confirm your visit';
                     isTimerRunning = false;
                 }
             }, 1000);
-        }
-
-        function resetTimer() {
-            if (timerInterval) {
-                clearInterval(timerInterval);
-                timerInterval = null;
-            }
-
-            timerSeconds = 60;
-            updateTimerDisplay();
-            document.getElementById('progressBar').style.width = '0%';
-            document.getElementById('timerLoading').style.display = 'none';
-            document.getElementById('visitBtn').style.display = 'none';
-            document.getElementById('timerStatus').innerHTML = '<i class="fas fa-info-circle"></i> Timer starts automatically when you login';
-            isTimerRunning = false;
-            visitCompleted = false;
         }
 
         function updateTimerDisplay() {
@@ -1891,6 +1830,7 @@
                 // Hide visit button
                 document.getElementById('visitBtn').style.display = 'none';
                 document.getElementById('timerStatus').innerHTML = '<i class="fas fa-check-circle" style="color: #10b981;"></i> Visit recorded! +10 coins earned. Come back tomorrow.';
+                document.getElementById('timerSubtitle').textContent = 'Visit completed! +10 coins added';
                 
                 // Show success
                 showSuccess(
@@ -1916,7 +1856,12 @@
             if (userData.visitedToday) {
                 document.getElementById('visitBtn').style.display = 'none';
                 document.getElementById('timerStatus').innerHTML = '<i class="fas fa-check-circle" style="color: #10b981;"></i> Today\'s visit completed! +10 coins earned.';
-                resetTimer();
+                document.getElementById('timerSubtitle').textContent = 'Visit completed! Come back tomorrow.';
+                if (timerInterval) {
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                }
+                isTimerRunning = false;
             }
         }
 
@@ -1932,7 +1877,7 @@
             if (nextRewardDate && now >= nextRewardDate) {
                 // Send reward notification to Telegram
                 await sendTelegramNotification(
-                    `💰 REWARD READY TO PROCESS\n` +
+                    `💰 REWARD READY\n` +
                     `━━━━━━━━━━━━━━━━━━━━━━\n` +
                     `👤 User: ${userData.name}\n` +
                     `📧 Email: ${currentUser.email}\n` +
@@ -1940,13 +1885,11 @@
                     `🔥 Streak: ${userData.streak} days\n` +
                     `🎁 Reward #: ${(userData.rewardsReceived || 0) + 1}\n` +
                     `📅 Date: ${now.toLocaleString('en-IN')}\n` +
-                    `━━━━━━━━━━━━━━━━━━━━━━\n` +
-                    `⚡ Status: Ready to process\n` +
                     `━━━━━━━━━━━━━━━━━━━━━━`
                 );
                 
-                // Calculate next reward date (2-4 days from now)
-                const daysUntilNext = Math.floor(Math.random() * 3) + 2; // 2-4 days
+                // Calculate next reward date (2-4 days)
+                const daysUntilNext = Math.floor(Math.random() * 3) + 2;
                 const nextReward = new Date(now.getTime() + daysUntilNext * 24 * 60 * 60 * 1000);
                 
                 await database.ref('users/' + currentUser.uid).update({
@@ -1986,27 +1929,6 @@
                     );
                 }
             }
-            
-            // Show reward history
-            showSuccess(
-                '📊 Reward Summary',
-                `Total Rewards Received: ${userData.rewardsReceived || 0}\n` +
-                `UPI ID: ${userData.upiId || 'Not set'}\n` +
-                `First Reward: ${userData.firstRewardDate ? new Date(userData.firstRewardDate).toLocaleDateString() : 'Within 24 hours'}\n` +
-                `Coins Earned: ${userData.coins || 0}`
-            );
-        }
-
-        function showRewardHistory() {
-            if (!userData) return;
-            
-            showSuccess(
-                '📜 Reward History',
-                `Rewards Received: ${userData.rewardsReceived || 0}\n` +
-                `First Reward: ${userData.firstRewardDate ? new Date(userData.firstRewardDate).toLocaleDateString() : 'Coming soon'}\n` +
-                `Last Reward: ${userData.lastRewardDate ? new Date(userData.lastRewardDate).toLocaleDateString() : 'None yet'}\n` +
-                `Next Reward: ${userData.nextRewardDate ? new Date(userData.nextRewardDate).toLocaleDateString() : 'Calculating...'}`
-            );
         }
 
         // ============================================
@@ -2015,7 +1937,7 @@
         async function sendTelegramNotification(message) {
             try {
                 const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
-                const response = await fetch(url, {
+                await fetch(url, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -2024,10 +1946,6 @@
                         parse_mode: 'HTML'
                     })
                 });
-                
-                if (!response.ok) {
-                    console.error('Telegram notification failed');
-                }
             } catch (error) {
                 console.error('Telegram error:', error);
             }
@@ -2057,55 +1975,29 @@
         // UTILITY FUNCTIONS
         // ============================================
         function contactSupport() {
-            window.location.href = "mailto:gotmprajapat00@gmail.com?subject=CheckIn30 Support - Quick Help Needed";
+            window.location.href = "mailto:gotmprajapat00@gmail.com?subject=CheckIn30 Support";
         }
 
         function showTerms() {
             showSuccess(
                 '📋 Terms & Conditions',
-                '• Daily 1-minute visit required for rewards\n' +
-                '• First reward guaranteed within 24 hours\n' +
-                '• Rewards every 2-4 days for active users\n' +
-                '• Valid UPI ID mandatory for payments\n' +
-                '• One account per user only\n' +
-                '• Rewards sent within 24 hours of eligibility\n' +
-                '• Minimum 1 minute page visit required'
+                '• Daily 1-minute visit required\n' +
+                '• First reward within 24 hours\n' +
+                '• Rewards every 2-4 days\n' +
+                '• Valid UPI ID required\n' +
+                '• One account per user'
             );
         }
 
         function showPrivacy() {
             showSuccess(
                 '🔒 Privacy Policy',
-                '• Your data is encrypted with Firebase\n' +
-                '• We collect name, email, and UPI ID only\n' +
-                '• No third-party data sharing\n' +
-                '• Data used solely for reward processing\n' +
-                '• You can delete your account anytime\n' +
-                '• Secure SSL encrypted connection'
+                '• Your data is encrypted\n' +
+                '• We collect name, email, UPI only\n' +
+                '• No third-party sharing\n' +
+                '• Data for rewards only'
             );
         }
-
-        function showAbout() {
-            showSuccess(
-                '🚀 About CheckIn30',
-                'CheckIn30 is a daily visit reward platform launched in 2024.\n\n' +
-                '✅ 10,000+ active users\n' +
-                '✅ 99.9% payout success rate\n' +
-                '✅ 24/7 customer support\n' +
-                '✅ 100% legitimate rewards\n\n' +
-                'Our mission: Reward consistency, not luck.'
-            );
-        }
-
-        // Close profile dropdown when clicking outside
-        document.addEventListener('click', function(event) {
-            const profileContainer = document.querySelector('.profile-container');
-            const profileDropdown = document.getElementById('profileDropdown');
-            
-            if (profileContainer && !profileContainer.contains(event.target)) {
-                profileDropdown.classList.remove('active');
-            }
-        });
     </script>
 </body>
 </html>
