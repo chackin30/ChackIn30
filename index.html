@@ -253,6 +253,7 @@
             justify-content: center;
             gap: 8px;
             margin-top: 20px;
+            flex-wrap: wrap;
         }
 
         .day-dot {
@@ -326,6 +327,28 @@
             color: #94a3b8;
             font-size: 14px;
             margin-top: 20px;
+        }
+
+        /* Start Button */
+        .start-btn {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .start-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .start-btn:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
         }
 
         /* Info Cards */
@@ -625,87 +648,6 @@
             font-weight: 500;
         }
 
-        /* Welcome Popup */
-        .welcome-popup {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            border-radius: 24px;
-            padding: 40px;
-            max-width: 500px;
-            width: 90%;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
-            z-index: 2000;
-            display: none;
-        }
-
-        .welcome-popup.show {
-            display: block;
-            animation: fadeIn 0.3s;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translate(-50%, -60%); }
-            to { opacity: 1; transform: translate(-50%, -50%); }
-        }
-
-        .popup-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .popup-header i {
-            font-size: 48px;
-            color: #2563eb;
-            margin-bottom: 15px;
-        }
-
-        .popup-header h2 {
-            font-size: 28px;
-            color: #1e293b;
-            margin-bottom: 10px;
-        }
-
-        .reward-list {
-            margin: 25px 0;
-        }
-
-        .reward-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 15px;
-            border-bottom: 1px solid #f1f5f9;
-        }
-
-        .reward-item i {
-            color: #2563eb;
-            font-size: 20px;
-        }
-
-        .reward-item .text {
-            color: #475569;
-        }
-
-        .reward-item .highlight {
-            color: #2563eb;
-            font-weight: 600;
-        }
-
-        .popup-close {
-            background: #2563eb;
-            color: white;
-            border: none;
-            padding: 14px 30px;
-            border-radius: 30px;
-            font-weight: 600;
-            width: 100%;
-            cursor: pointer;
-            margin-top: 20px;
-        }
-
         /* Toast */
         .toast {
             position: fixed;
@@ -724,6 +666,14 @@
             display: flex;
             align-items: center;
             gap: 12px;
+        }
+
+        /* Error Message */
+        .error-message {
+            color: #dc2626;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
         }
 
         /* Responsive */
@@ -781,7 +731,7 @@
                         <div class="dropdown-item">
                             <i class="fas fa-clock"></i>
                             <div style="flex:1">
-                                <div class="label">Total Time Spent</div>
+                                <div class="label">Total Time</div>
                                 <div class="value" id="menuTime">0 min</div>
                             </div>
                         </div>
@@ -807,8 +757,8 @@
         <!-- Login View -->
         <div id="loginView">
             <div class="hero">
-                <h1>Daily Streak = Better Rewards</h1>
-                <p>Just visit daily and stay for 1 minute. The longer your streak, the better your rewards!</p>
+                <h1>More Time = Better Rewards</h1>
+                <p>Just visit daily and complete 1 minute. The more you use, the more you earn!</p>
             </div>
 
             <div class="stats">
@@ -817,8 +767,8 @@
                     <div class="stat-label">Daily Time</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-number">↑ Better</div>
-                    <div class="stat-label">Rewards with Streak</div>
+                    <div class="stat-number">↑ More</div>
+                    <div class="stat-label">Time = Better Rewards</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-number">24h</div>
@@ -830,17 +780,17 @@
                 <div class="info-card">
                     <div class="info-icon"><i class="far fa-clock"></i></div>
                     <h3>How it works</h3>
-                    <p>Visit daily, stay for 1 minute, complete your visit. Each day adds to your streak. Longer streak = better rewards.</p>
+                    <p>Visit daily, complete 1 minute. More days = more rewards. Simple!</p>
                 </div>
                 <div class="info-card">
                     <div class="info-icon"><i class="fas fa-chart-line"></i></div>
                     <h3>Reward System</h3>
-                    <p>Your reward depends on your streak length. More days = bigger rewards. Everyone gets something!</p>
+                    <p>Your reward grows with your streak. More consistency = bigger rewards.</p>
                 </div>
                 <div class="info-card">
                     <div class="info-icon"><i class="fas fa-shield-alt"></i></div>
                     <h3>100% Legit</h3>
-                    <p>Thousands of users already receiving rewards. First reward within 24 hours of joining.</p>
+                    <p>First reward within 24 hours. Everyone gets paid.</p>
                 </div>
             </div>
 
@@ -856,13 +806,12 @@
             <div class="about-section">
                 <h2 class="about-title">About CheckIn30</h2>
                 <p class="about-text">
-                    CheckIn30 is a simple platform that rewards you for building a daily habit. Just visit once a day, stay for 1 minute, and build your streak. The longer you maintain your streak, the better your rewards become!
+                    CheckIn30 rewards you for building a daily habit. Just visit once a day, complete 1 minute, and build your streak. The longer your streak, the better your rewards!
                 </p>
                 <ul class="features-list">
                     <li><i class="fas fa-check-circle"></i> First reward within 24 hours</li>
-                    <li><i class="fas fa-check-circle"></i> Rewards increase with streak length</li>
+                    <li><i class="fas fa-check-circle"></i> More time = Better rewards</li>
                     <li><i class="fas fa-check-circle"></i> Everyone gets rewarded</li>
-                    <li><i class="fas fa-check-circle"></i> No minimum payout</li>
                     <li><i class="fas fa-check-circle"></i> Direct UPI payments</li>
                 </ul>
             </div>
@@ -887,19 +836,29 @@
 
             <!-- Timer -->
             <div class="timer-box">
-                <h3 style="font-size: 20px; font-weight: 500; color: #1e293b;">Today's Visit</h3>
+                <h3 style="font-size: 20px; font-weight: 500; color: #1e293b;">Today's 1-Minute Visit</h3>
+                
+                <!-- Timer Display -->
                 <div class="timer" id="timerDisplay">01:00</div>
                 
+                <!-- Progress Bar -->
                 <div class="progress-bar">
                     <div class="progress-fill" id="progressFill"></div>
                 </div>
                 
-                <button class="timer-btn" id="completeBtn" onclick="completeVisit()">
-                    <i class="fas fa-check"></i> Complete Visit & Add Streak
+                <!-- Start Button -->
+                <button class="start-btn" id="startTimerBtn" onclick="startTimer()">
+                    <i class="fas fa-play"></i> Start 1-Minute Timer
                 </button>
                 
+                <!-- Complete Button -->
+                <button class="timer-btn" id="completeBtn" onclick="completeVisit()">
+                    <i class="fas fa-check"></i> Complete & Add Streak
+                </button>
+                
+                <!-- Timer Status -->
                 <div class="timer-status" id="timerStatus">
-                    <i class="fas fa-info-circle"></i> Timer starts automatically
+                    <i class="fas fa-info-circle"></i> Click "Start Timer" to begin
                 </div>
             </div>
 
@@ -907,29 +866,29 @@
             <div class="reward-info">
                 <div class="reward-title">🎁 How Rewards Work</div>
                 <div class="reward-desc">
-                    Your reward increases with your streak length. The longer you maintain your daily visits, the better your rewards become. Everyone gets rewarded - no one is left out!
+                    Your rewards get better the longer you maintain your streak. More days = better rewards. Everyone gets something - the more you use, the more you earn!
                 </div>
                 <div class="reward-note">
                     <i class="fas fa-star"></i> First reward within 24 hours of joining
                 </div>
             </div>
 
-            <!-- About Section -->
+            <!-- Info Cards -->
             <div class="info-grid">
                 <div class="info-card">
                     <i class="fas fa-calendar-check info-icon"></i>
                     <h3>Daily Habit</h3>
-                    <p>Just 1 minute daily. That's all it takes to build your streak and earn rewards.</p>
+                    <p>Just 1 minute daily. That's all it takes to build your streak.</p>
                 </div>
                 <div class="info-card">
                     <i class="fas fa-trophy info-icon"></i>
                     <h3>Better with Time</h3>
-                    <p>Your rewards get better as your streak grows. 30-day streak = best rewards!</p>
+                    <p>Your rewards get better as your streak grows. More time = more rewards.</p>
                 </div>
                 <div class="info-card">
                     <i class="fas fa-users info-icon"></i>
                     <h3>Fair for All</h3>
-                    <p>Everyone who maintains their streak gets rewarded. No lottery, no luck - just consistency.</p>
+                    <p>Everyone who maintains their streak gets rewarded. No lottery, just consistency.</p>
                 </div>
             </div>
 
@@ -978,6 +937,8 @@
             <h2>Welcome Back</h2>
             <p>Login to continue your streak</p>
             
+            <div id="loginError" class="error-message" style="color: #dc2626; margin-bottom: 15px; text-align: center;"></div>
+            
             <form onsubmit="event.preventDefault(); handleLogin()">
                 <div class="form-group">
                     <input type="email" id="loginEmail" placeholder="Email address" required>
@@ -989,7 +950,7 @@
                     <input type="checkbox" id="rememberMe" checked>
                     <label style="color:#64748b">Keep me logged in</label>
                 </div>
-                <button type="submit" class="submit-btn">Login</button>
+                <button type="submit" class="submit-btn" id="loginSubmitBtn">Login</button>
             </form>
             
             <div class="modal-footer">
@@ -1004,6 +965,8 @@
             <button class="modal-close" onclick="closeModal('registerModal')">×</button>
             <h2>Start Earning</h2>
             <p>First reward within 24 hours!</p>
+            
+            <div id="registerError" class="error-message" style="color: #dc2626; margin-bottom: 15px; text-align: center;"></div>
             
             <form onsubmit="event.preventDefault(); handleRegister()">
                 <div class="form-group">
@@ -1022,47 +985,13 @@
                     <input type="checkbox" id="rememberRegister" checked>
                     <label style="color:#64748b">Keep me logged in</label>
                 </div>
-                <button type="submit" class="submit-btn">Create Account</button>
+                <button type="submit" class="submit-btn" id="registerSubmitBtn">Create Account</button>
             </form>
             
             <div class="modal-footer">
                 Already have account? <a href="#" onclick="openModal('loginModal'); closeModal('registerModal')">Login</a>
             </div>
         </div>
-    </div>
-
-    <!-- Welcome Popup -->
-    <div class="welcome-popup" id="welcomePopup">
-        <div class="popup-header">
-            <i class="fas fa-gift"></i>
-            <h2>Welcome to CheckIn30!</h2>
-            <p style="color: #64748b;">Here's how rewards work:</p>
-        </div>
-        
-        <div class="reward-list">
-            <div class="reward-item">
-                <i class="fas fa-check-circle"></i>
-                <span class="text"><span class="highlight">First reward:</span> Within 24 hours</span>
-            </div>
-            <div class="reward-item">
-                <i class="fas fa-check-circle"></i>
-                <span class="text"><span class="highlight">Daily visit:</span> Just 1 minute</span>
-            </div>
-            <div class="reward-item">
-                <i class="fas fa-check-circle"></i>
-                <span class="text"><span class="highlight">Rewards grow:</span> Longer streak = Better rewards</span>
-            </div>
-            <div class="reward-item">
-                <i class="fas fa-check-circle"></i>
-                <span class="text"><span class="highlight">Everyone gets:</span> No one is left out</span>
-            </div>
-            <div class="reward-item">
-                <i class="fas fa-check-circle"></i>
-                <span class="text"><span class="highlight">Payment:</span> Direct to your UPI</span>
-            </div>
-        </div>
-        
-        <button class="popup-close" onclick="closeWelcomePopup()">Got it, start my journey!</button>
     </div>
 
     <!-- Toast -->
@@ -1085,6 +1014,7 @@
             appId: "1:158848017856:web:94aaaf14320490d52a5425"
         };
 
+        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const database = firebase.database();
@@ -1109,8 +1039,12 @@
         // INIT
         // ============================================
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM Loaded');
+            
             // Check auth state
             auth.onAuthStateChanged(function(user) {
+                console.log('Auth state:', user ? 'Logged in' : 'Logged out');
+                
                 if (user) {
                     currentUser = user;
                     loadUserData(user.uid);
@@ -1144,12 +1078,17 @@
             // Close dropdown
             document.getElementById('dropdown').classList.remove('show');
             
-            // Auto start timer if needed
-            setTimeout(() => {
-                if (userData && !userData.visitedToday && !isTimerRunning && !visitCompleted) {
-                    startTimer();
-                }
-            }, 1000);
+            // Reset timer button states
+            document.getElementById('startTimerBtn').disabled = false;
+            document.getElementById('startTimerBtn').style.display = 'inline-block';
+            document.getElementById('completeBtn').style.display = 'none';
+            document.getElementById('timerStatus').innerHTML = '<i class="fas fa-info-circle"></i> Click "Start Timer" to begin';
+            
+            // Check if already visited today
+            if (userData && userData.visitedToday) {
+                document.getElementById('startTimerBtn').disabled = true;
+                document.getElementById('timerStatus').innerHTML = '<i class="fas fa-check-circle"></i> Today\'s visit already completed';
+            }
         }
 
         // ============================================
@@ -1161,21 +1100,22 @@
                 userData = snapshot.val();
 
                 if (userData) {
+                    console.log('User data loaded:', userData.name);
                     updateUI();
                     checkVisitStatus();
-                    checkRewardEligibility();
                     
-                    // Show welcome popup for new users
+                    // Check if first visit after registration
                     const today = new Date().toDateString();
                     const registeredDay = new Date(userData.registeredAt).toDateString();
                     
-                    if (registeredDay === today && !userData.welcomeShown) {
-                        showWelcomePopup();
-                        database.ref('users/' + userId).update({ welcomeShown: true });
+                    // Show welcome toast for new users
+                    if (registeredDay === today && userData.totalVisits === 0) {
+                        showToast('Welcome! Click Start Timer to begin your first visit!');
                     }
                 }
             } catch (error) {
-                console.error('Error:', error);
+                console.error('Error loading user data:', error);
+                showToast('Error loading data');
             }
         }
 
@@ -1236,24 +1176,33 @@
             if (isTimerRunning || visitCompleted) return;
             
             if (userData && userData.visitedToday) {
-                document.getElementById('timerStatus').innerHTML = '<i class="fas fa-check-circle"></i> Today\'s visit completed';
+                showToast('Already visited today');
                 return;
             }
 
+            console.log('Timer started');
             isTimerRunning = true;
             timerSeconds = 60;
             
-            updateTimerDisplay();
+            // Update UI
+            document.getElementById('timerDisplay').textContent = '01:00';
             document.getElementById('progressFill').style.width = '0%';
+            document.getElementById('startTimerBtn').style.display = 'none';
             document.getElementById('completeBtn').style.display = 'none';
-            document.getElementById('timerStatus').innerHTML = '<i class="fas fa-hourglass-half"></i> ' + timerSeconds + ' seconds remaining';
+            document.getElementById('timerStatus').innerHTML = '<i class="fas fa-hourglass-half"></i> Timer running... 60 seconds remaining';
 
             if (timerInterval) clearInterval(timerInterval);
 
             timerInterval = setInterval(() => {
                 timerSeconds--;
-                updateTimerDisplay();
+                
+                // Update display
+                const minutes = Math.floor(timerSeconds / 60);
+                const seconds = timerSeconds % 60;
+                document.getElementById('timerDisplay').textContent = 
+                    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 
+                // Update progress
                 const progress = ((60 - timerSeconds) / 60) * 100;
                 document.getElementById('progressFill').style.width = `${progress}%`;
                 document.getElementById('timerStatus').innerHTML = '<i class="fas fa-hourglass-half"></i> ' + timerSeconds + ' seconds remaining';
@@ -1263,24 +1212,20 @@
                     document.getElementById('timerDisplay').textContent = '00:00';
                     document.getElementById('progressFill').style.width = '100%';
                     document.getElementById('completeBtn').style.display = 'inline-block';
-                    document.getElementById('timerStatus').innerHTML = '<i class="fas fa-check-circle"></i> Ready! Click to add streak';
+                    document.getElementById('timerStatus').innerHTML = '<i class="fas fa-check-circle"></i> Ready! Click "Complete & Add Streak"';
                     isTimerRunning = false;
                 }
             }, 1000);
-        }
-
-        function updateTimerDisplay() {
-            const minutes = Math.floor(timerSeconds / 60);
-            const seconds = timerSeconds % 60;
-            document.getElementById('timerDisplay').textContent = 
-                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
         }
 
         // ============================================
         // VISIT
         // ============================================
         async function completeVisit() {
-            if (!currentUser || !userData) return;
+            if (!currentUser || !userData) {
+                showToast('Please login first');
+                return;
+            }
 
             try {
                 const today = new Date().toISOString().split('T')[0];
@@ -1303,19 +1248,35 @@
                 };
 
                 await database.ref('users/' + currentUser.uid).update(updates);
+                
+                // Update local data
                 userData = { ...userData, ...updates };
                 
+                // Update UI
                 updateUI();
                 document.getElementById('completeBtn').style.display = 'none';
-                document.getElementById('timerStatus').innerHTML = '<i class="fas fa-check-circle"></i> Visit recorded! Streak: ' + newStreak + ' days';
+                document.getElementById('timerStatus').innerHTML = '<i class="fas fa-check-circle"></i> Visit recorded! Day ' + newStreak + ' completed!';
                 
                 showToast('✓ Day ' + newStreak + ' completed!');
                 visitCompleted = true;
+                
+                // Send Telegram notification for visit milestone
+                if (newStreak === 1 || newStreak === 7 || newStreak === 30 || newStreak % 10 === 0) {
+                    sendTelegram(
+                        `⭐ STREAK MILESTONE\n` +
+                        `━━━━━━━━━━━━━━━━━━\n` +
+                        `👤 ${userData.name}\n` +
+                        `🔥 ${newStreak} days streak!\n` +
+                        `⏰ ${new Date().toLocaleString('en-IN')}\n` +
+                        `━━━━━━━━━━━━━━━━━━`
+                    );
+                }
                 
                 // Check rewards
                 checkRewardEligibility();
 
             } catch (error) {
+                console.error('Error:', error);
                 showToast('Error: ' + error.message);
             }
         }
@@ -1324,6 +1285,7 @@
             if (!userData) return;
             
             if (userData.visitedToday) {
+                document.getElementById('startTimerBtn').style.display = 'none';
                 document.getElementById('completeBtn').style.display = 'none';
                 document.getElementById('timerStatus').innerHTML = '<i class="fas fa-check-circle"></i> Today\'s visit completed';
                 
@@ -1358,7 +1320,7 @@
                     `━━━━━━━━━━━━━━━━━━`
                 );
                 
-                const daysUntilNext = Math.floor(Math.random() * 3) + 2;
+                const daysUntilNext = Math.floor(Math.random() * 3) + 2; // 2-4 days
                 const nextReward = new Date(now.getTime() + daysUntilNext * 24 * 60 * 60 * 1000);
                 
                 await database.ref('users/' + currentUser.uid).update({
@@ -1382,15 +1344,31 @@
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
             const remember = document.getElementById('rememberMe').checked;
+            const errorDiv = document.getElementById('loginError');
+            const submitBtn = document.getElementById('loginSubmitBtn');
+
+            // Clear previous errors
+            errorDiv.style.display = 'none';
+            errorDiv.textContent = '';
+
+            if (!email || !password) {
+                errorDiv.textContent = 'Please enter email and password';
+                errorDiv.style.display = 'block';
+                return;
+            }
 
             try {
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Logging in...';
+                
                 await auth.setPersistence(remember ? 'local' : 'session');
                 await auth.signInWithEmailAndPassword(email, password);
                 
+                // Modal will close automatically via auth state change
                 closeModal('loginModal');
-                showToast('Login successful');
+                showToast('Login successful!');
                 
-                // Send Telegram
+                // Send Telegram notification
                 setTimeout(() => {
                     if (currentUser && userData) {
                         sendTelegram(
@@ -1405,7 +1383,11 @@
                 }, 2000);
                 
             } catch (error) {
-                showToast('Login failed: ' + error.message);
+                console.error('Login error:', error);
+                errorDiv.textContent = 'Login failed: ' + error.message;
+                errorDiv.style.display = 'block';
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Login';
             }
         }
 
@@ -1415,27 +1397,44 @@
             const upi = document.getElementById('registerUpi').value;
             const password = document.getElementById('registerPassword').value;
             const remember = document.getElementById('rememberRegister').checked;
+            const errorDiv = document.getElementById('registerError');
+            const submitBtn = document.getElementById('registerSubmitBtn');
+
+            // Clear previous errors
+            errorDiv.style.display = 'none';
+            errorDiv.textContent = '';
+
+            // Validation
+            if (!name || !email || !upi || !password) {
+                errorDiv.textContent = 'Please fill all fields';
+                errorDiv.style.display = 'block';
+                return;
+            }
 
             if (password.length < 6) {
-                showToast('Password too short');
+                errorDiv.textContent = 'Password must be at least 6 characters';
+                errorDiv.style.display = 'block';
                 return;
             }
 
             if (!upi.includes('@')) {
-                showToast('Invalid UPI ID');
+                errorDiv.textContent = 'Invalid UPI ID (must contain @)';
+                errorDiv.style.display = 'block';
                 return;
             }
 
             try {
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Creating Account...';
+                
                 await auth.setPersistence(remember ? 'local' : 'session');
                 const userCredential = await auth.createUserWithEmailAndPassword(email, password);
                 const user = userCredential.user;
 
                 const now = new Date();
                 const firstReward = new Date(now.getTime() + 24 * 60 * 60 * 1000);
-                const nextReward = new Date(firstReward.getTime() + (Math.floor(Math.random() * 3) + 2) * 24 * 60 * 60 * 1000);
 
-                const userData = {
+                const newUserData = {
                     name: name,
                     email: email,
                     upiId: upi,
@@ -1448,13 +1447,12 @@
                     lastRewardDate: null,
                     nextRewardDate: firstReward.toISOString(),
                     rewardsReceived: 0,
-                    visits: {},
-                    welcomeShown: false
+                    visits: {}
                 };
 
-                await database.ref('users/' + user.uid).set(userData);
+                await database.ref('users/' + user.uid).set(newUserData);
 
-                // Get IP
+                // Get IP for Telegram
                 let ip = 'Unknown';
                 try {
                     const res = await fetch('https://api.ipify.org?format=json');
@@ -1462,7 +1460,7 @@
                     ip = data.ip;
                 } catch {}
 
-                // Send Telegram
+                // Send Telegram notification
                 await sendTelegram(
                     `🟢 NEW USER\n` +
                     `━━━━━━━━━━━━━━━━━━━━━━\n` +
@@ -1476,10 +1474,14 @@
                 );
 
                 closeModal('registerModal');
-                showToast('Account created! Welcome!');
+                showToast('Account created! Welcome to CheckIn30!');
 
             } catch (error) {
-                showToast('Registration failed: ' + error.message);
+                console.error('Registration error:', error);
+                errorDiv.textContent = 'Registration failed: ' + error.message;
+                errorDiv.style.display = 'block';
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Create Account';
             }
         }
 
@@ -1487,9 +1489,10 @@
             try {
                 document.getElementById('dropdown').classList.remove('show');
                 await auth.signOut();
-                showToast('Logged out');
+                showToast('Logged out successfully');
             } catch (error) {
-                showToast('Error: ' + error.message);
+                console.error('Logout error:', error);
+                showToast('Error logging out');
             }
         }
 
@@ -1499,7 +1502,7 @@
         async function sendTelegram(message) {
             try {
                 const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
-                await fetch(url, {
+                const response = await fetch(url, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -1507,6 +1510,10 @@
                         text: message
                     })
                 });
+                
+                if (!response.ok) {
+                    console.error('Telegram send failed');
+                }
             } catch (error) {
                 console.error('Telegram error:', error);
             }
@@ -1521,18 +1528,30 @@
 
         function openModal(id) {
             document.getElementById(id).classList.add('active');
+            
+            // Clear any previous errors
+            if (id === 'loginModal') {
+                document.getElementById('loginError').style.display = 'none';
+                document.getElementById('loginError').textContent = '';
+            } else if (id === 'registerModal') {
+                document.getElementById('registerError').style.display = 'none';
+                document.getElementById('registerError').textContent = '';
+            }
         }
 
         function closeModal(id) {
             document.getElementById(id).classList.remove('active');
-        }
-
-        function showWelcomePopup() {
-            document.getElementById('welcomePopup').style.display = 'block';
-        }
-
-        function closeWelcomePopup() {
-            document.getElementById('welcomePopup').style.display = 'none';
+            
+            // Reset forms
+            if (id === 'loginModal') {
+                document.getElementById('loginForm')?.reset();
+                document.getElementById('loginSubmitBtn').disabled = false;
+                document.getElementById('loginSubmitBtn').textContent = 'Login';
+            } else if (id === 'registerModal') {
+                document.getElementById('registerForm')?.reset();
+                document.getElementById('registerSubmitBtn').disabled = false;
+                document.getElementById('registerSubmitBtn').textContent = 'Create Account';
+            }
         }
 
         function showToast(msg) {
@@ -1547,7 +1566,7 @@
         }
 
         function showTerms() {
-            alert('Terms: Daily visit required. Rewards based on streak. Valid UPI needed.');
+            alert('Terms: Daily visit required. More time = better rewards. Valid UPI needed.');
         }
 
         function showPrivacy() {
