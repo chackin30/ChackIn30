@@ -2,1171 +2,1277 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CheckIn30 - Daily Streak Rewards</title>
-    
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>CheckIn30 · Streak Rewards System</title>
+    <!-- Font Awesome 6 (Free) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <style>
+        /* ==================== SECTION 1: CSS RESET & VARIABLES ==================== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
+        }
+
+        :root {
+            /* Pure White Theme with subtle accents */
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #3b82f6;
+            --primary-bg: #eff6ff;
+            --primary-soft: #f8fafc;
+            
+            --success: #059669;
+            --success-bg: #ecfdf5;
+            
+            --error: #dc2626;
+            --error-bg: #fef2f2;
+            
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --text-muted: #94a3b8;
+            --text-extra-light: #cbd5e1;
+            
+            --background: #ffffff;
+            --white: #ffffff;
+            --border: #e2e8f0;
+            --border-light: #f1f5f9;
+            
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.03);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.03);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.03);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.03);
+            --shadow-blue: 0 8px 20px rgba(37, 99, 235, 0.08);
+            
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 1rem;
+            --radius-xl: 1.5rem;
+            --radius-2xl: 2rem;
+            --radius-full: 9999px;
+            
+            --space-1: 0.25rem;
+            --space-2: 0.5rem;
+            --space-3: 0.75rem;
+            --space-4: 1rem;
+            --space-5: 1.25rem;
+            --space-6: 1.5rem;
+            --space-8: 2rem;
+            --space-10: 2.5rem;
+            --space-12: 3rem;
+            --space-16: 4rem;
+            
+            --transition-fast: 150ms;
+            --transition-base: 300ms;
+        }
+
+        /* ==================== SECTION 2: BASE STYLES ==================== */
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
         }
 
         body {
-            background: #f8fafc;
-            color: #1e293b;
-            line-height: 1.5;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--background);
+            color: var(--text-dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
+        /* ==================== SECTION 3: TYPOGRAPHY ==================== */
+        h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: var(--space-4);
+        }
+
+        h2 {
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            font-weight: 700;
+            margin-bottom: var(--space-6);
+            color: var(--text-dark);
+        }
+
+        h3 {
+            font-size: clamp(1.3rem, 3vw, 1.8rem);
+            font-weight: 600;
+            margin-bottom: var(--space-4);
+        }
+
+        p {
+            color: var(--text-light);
+            margin-bottom: var(--space-4);
+            line-height: 1.7;
+        }
+
+        /* ==================== SECTION 4: LAYOUT ==================== */
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 0 var(--space-6);
+            width: 100%;
         }
 
-        /* Header */
-        header {
-            background: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+        .section {
+            padding: var(--space-16) 0;
+        }
+
+        .section-sm {
+            padding: var(--space-8) 0;
+        }
+
+        .grid {
+            display: grid;
+            gap: var(--space-6);
+        }
+
+        .grid-2 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .grid-3 {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .grid-4 {
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        .flex {
+            display: flex;
+            gap: var(--space-4);
+        }
+
+        .flex-center {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .flex-between {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .flex-wrap {
+            flex-wrap: wrap;
+        }
+
+        /* ==================== SECTION 5: BUTTONS ==================== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-2);
+            padding: var(--space-3) var(--space-6);
+            border-radius: var(--radius-full);
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all var(--transition-base) ease;
+            border: none;
+            outline: none;
+            white-space: nowrap;
+            background: var(--white);
+            border: 1px solid var(--border);
+            color: var(--text-dark);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            box-shadow: var(--shadow-blue);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-bg);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: var(--white);
+            border: none;
+        }
+
+        .btn-success:hover {
+            background: var(--success);
+            opacity: 0.9;
+        }
+
+        .btn-lg {
+            padding: var(--space-4) var(--space-8);
+            font-size: 1.125rem;
+        }
+
+        .btn-block {
+            width: 100%;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        /* ==================== SECTION 6: CARDS ==================== */
+        .card {
+            background: var(--white);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-8);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-light);
+            transition: all var(--transition-base);
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-xl);
+            border-color: var(--border);
+        }
+
+        .card-header {
+            padding-bottom: var(--space-4);
+            border-bottom: 1px solid var(--border-light);
+            margin-bottom: var(--space-4);
+        }
+
+        .card-footer {
+            padding-top: var(--space-4);
+            border-top: 1px solid var(--border-light);
+            margin-top: var(--space-4);
+        }
+
+        /* ==================== SECTION 7: HEADER ==================== */
+        .header {
+            background: var(--white);
+            border-bottom: 1px solid var(--border-light);
             position: sticky;
             top: 0;
             z-index: 100;
+            padding: var(--space-4) 0;
         }
 
         .header-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 0;
         }
 
         .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary);
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: var(--space-3);
         }
 
-        .logo i {
-            font-size: 28px;
-            color: #2563eb;
+        .logo-icon {
+            font-size: 2rem;
+            color: var(--primary);
         }
 
-        .logo span {
-            font-size: 20px;
-            font-weight: 600;
-            color: #1e293b;
-        }
-
-        /* Auth Buttons */
-        .auth-buttons {
+        /* ==================== SECTION 8: PROFILE ==================== */
+        .profile-wrapper {
+            position: relative;
             display: flex;
-            gap: 12px;
-        }
-
-        .btn {
-            padding: 10px 24px;
-            border-radius: 30px;
-            font-weight: 500;
-            font-size: 15px;
-            cursor: pointer;
-            transition: 0.2s;
-            border: none;
-        }
-
-        .btn-login {
-            background: #f1f5f9;
-            color: #475569;
-        }
-
-        .btn-login:hover {
-            background: #e2e8f0;
-        }
-
-        .btn-register {
-            background: #2563eb;
-            color: white;
-        }
-
-        .btn-register:hover {
-            background: #1d4ed8;
-        }
-
-        /* User Profile */
-        .user-profile {
-            display: none;
             align-items: center;
-            gap: 15px;
-        }
-
-        .user-profile.active {
-            display: flex;
+            gap: var(--space-4);
         }
 
         .profile-circle {
-            width: 45px;
-            height: 45px;
-            background: #2563eb;
+            width: 48px;
+            height: 48px;
             border-radius: 50%;
+            background: var(--primary);
+            color: var(--white);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-weight: 600;
-            font-size: 18px;
+            font-weight: 700;
+            font-size: 1.5rem;
             cursor: pointer;
-            transition: 0.2s;
+            border: 2px solid var(--white);
+            box-shadow: var(--shadow-md);
+            transition: all var(--transition-base);
         }
 
         .profile-circle:hover {
-            background: #1d4ed8;
             transform: scale(1.05);
+            box-shadow: var(--shadow-lg);
         }
 
         .profile-name {
             font-weight: 600;
-            color: #1e293b;
+            color: var(--text-dark);
         }
 
-        /* Dropdown */
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
-
-        .dropdown-content {
-            display: none;
+        /* Dropdown Menu */
+        .dropdown-menu {
             position: absolute;
+            top: 60px;
             right: 0;
-            top: 55px;
-            background: white;
-            min-width: 300px;
-            border-radius: 16px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            border: 1px solid #e2e8f0;
-            z-index: 1000;
+            width: 320px;
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--border);
+            padding: var(--space-2);
+            display: none;
+            z-index: 101;
+            animation: slideDown var(--transition-base);
         }
 
-        .dropdown-content.show {
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dropdown-menu.show {
             display: block;
         }
 
         .dropdown-item {
-            padding: 15px 20px;
-            border-bottom: 1px solid #f1f5f9;
+            padding: var(--space-3) var(--space-4);
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: var(--space-3);
+            color: var(--text-dark);
+            border-radius: var(--radius-lg);
+            transition: background var(--transition-fast);
         }
 
-        .dropdown-item:last-child {
-            border-bottom: none;
+        .dropdown-item:hover {
+            background: var(--primary-soft);
         }
 
         .dropdown-item i {
             width: 20px;
-            color: #2563eb;
+            color: var(--primary);
         }
 
-        .dropdown-item .label {
-            color: #64748b;
-            font-size: 13px;
+        .dropdown-divider {
+            height: 1px;
+            background: var(--border-light);
+            margin: var(--space-2) 0;
         }
 
-        .dropdown-item .value {
-            color: #1e293b;
-            font-weight: 600;
-        }
-
-        .dropdown-item.clickable {
-            cursor: pointer;
-        }
-
-        .dropdown-item.clickable:hover {
-            background: #f8fafc;
-        }
-
-        /* Hero Section */
-        .hero {
+        /* ==================== SECTION 9: STREAK DISPLAY ==================== */
+        .streak-container {
             text-align: center;
-            padding: 60px 0 40px;
-        }
-
-        .hero h1 {
-            font-size: 42px;
-            font-weight: 600;
-            color: #1e293b;
-            margin-bottom: 15px;
-        }
-
-        .hero p {
-            font-size: 18px;
-            color: #64748b;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        /* Stats */
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin: 40px 0;
-        }
-
-        .stat-card {
-            background: white;
-            padding: 25px;
-            border-radius: 20px;
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
-            border: 1px solid #eef2f6;
-        }
-
-        .stat-number {
-            font-size: 36px;
-            font-weight: 600;
-            color: #2563eb;
-            margin-bottom: 8px;
-        }
-
-        .stat-label {
-            color: #64748b;
-            font-size: 15px;
-        }
-
-        /* Dashboard */
-        .dashboard {
-            display: none;
-        }
-
-        .dashboard.active {
-            display: block;
-        }
-
-        /* Streak Display */
-        .streak-display {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            margin: 30px 0;
-            text-align: center;
-            border: 1px solid #eef2f6;
+            padding: var(--space-8);
         }
 
         .streak-number {
-            font-size: 48px;
-            font-weight: 600;
-            color: #2563eb;
-            margin: 10px 0 5px;
+            font-size: 8rem;
+            font-weight: 800;
+            line-height: 1;
+            color: var(--primary);
+            text-shadow: var(--shadow-blue);
+            margin: var(--space-4) 0;
         }
 
-        .streak-label {
-            color: #64748b;
-            font-size: 16px;
-        }
-
-        .streak-days {
+        .streak-dots-container {
             display: flex;
-            justify-content: center;
-            gap: 8px;
-            margin-top: 20px;
             flex-wrap: wrap;
+            gap: var(--space-2);
+            justify-content: center;
+            margin: var(--space-8) 0;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        .day-dot {
-            width: 35px;
-            height: 35px;
+        .streak-dot {
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
-            background: #f1f5f9;
+            background: var(--border-light);
+            color: var(--text-light);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
-            font-weight: 500;
-            color: #64748b;
-        }
-
-        .day-dot.active {
-            background: #2563eb;
-            color: white;
-        }
-
-        /* Timer */
-        .timer-box {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            margin: 30px 0;
-            text-align: center;
-            border: 1px solid #eef2f6;
-        }
-
-        .timer {
-            font-size: 64px;
             font-weight: 600;
-            color: #2563eb;
-            margin: 20px 0;
-            font-family: monospace;
+            font-size: 1rem;
+            transition: all var(--transition-base);
+        }
+
+        .streak-dot.active {
+            background: var(--primary);
+            color: var(--white);
+            box-shadow: var(--shadow-blue);
+            transform: scale(1.1);
+        }
+
+        .streak-dot.milestone {
+            border: 2px solid var(--primary);
+            background: var(--white);
+            color: var(--primary);
+        }
+
+        .streak-dot.milestone.active {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--white);
+        }
+
+        /* ==================== SECTION 10: TIMER ==================== */
+        .timer-container {
+            text-align: center;
+            padding: var(--space-8);
+            background: linear-gradient(135deg, var(--white), var(--primary-soft));
+        }
+
+        .timer-display {
+            font-size: 7rem;
+            font-family: 'Courier New', monospace;
+            font-weight: 800;
+            letter-spacing: 8px;
+            color: var(--primary);
+            margin: var(--space-4) 0;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.8;
+            }
         }
 
         .progress-bar {
-            height: 8px;
-            background: #f1f5f9;
-            border-radius: 10px;
-            margin: 30px 0;
+            width: 100%;
+            height: 12px;
+            background: var(--border-light);
+            border-radius: var(--radius-full);
             overflow: hidden;
+            margin: var(--space-8) 0;
         }
 
         .progress-fill {
             height: 100%;
-            background: #2563eb;
             width: 0%;
-            transition: width 1s linear;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            border-radius: var(--radius-full);
+            transition: width 0.3s linear;
         }
 
-        .timer-btn {
-            background: #2563eb;
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            border-radius: 30px;
-            font-size: 16px;
-            font-weight: 500;
-            cursor: pointer;
-            margin: 10px;
+        .timer-message {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            margin-top: var(--space-4);
         }
 
-        .timer-btn:hover {
-            background: #1d4ed8;
-        }
-
-        .timer-btn:disabled {
-            background: #94a3b8;
-            cursor: not-allowed;
-        }
-
-        .timer-status {
-            color: #64748b;
-            font-size: 14px;
-            margin-top: 20px;
-        }
-
-        /* Features Section */
-        .features-section {
-            margin: 50px 0;
-        }
-
-        .section-title {
-            font-size: 28px;
+        .reward-multiplier {
+            display: inline-block;
+            padding: var(--space-2) var(--space-4);
+            background: var(--primary-bg);
+            color: var(--primary);
+            border-radius: var(--radius-full);
             font-weight: 600;
-            color: #1e293b;
-            margin-bottom: 30px;
-            text-align: center;
+            margin-top: var(--space-4);
         }
 
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-        }
-
-        .feature-card {
-            background: white;
-            padding: 30px;
-            border-radius: 20px;
-            border: 1px solid #eef2f6;
-            transition: 0.2s;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-        }
-
-        .feature-icon {
-            font-size: 32px;
-            color: #2563eb;
-            margin-bottom: 20px;
-        }
-
-        .feature-card h3 {
-            font-size: 20px;
-            font-weight: 600;
-            color: #1e293b;
-            margin-bottom: 12px;
-        }
-
-        .feature-card p {
-            color: #64748b;
-            line-height: 1.6;
-        }
-
-        /* Reward Info */
-        .reward-info {
-            background: #f8fafc;
-            border-radius: 20px;
-            padding: 30px;
-            margin: 30px 0;
-            border: 1px solid #e2e8f0;
-        }
-
-        .reward-title {
-            font-size: 20px;
-            font-weight: 600;
-            color: #1e293b;
-            margin-bottom: 15px;
-        }
-
-        .reward-desc {
-            color: #475569;
-            font-size: 15px;
-            line-height: 1.7;
-        }
-
-        .reward-note {
-            background: #dbeafe;
-            padding: 15px 20px;
-            border-radius: 12px;
-            margin-top: 20px;
-            color: #1e40af;
-            font-size: 14px;
-        }
-
-        /* Telegram Section */
-        .telegram-box {
-            background: linear-gradient(145deg, #2563eb, #1d4ed8);
-            border-radius: 20px;
-            padding: 40px;
-            margin: 40px 0;
-            color: white;
-            text-align: center;
-        }
-
-        .telegram-box i {
-            font-size: 48px;
-            margin-bottom: 15px;
-        }
-
-        .telegram-box h3 {
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-
-        .telegram-box p {
-            opacity: 0.9;
-            margin-bottom: 25px;
-        }
-
-        .telegram-btn {
-            background: white;
-            color: #2563eb;
-            border: none;
-            padding: 15px 40px;
-            border-radius: 30px;
-            font-weight: 600;
-            font-size: 16px;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            text-decoration: none;
-        }
-
-        .telegram-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-        }
-
-        /* Popup Modal */
-        .popup-modal {
-            display: none;
+        /* ==================== SECTION 11: MODALS ==================== */
+        .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 2000;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(4px);
+            display: none;
             align-items: center;
             justify-content: center;
-            padding: 20px;
-        }
-
-        .popup-modal.active {
-            display: flex;
-        }
-
-        .popup-content {
-            background: white;
-            border-radius: 24px;
-            padding: 40px;
-            max-width: 400px;
-            width: 100%;
-            text-align: center;
-            animation: popIn 0.3s ease;
-        }
-
-        @keyframes popIn {
-            from { transform: scale(0.9); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-
-        .popup-icon {
-            font-size: 48px;
-            color: #2563eb;
-            margin-bottom: 20px;
-        }
-
-        .popup-title {
-            font-size: 24px;
-            font-weight: 600;
-            color: #1e293b;
-            margin-bottom: 15px;
-        }
-
-        .popup-text {
-            color: #64748b;
-            margin-bottom: 25px;
-            line-height: 1.6;
-        }
-
-        .popup-btn {
-            background: #2563eb;
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 30px;
-            font-weight: 500;
-            cursor: pointer;
-            width: 100%;
-        }
-
-        .popup-btn:hover {
-            background: #1d4ed8;
-        }
-
-        /* Footer */
-        footer {
-            background: white;
-            padding: 40px 0;
-            margin-top: 60px;
-            border-top: 1px solid #eef2f6;
-        }
-
-        .footer-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 30px;
-        }
-
-        .footer-links a {
-            color: #64748b;
-            text-decoration: none;
-            font-size: 14px;
-        }
-
-        .footer-links a:hover {
-            color: #2563eb;
-        }
-
-        .copyright {
-            color: #94a3b8;
-            font-size: 14px;
-        }
-
-        /* Modals */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
             z-index: 1000;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
         }
 
-        .modal.active {
-            display: flex;
+        .modal-card {
+            background: var(--white);
+            max-width: 480px;
+            width: 90%;
+            border-radius: var(--radius-2xl);
+            padding: var(--space-8);
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--border);
+            animation: slideUp var(--transition-base);
         }
 
-        .modal-content {
-            background: white;
-            border-radius: 24px;
-            padding: 40px;
-            max-width: 450px;
-            width: 100%;
-            position: relative;
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-icon {
+            font-size: 4rem;
+            text-align: center;
+            margin-bottom: var(--space-4);
         }
 
         .modal-close {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: none;
-            border: none;
-            font-size: 24px;
-            color: #94a3b8;
+            float: right;
+            font-size: 1.5rem;
             cursor: pointer;
+            color: var(--text-light);
+            transition: color var(--transition-fast);
         }
 
-        .modal h2 {
-            font-size: 26px;
-            font-weight: 600;
-            color: #1e293b;
-            margin-bottom: 10px;
+        .modal-close:hover {
+            color: var(--error);
         }
 
-        .modal p {
-            color: #64748b;
-            margin-bottom: 25px;
-        }
-
+        /* ==================== SECTION 12: FORMS ==================== */
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: var(--space-4);
         }
 
-        .form-group input {
-            width: 100%;
-            padding: 14px 18px;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            font-size: 15px;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: #2563eb;
-        }
-
-        .submit-btn {
-            width: 100%;
-            padding: 14px;
-            background: #2563eb;
-            color: white;
-            border: none;
-            border-radius: 12px;
+        .form-label {
+            display: block;
             font-weight: 600;
-            font-size: 16px;
-            cursor: pointer;
+            margin-bottom: var(--space-2);
+            color: var(--text-dark);
         }
 
-        .submit-btn:hover {
-            background: #1d4ed8;
+        .form-input {
+            width: 100%;
+            padding: var(--space-3) var(--space-4);
+            border: 2px solid var(--border);
+            border-radius: var(--radius-lg);
+            font-size: 1rem;
+            transition: all var(--transition-fast);
+            background: var(--white);
         }
 
-        .submit-btn:disabled {
-            background: #94a3b8;
-            cursor: not-allowed;
+        .form-input:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 4px var(--primary-bg);
         }
 
-        .modal-footer {
-            text-align: center;
-            margin-top: 20px;
-            color: #64748b;
-        }
-
-        .modal-footer a {
-            color: #2563eb;
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        /* Error Message */
-        .error-message {
-            color: #dc2626;
-            font-size: 14px;
-            margin-top: 5px;
-            display: none;
-            text-align: center;
-        }
-
-        /* Success Message */
-        .success-message {
-            color: #059669;
-            font-size: 14px;
-            margin-top: 5px;
-            display: none;
-            text-align: center;
-        }
-
-        /* Toast */
-        .toast {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: white;
-            border-left: 4px solid #2563eb;
-            border-radius: 12px;
-            padding: 16px 24px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            display: none;
-            z-index: 3000;
-        }
-
-        .toast.show {
+        .form-checkbox {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: var(--space-2);
+            cursor: pointer;
         }
 
-        /* Loading Spinner */
-        .loading-spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(37,99,235,0.2);
-            border-top-color: #2563eb;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin-right: 8px;
+        .form-checkbox input {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        /* ==================== SECTION 13: STREAK POPUP ==================== */
+        .streak-popup {
+            text-align: center;
         }
 
-        /* Responsive */
+        .streak-popup-icon {
+            font-size: 5rem;
+            margin-bottom: var(--space-4);
+        }
+
+        .streak-popup-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: var(--space-2);
+        }
+
+        .streak-popup-streak {
+            font-size: 4rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin: var(--space-4) 0;
+        }
+
+        .streak-popup-message {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            margin-bottom: var(--space-6);
+        }
+
+        .streak-popup-reward {
+            background: var(--primary-bg);
+            padding: var(--space-4);
+            border-radius: var(--radius-xl);
+            margin: var(--space-4) 0;
+        }
+
+        .streak-popup-reward-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--success);
+        }
+
+        /* ==================== SECTION 14: TELEGRAM SECTION ==================== */
+        .telegram-section {
+            background: linear-gradient(135deg, var(--primary-soft), var(--white));
+            border-radius: var(--radius-2xl);
+            padding: var(--space-8);
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+
+        .telegram-icon {
+            font-size: 4rem;
+            color: #0088cc;
+            margin-bottom: var(--space-4);
+        }
+
+        .telegram-button {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            background: #0088cc;
+            color: var(--white);
+            padding: var(--space-4) var(--space-8);
+            border-radius: var(--radius-full);
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: var(--space-4);
+            transition: all var(--transition-base);
+        }
+
+        .telegram-button:hover {
+            background: #0077b5;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* ==================== SECTION 15: ACTIVITY METER ==================== */
+        .activity-meter {
+            background: var(--white);
+            padding: var(--space-6);
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--border);
+            margin: var(--space-4) 0;
+        }
+
+        .activity-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: var(--space-4);
+        }
+
+        .activity-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-4);
+            text-align: center;
+        }
+
+        .activity-stat {
+            padding: var(--space-4);
+            background: var(--primary-soft);
+            border-radius: var(--radius-lg);
+        }
+
+        .activity-stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .activity-stat-label {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        /* ==================== SECTION 16: RESPONSIVE ==================== */
         @media (max-width: 768px) {
-            .hero h1 { font-size: 32px; }
-            .timer { font-size: 48px; }
-            .stats { grid-template-columns: 1fr; }
-            .footer-content { flex-direction: column; text-align: center; }
-            .profile-name { display: none; }
+            .container {
+                padding: 0 var(--space-4);
+            }
+
+            .grid-2, .grid-3, .grid-4 {
+                grid-template-columns: 1fr;
+            }
+
+            .streak-number {
+                font-size: 5rem;
+            }
+
+            .timer-display {
+                font-size: 5rem;
+            }
+
+            .profile-name {
+                display: none;
+            }
+
+            .dropdown-menu {
+                width: 280px;
+            }
+
+            .activity-stats {
+                grid-template-columns: 1fr;
+            }
         }
+
+        @media (max-width: 480px) {
+            .streak-number {
+                font-size: 4rem;
+            }
+
+            .timer-display {
+                font-size: 3.5rem;
+                letter-spacing: 4px;
+            }
+
+            .streak-dot {
+                width: 35px;
+                height: 35px;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* ==================== SECTION 17: UTILITIES ==================== */
+        .text-center { text-align: center; }
+        .text-primary { color: var(--primary); }
+        .text-success { color: var(--success); }
+        .bg-primary-soft { background: var(--primary-soft); }
+        .mt-4 { margin-top: var(--space-4); }
+        .mt-8 { margin-top: var(--space-8); }
+        .mb-4 { margin-bottom: var(--space-4); }
+        .mb-8 { margin-bottom: var(--space-8); }
+        .p-4 { padding: var(--space-4); }
+        .p-8 { padding: var(--space-8); }
+        .rounded-full { border-radius: var(--radius-full); }
+        .font-600 { font-weight: 600; }
+        .font-800 { font-weight: 800; }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">
-                    <i class="fas fa-calendar-check"></i>
-                    <span>CheckIn30</span>
-                </div>
+    <!-- ==================== SECTION 18: STREAK COMPLETION POPUP ==================== -->
+    <div id="streakPopup" class="modal-overlay">
+        <div class="modal-card streak-popup">
+            <div class="modal-close" onclick="closeModal('streakPopup')">
+                <i class="fas fa-times"></i>
+            </div>
+            <div class="streak-popup-icon">
+                <i class="fas fa-fire" style="color: var(--primary);"></i>
+            </div>
+            <div class="streak-popup-title">Streak Updated!</div>
+            <div class="streak-popup-streak" id="popupStreak">0</div>
+            <div class="streak-popup-message" id="popupMessage">Keep going! Your streak is growing!</div>
+            
+            <div class="streak-popup-reward" id="popupReward" style="display: none;">
+                <div class="text-muted">Reward Earned</div>
+                <div class="streak-popup-reward-value" id="popupRewardValue">₹0</div>
+            </div>
+            
+            <div class="flex-center gap-4 mt-8">
+                <button class="btn btn-outline" onclick="closeModal('streakPopup')">
+                    Close
+                </button>
+                <button class="btn btn-primary" onclick="closeModal('streakPopup')">
+                    Continue
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== SECTION 19: LOGIN MODAL ==================== -->
+    <div id="loginModal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-close" onclick="closeModal('loginModal')">
+                <i class="fas fa-times"></i>
+            </div>
+            <div class="modal-icon">
+                <i class="fas fa-lock text-primary"></i>
+            </div>
+            <h2 class="text-center mb-4">Welcome Back!</h2>
+            
+            <div class="form-group">
+                <label class="form-label">Email</label>
+                <input type="email" id="loginEmail" class="form-input" placeholder="your@email.com">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <input type="password" id="loginPass" class="form-input" placeholder="••••••••">
+            </div>
+
+            <div class="form-checkbox mb-4">
+                <input type="checkbox" id="loginKeep" checked>
+                <label for="loginKeep">Keep me logged in</label>
+            </div>
+
+            <button class="btn btn-primary btn-block btn-lg" id="loginBtn">
+                Login
+            </button>
+
+            <p class="text-center mt-4">
+                Don't have an account? 
+                <a href="#" onclick="switchModal('loginModal', 'registerModal')" class="text-primary">
+                    Register
+                </a>
+            </p>
+        </div>
+    </div>
+
+    <!-- ==================== SECTION 20: REGISTER MODAL ==================== -->
+    <div id="registerModal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-close" onclick="closeModal('registerModal')">
+                <i class="fas fa-times"></i>
+            </div>
+            <div class="modal-icon">
+                <i class="fas fa-user-plus text-primary"></i>
+            </div>
+            <h2 class="text-center mb-4">Join CheckIn30</h2>
+
+            <div class="form-group">
+                <label class="form-label">Full Name</label>
+                <input type="text" id="regName" class="form-input" placeholder="Rajesh Kumar">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Email</label>
+                <input type="email" id="regEmail" class="form-input" placeholder="rajesh@gmail.com">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">UPI ID</label>
+                <input type="text" id="regUpi" class="form-input" placeholder="rajesh@okhdfcbank">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Password (min 6 characters)</label>
+                <input type="password" id="regPass" class="form-input" placeholder="••••••••">
+            </div>
+
+            <div class="form-checkbox mb-4">
+                <input type="checkbox" id="regKeep" checked>
+                <label for="regKeep">Keep me logged in</label>
+            </div>
+
+            <button class="btn btn-primary btn-block btn-lg" id="registerBtn">
+                Create Account
+            </button>
+
+            <p class="text-center mt-4">
+                Already have an account? 
+                <a href="#" onclick="switchModal('registerModal', 'loginModal')" class="text-primary">
+                    Login
+                </a>
+            </p>
+        </div>
+    </div>
+
+    <!-- ==================== SECTION 21: EDIT PROFILE MODAL ==================== -->
+    <div id="editModal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-close" onclick="closeModal('editModal')">
+                <i class="fas fa-times"></i>
+            </div>
+            <div class="modal-icon">
+                <i class="fas fa-pen text-primary"></i>
+            </div>
+            <h2 class="text-center mb-4">Edit Profile</h2>
+
+            <div class="form-group">
+                <label class="form-label">Full Name</label>
+                <input type="text" id="editName" class="form-input">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">UPI ID</label>
+                <input type="text" id="editUpi" class="form-input">
+            </div>
+
+            <button class="btn btn-primary btn-block btn-lg" id="saveEditBtn">
+                Save Changes
+            </button>
+        </div>
+    </div>
+
+    <!-- ==================== SECTION 22: HEADER ==================== -->
+    <header class="header">
+        <div class="container header-content">
+            <div class="logo">
+                <i class="fas fa-calendar-check logo-icon"></i>
+                <span>CheckIn30</span>
+            </div>
+
+            <!-- Auth Buttons (Logged Out) -->
+            <div id="authSection" class="flex">
+                <button class="btn btn-outline" onclick="openModal('loginModal')">
+                    Login
+                </button>
+                <button class="btn btn-primary" onclick="openModal('registerModal')">
+                    Register
+                </button>
+            </div>
+
+            <!-- Profile Section (Logged In) -->
+            <div id="profileSection" class="profile-wrapper" style="display: none;">
+                <span class="profile-name" id="headerName">User</span>
+                <div class="profile-circle" id="profileCircle" onclick="toggleDropdown()">U</div>
                 
-                <!-- Auth Buttons -->
-                <div class="auth-buttons" id="authButtons">
-                    <button class="btn btn-login" onclick="openModal('loginModal')">Login</button>
-                    <button class="btn btn-register" onclick="openModal('registerModal')">Register</button>
-                </div>
-                
-                <!-- User Profile -->
-                <div class="user-profile" id="userProfile">
-                    <div class="dropdown">
-                        <div class="profile-circle" id="profileCircle" onclick="toggleDropdown()">U</div>
-                        <div class="profile-name" id="profileName"></div>
-                        <div class="dropdown-content" id="dropdown">
-                            <div class="dropdown-item">
-                                <i class="fas fa-user"></i>
-                                <div style="flex:1">
-                                    <div class="label">Full Name</div>
-                                    <div class="value" id="menuName">User</div>
-                                </div>
-                            </div>
-                            <div class="dropdown-item">
-                                <i class="fas fa-envelope"></i>
-                                <div style="flex:1">
-                                    <div class="label">Email</div>
-                                    <div class="value" id="menuEmail">email</div>
-                                </div>
-                            </div>
-                            <div class="dropdown-item">
-                                <i class="fas fa-fire"></i>
-                                <div style="flex:1">
-                                    <div class="label">Current Streak</div>
-                                    <div class="value" id="menuStreak">0 days</div>
-                                </div>
-                            </div>
-                            <div class="dropdown-item">
-                                <i class="fas fa-clock"></i>
-                                <div style="flex:1">
-                                    <div class="label">Total Time</div>
-                                    <div class="value" id="menuTime">0 min</div>
-                                </div>
-                            </div>
-                            <div class="dropdown-item">
-                                <i class="fas fa-qrcode"></i>
-                                <div style="flex:1">
-                                    <div class="label">UPI ID</div>
-                                    <div class="value" id="menuUpi">Not set</div>
-                                </div>
-                            </div>
-                            <div class="dropdown-item">
-                                <i class="fas fa-gift"></i>
-                                <div style="flex:1">
-                                    <div class="label">Rewards Received</div>
-                                    <div class="value" id="menuRewards">0</div>
-                                </div>
-                            </div>
-                            <div class="dropdown-item clickable" onclick="openEditProfile()">
-                                <i class="fas fa-edit"></i>
-                                <span>Edit Profile</span>
-                            </div>
-                            <div class="dropdown-item clickable" onclick="logout()">
-                                <i class="fas fa-sign-out-alt"></i>
-                                <span>Logout</span>
-                            </div>
-                        </div>
+                <!-- Dropdown Menu -->
+                <div class="dropdown-menu" id="dropdownMenu">
+                    <div class="dropdown-item">
+                        <i class="fas fa-user"></i>
+                        <span id="dropName">Full Name</span>
+                    </div>
+                    <div class="dropdown-item">
+                        <i class="fas fa-envelope"></i>
+                        <span id="dropEmail">email@example.com</span>
+                    </div>
+                    <div class="dropdown-item">
+                        <i class="fas fa-fire"></i>
+                        <span>Streak: <span id="dropStreak">0</span> days</span>
+                    </div>
+                    <div class="dropdown-item">
+                        <i class="fas fa-clock"></i>
+                        <span>Total Visits: <span id="dropTotal">0</span></span>
+                    </div>
+                    <div class="dropdown-item">
+                        <i class="fas fa-qrcode"></i>
+                        <span>UPI: <span id="dropUpi">-</span></span>
+                    </div>
+                    <div class="dropdown-item">
+                        <i class="fas fa-gift"></i>
+                        <span>Rewards: <span id="dropRewards">0</span></span>
+                    </div>
+                    <div class="dropdown-item">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Activity: <span id="dropActivity">0</span> points</span>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <div class="dropdown-item" onclick="openEditModal()">
+                        <i class="fas fa-pencil-alt"></i>
+                        <span>Edit Profile</span>
+                    </div>
+                    <div class="dropdown-item" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
                     </div>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="container">
-        <!-- Login View -->
-        <div id="loginView">
-            <div class="hero">
-                <h1>More Time = Better Rewards</h1>
-                <p>Just visit daily and complete 1 minute. The more you use, the more you earn!</p>
-            </div>
-
-            <div class="stats">
-                <div class="stat-card">
-                    <div class="stat-number">1 min</div>
-                    <div class="stat-label">Daily Time</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">↑ More</div>
-                    <div class="stat-label">Time = Better Rewards</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">24h</div>
-                    <div class="stat-label">First Reward</div>
-                </div>
-            </div>
-
-            <!-- Features Section -->
-            <div class="features-section">
-                <h2 class="section-title">Why Choose CheckIn30?</h2>
-                <div class="features-grid">
-                    <div class="feature-card">
-                        <div class="feature-icon"><i class="fas fa-clock"></i></div>
-                        <h3>Simple Daily Habit</h3>
-                        <p>Just 1 minute daily. Visit, start timer, complete. That's all it takes to build your streak.</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
-                        <h3>Growing Rewards</h3>
-                        <p>Your rewards grow with your streak. The longer you maintain, the better your payouts become.</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon"><i class="fas fa-users"></i></div>
-                        <h3>Fair for Everyone</h3>
-                        <p>No lottery, no luck. Everyone who stays consistent gets rewarded. First reward in 24 hours!</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
-                        <h3>100% Legitimate</h3>
-                        <p>Thousands of users already receiving payments directly to their UPI. Trusted platform since 2024.</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon"><i class="fas fa-bolt"></i></div>
-                        <h3>Instant Updates</h3>
-                        <p>Join our Telegram channel for instant reward announcements and platform updates.</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon"><i class="fas fa-headset"></i></div>
-                        <h3>24/7 Support</h3>
-                        <p>Have questions? Our support team responds within 2 hours, anytime day or night.</p>
+    <!-- ==================== SECTION 23: MAIN CONTENT ==================== -->
+    <main class="container" id="mainContent">
+        <!-- LOGGED OUT HOME PAGE (Scrollable) -->
+        <div id="homeLoggedOut">
+            <!-- Hero Section -->
+            <section class="section" data-aos="fade-up">
+                <div class="card text-center">
+                    <h1>More Activity = Bigger Rewards</h1>
+                    <p class="text-xl" style="font-size: 1.3rem; color: var(--primary);">
+                        The more you engage, the more you earn!
+                    </p>
+                    
+                    <div class="grid grid-3 mt-8">
+                        <div class="activity-stat" data-aos="zoom-in" data-aos-delay="100">
+                            <div class="activity-stat-value">1 min</div>
+                            <div class="activity-stat-label">Daily Time</div>
+                        </div>
+                        <div class="activity-stat" data-aos="zoom-in" data-aos-delay="200">
+                            <div class="activity-stat-value">↑ More</div>
+                            <div class="activity-stat-label">Activity = Bigger Rewards</div>
+                        </div>
+                        <div class="activity-stat" data-aos="zoom-in" data-aos-delay="300">
+                            <div class="activity-stat-value">24h</div>
+                            <div class="activity-stat-label">First Reward</div>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </section>
 
             <!-- How It Works -->
-            <div class="reward-info">
-                <div class="reward-title">📋 How It Works</div>
-                <div class="reward-desc">
-                    1. Register with your name, email, and UPI ID<br>
-                    2. Visit daily and click "Start 1-Minute Timer"<br>
-                    3. Wait for timer to complete<br>
-                    4. Click "Complete Visit" to add to your streak<br>
-                    5. Longer streak = Better rewards!
+            <section class="section" data-aos="fade-up">
+                <h2 class="text-center">How It Works</h2>
+                <div class="grid grid-3">
+                    <div class="card" data-aos="flip-left" data-aos-delay="100">
+                        <i class="fas fa-user-plus text-primary" style="font-size: 2rem;"></i>
+                        <h3 class="mt-4">1. Register</h3>
+                        <p>Sign up with your name, email, and UPI ID to start earning</p>
+                    </div>
+                    <div class="card" data-aos="flip-left" data-aos-delay="200">
+                        <i class="fas fa-clock text-primary" style="font-size: 2rem;"></i>
+                        <h3 class="mt-4">2. Timer Auto-Starts</h3>
+                        <p>Timer starts automatically when you visit - no buttons needed!</p>
+                    </div>
+                    <div class="card" data-aos="flip-left" data-aos-delay="300">
+                        <i class="fas fa-hourglass-half text-primary" style="font-size: 2rem;"></i>
+                        <h3 class="mt-4">3. Wait 1 Minute</h3>
+                        <p>Timer runs for 60 seconds - you can browse other sections</p>
+                    </div>
+                    <div class="card" data-aos="flip-left" data-aos-delay="400">
+                        <i class="fas fa-fire text-primary" style="font-size: 2rem;"></i>
+                        <h3 class="mt-4">4. Popup Appears</h3>
+                        <p>When timer ends, popup asks you to claim your streak</p>
+                    </div>
+                    <div class="card" data-aos="flip-left" data-aos-delay="500">
+                        <i class="fas fa-gift text-primary" style="font-size: 2rem;"></i>
+                        <h3 class="mt-4">5. Claim Streak</h3>
+                        <p>Click to add to your streak and see potential reward</p>
+                    </div>
+                    <div class="card" data-aos="flip-left" data-aos-delay="600">
+                        <i class="fas fa-chart-line text-primary" style="font-size: 2rem;"></i>
+                        <h3 class="mt-4">6. Bigger Rewards</h3>
+                        <p>More activity = bigger rewards. Never stops growing!</p>
+                    </div>
                 </div>
-                <div class="reward-note">
-                    <i class="fas fa-star"></i> First reward guaranteed within 24 hours of registration!
-                </div>
-            </div>
+            </section>
 
-            <!-- Telegram -->
-            <div class="telegram-box">
-                <i class="fab fa-telegram"></i>
-                <h3>Join Our Telegram Channel</h3>
-                <p>Get updates, reward announcements, and tips</p>
-                <a href="https://t.me/chackin30" target="_blank" class="telegram-btn">
-                    <i class="fab fa-telegram"></i> @chackin30
-                </a>
-            </div>
+            <!-- Activity Reward Explanation -->
+            <section class="section" data-aos="fade-up">
+                <div class="card bg-primary-soft">
+                    <h2 class="text-center">📈 Activity = Bigger Rewards</h2>
+                    <p class="text-center text-lg">
+                        Every action you take on the website increases your activity score. 
+                        The more you engage, the bigger your rewards become!
+                    </p>
+                    
+                    <div class="grid grid-4 mt-8">
+                        <div class="text-center">
+                            <div class="stat-number text-primary">1x</div>
+                            <div>Daily Visit</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="stat-number text-primary">2x</div>
+                            <div>Profile Complete</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="stat-number text-primary">3x</div>
+                            <div>7-Day Streak</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="stat-number text-primary">5x</div>
+                            <div>30-Day Streak</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Telegram Channel Section (Prominent) -->
+            <section class="section" data-aos="fade-up">
+                <div class="telegram-section">
+                    <i class="fab fa-telegram telegram-icon"></i>
+                    <h2>Join Our Telegram Channel</h2>
+                    <p class="text-lg">Get instant updates about your rewards, streak milestones, and special offers!</p>
+                    <a href="https://t.me/chackin30" target="_blank" class="telegram-button">
+                        <i class="fab fa-telegram"></i>
+                        Join @chackin30 Now
+                    </a>
+                    <p class="mt-4 text-muted">500+ members already earning daily!</p>
+                </div>
+            </section>
+
+            <!-- Why Choose Us -->
+            <section class="section" data-aos="fade-up">
+                <div class="grid grid-2">
+                    <div class="card">
+                        <i class="fas fa-infinity text-primary" style="font-size: 2rem;"></i>
+                        <h3 class="mt-4">Unlimited Streak</h3>
+                        <p>Your streak never stops growing. Keep going beyond 30, 60, 100 days!</p>
+                    </div>
+                    <div class="card">
+                        <i class="fas fa-rocket text-primary" style="font-size: 2rem;"></i>
+                        <h3 class="mt-4">Growing Rewards</h3>
+                        <p>The more active you are, the bigger your rewards become. Simple!</p>
+                    </div>
+                </div>
+            </section>
         </div>
 
-        <!-- Dashboard -->
-        <div class="dashboard" id="dashboard">
-            <!-- Streak Display -->
-            <div class="streak-display">
-                <div class="streak-label">Current Streak</div>
-                <div class="streak-number" id="streakValue">0</div>
-                <div class="streak-label">days</div>
-                
-                <div class="streak-days" id="streakDots">
-                    <!-- Generated by JS -->
-                </div>
-                
-                <div style="margin-top: 20px; color: #64748b; font-size: 14px;">
-                    <i class="far fa-clock"></i> Longer streak = Better rewards
-                </div>
-            </div>
-
-            <!-- Timer -->
-            <div class="timer-box">
-                <h3 style="font-size: 20px; font-weight: 500; color: #1e293b; margin-bottom: 20px;">Today's 1-Minute Visit</h3>
-                
-                <!-- Timer Display -->
-                <div class="timer" id="timerDisplay">01:00</div>
-                
-                <!-- Progress Bar -->
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill"></div>
-                </div>
-                
-                <!-- Buttons -->
-                <div>
-                    <button class="timer-btn" id="startTimerBtn" onclick="startTimer()">
-                        <i class="fas fa-play"></i> Start 1-Minute Timer
-                    </button>
+        <!-- LOGGED IN DASHBOARD -->
+        <div id="dashboard" style="display: none;">
+            <!-- Auto-Starting Timer Section -->
+            <section class="section" data-aos="fade-up">
+                <div class="timer-container card">
+                    <h2><i class="fas fa-clock"></i> Daily Timer</h2>
                     
-                    <button class="timer-btn" id="completeBtn" onclick="showStreakPopup()" style="display: none;">
-                        <i class="fas fa-check"></i> Complete Visit
-                    </button>
-                </div>
-                
-                <!-- Timer Status -->
-                <div class="timer-status" id="timerStatus">
-                    <i class="fas fa-info-circle"></i> Click "Start 1-Minute Timer" to begin
-                </div>
-            </div>
-
-            <!-- Reward Info -->
-            <div class="reward-info">
-                <div class="reward-title">🎁 Your Rewards</div>
-                <div class="reward-desc">
-                    Your rewards get better the longer you maintain your streak. 
-                    <span style="color: #2563eb; font-weight: 600;">More days = Better rewards</span>. 
-                    Everyone gets something - the more you use, the more you earn!
-                </div>
-                <div class="reward-note">
-                    <i class="fas fa-star"></i> First reward: Within 24 hours • Next reward: Every 2-4 days
-                </div>
-            </div>
-
-            <!-- Features -->
-            <div class="features-section">
-                <h2 class="section-title">How to Maximize Your Rewards</h2>
-                <div class="features-grid">
-                    <div class="feature-card">
-                        <div class="feature-icon"><i class="fas fa-calendar-check"></i></div>
-                        <h3>Daily Consistency</h3>
-                        <p>Visit every day without missing. Each day adds to your streak and increases your reward potential.</p>
+                    <div class="timer-display" id="timerDisplay">01:00</div>
+                    
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
                     </div>
-                    <div class="feature-card">
-                        <div class="feature-icon"><i class="fas fa-chart-bar"></i></div>
-                        <h3>Streak Milestones</h3>
-                        <p>7 days, 15 days, 30 days - each milestone unlocks better reward tiers. Longer streaks = bigger payouts.</p>
+                    
+                    <div class="timer-message" id="timerMessage">
+                        ⏳ Timer running automatically...
                     </div>
-                    <div class="feature-card">
-                        <div class="feature-icon"><i class="fas fa-clock"></i></div>
-                        <h3>Complete Full Minute</h3>
-                        <p>Make sure to complete the full 1 minute. Partial visits don't count toward your streak.</p>
+                    
+                    <div class="reward-multiplier" id="rewardMultiplier">
+                        Current Multiplier: 1x
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <!-- Telegram -->
-            <div class="telegram-box">
-                <i class="fab fa-telegram"></i>
-                <h3>Join Our Telegram Channel</h3>
-                <p>Get instant updates about your rewards</p>
-                <a href="https://t.me/chackin30" target="_blank" class="telegram-btn">
-                    <i class="fab fa-telegram"></i> @chackin30
-                </a>
-            </div>
+            <!-- Streak Display -->
+            <section class="section" data-aos="fade-up">
+                <div class="card streak-container">
+                    <span class="badge" style="background: var(--primary-bg); color: var(--primary); padding: var(--space-2) var(--space-4); border-radius: var(--radius-full);">
+                        <i class="fas fa-fire"></i> CURRENT STREAK
+                    </span>
+                    
+                    <div class="streak-number" id="streakMain">0</div>
+                    <p class="text-xl font-600">days</p>
+                    
+                    <!-- Unlimited Streak Indicator -->
+                    <div id="unlimitedBadge" style="display: none; color: var(--primary); font-weight: 600; margin: var(--space-4) 0;">
+                        <i class="fas fa-infinity"></i> UNLIMITED STREAK MODE
+                    </div>
 
-            <!-- Connect -->
-            <div style="background: white; border-radius: 20px; padding: 40px; margin: 40px 0; text-align: center; border: 1px solid #eef2f6;">
-                <i class="fas fa-headset" style="font-size: 48px; color: #2563eb; margin-bottom: 20px;"></i>
-                <h3 style="font-size: 24px; margin-bottom: 15px;">Need Help?</h3>
-                <p style="color: #64748b; margin-bottom: 25px; max-width: 500px; margin-left: auto; margin-right: auto;">
-                    Our support team responds within 2 hours, 24/7
-                </p>
-                <button class="btn btn-register" onclick="contactSupport()" style="padding: 15px 40px;">
-                    <i class="fas fa-envelope"></i> Contact Support
-                </button>
-            </div>
+                    <!-- Streak Dots (Shows up to 60 days) -->
+                    <div class="streak-dots-container" id="streakDots"></div>
+                </div>
+            </section>
+
+            <!-- Activity Meter & Reward Potential -->
+            <section class="section" data-aos="fade-up">
+                <div class="grid grid-2">
+                    <!-- Activity Meter -->
+                    <div class="card">
+                        <h3><i class="fas fa-chart-line text-primary"></i> Your Activity Score</h3>
+                        <div class="activity-meter">
+                            <div class="activity-title">Activity Level</div>
+                            <div class="activity-stats">
+                                <div class="activity-stat">
+                                    <div class="activity-stat-value" id="activityScore">0</div>
+                                    <div class="activity-stat-label">Points</div>
+                                </div>
+                                <div class="activity-stat">
+                                    <div class="activity-stat-value" id="activityMultiplier">1x</div>
+                                    <div class="activity-stat-label">Multiplier</div>
+                                </div>
+                                <div class="activity-stat">
+                                    <div class="activity-stat-value" id="nextRewardEstimate">₹0</div>
+                                    <div class="activity-stat-label">Next Reward</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Reward Info -->
+                    <div class="card">
+                        <h3><i class="fas fa-gift text-primary"></i> Reward Potential</h3>
+                        <div class="mt-4">
+                            <div class="flex-between p-3" style="border-bottom: 1px solid var(--border);">
+                                <span>Base Reward:</span>
+                                <span class="font-600" id="baseReward">₹10</span>
+                            </div>
+                            <div class="flex-between p-3" style="border-bottom: 1px solid var(--border);">
+                                <span>Activity Multiplier:</span>
+                                <span class="font-600 text-primary" id="currentMultiplier">1x</span>
+                            </div>
+                            <div class="flex-between p-3" style="border-bottom: 1px solid var(--border);">
+                                <span>Streak Bonus:</span>
+                                <span class="font-600" id="streakBonus">+₹0</span>
+                            </div>
+                            <div class="flex-between p-3" style="font-size: 1.2rem;">
+                                <span class="font-600">Total Potential:</span>
+                                <span class="font-800 text-success" id="totalPotential">₹10</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Stats Overview -->
+            <section class="section" data-aos="fade-up">
+                <div class="grid grid-4">
+                    <div class="card text-center">
+                        <div class="stat-number text-primary" id="totalVisits">0</div>
+                        <div class="stat-label">Total Visits</div>
+                    </div>
+                    <div class="card text-center">
+                        <div class="stat-number text-primary" id="rewardsEarned">0</div>
+                        <div class="stat-label">Rewards Earned</div>
+                    </div>
+                    <div class="card text-center">
+                        <div class="stat-number text-primary" id="totalValue">₹0</div>
+                        <div class="stat-label">Total Value</div>
+                    </div>
+                    <div class="card text-center">
+                        <div class="stat-number text-primary" id="completionPercent">0%</div>
+                        <div class="stat-label">Completion</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Recent Activity -->
+            <section class="section" data-aos="fade-up">
+                <div class="card">
+                    <h3><i class="fas fa-history"></i> Recent Activity</h3>
+                    <div id="recentActivity" class="mt-4">
+                        <!-- Dynamically filled -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Telegram Channel (Always visible) -->
+            <section class="section" data-aos="fade-up">
+                <div class="telegram-section">
+                    <i class="fab fa-telegram telegram-icon"></i>
+                    <h3>Stay Updated on Telegram</h3>
+                    <p>Get instant notifications about your streak milestones and rewards</p>
+                    <a href="https://t.me/chackin30" target="_blank" class="telegram-button">
+                        <i class="fab fa-telegram"></i> Join @chackin30
+                    </a>
+                </div>
+            </section>
         </div>
     </main>
 
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="copyright">
-                    © 2026 CheckIn30. All rights reserved.
-                </div>
-                <div class="footer-links">
-                    <a href="#" onclick="showTerms()">Terms</a>
-                    <a href="#" onclick="showPrivacy()">Privacy</a>
-                    <a href="#" onclick="contactSupport()">Contact</a>
-                    <a href="https://t.me/chackin30" target="_blank">Telegram</a>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <!-- ==================== SECTION 24: FIREBASE SDK ==================== -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    
+    <!-- ==================== SECTION 25: AOS LIBRARY ==================== -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
-    <!-- Login Modal -->
-    <div class="modal" id="loginModal">
-        <div class="modal-content">
-            <button class="modal-close" onclick="closeModal('loginModal')">×</button>
-            <h2>Welcome Back</h2>
-            <p>Login to continue your streak</p>
-            
-            <div id="loginError" class="error-message"></div>
-            <div id="loginSuccess" class="success-message"></div>
-            
-            <form onsubmit="event.preventDefault(); handleLogin()">
-                <div class="form-group">
-                    <input type="email" id="loginEmail" placeholder="Email address" required>
-                </div>
-                <div class="form-group">
-                    <input type="password" id="loginPassword" placeholder="Password" required>
-                </div>
-                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
-                    <input type="checkbox" id="rememberMe" checked style="width: 18px; height: 18px;">
-                    <label style="color:#64748b">Keep me logged in</label>
-                </div>
-                <button type="submit" class="submit-btn" id="loginSubmitBtn">Login</button>
-            </form>
-            
-            <div class="modal-footer">
-                New here? <a href="#" onclick="openModal('registerModal'); closeModal('loginModal')">Create account</a>
-            </div>
-        </div>
-    </div>
-
-    <!-- Register Modal -->
-    <div class="modal" id="registerModal">
-        <div class="modal-content">
-            <button class="modal-close" onclick="closeModal('registerModal')">×</button>
-            <h2>Start Earning</h2>
-            <p>First reward within 24 hours!</p>
-            
-            <div id="registerError" class="error-message"></div>
-            <div id="registerSuccess" class="success-message"></div>
-            
-            <form onsubmit="event.preventDefault(); handleRegister()">
-                <div class="form-group">
-                    <input type="text" id="registerName" placeholder="Full name" required>
-                </div>
-                <div class="form-group">
-                    <input type="email" id="registerEmail" placeholder="Email address" required>
-                </div>
-                <div class="form-group">
-                    <input type="text" id="registerUpi" placeholder="UPI ID (for rewards)" required>
-                </div>
-                <div class="form-group">
-                    <input type="password" id="registerPassword" placeholder="Password (min 6 characters)" required>
-                </div>
-                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
-                    <input type="checkbox" id="rememberRegister" checked style="width: 18px; height: 18px;">
-                    <label style="color:#64748b">Keep me logged in</label>
-                </div>
-                <button type="submit" class="submit-btn" id="registerSubmitBtn">Create Account</button>
-            </form>
-            
-            <div class="modal-footer">
-                Already have account? <a href="#" onclick="openModal('loginModal'); closeModal('registerModal')">Login</a>
-            </div>
-        </div>
-    </div>
-
-    <!-- Edit Profile Modal -->
-    <div class="modal" id="editProfileModal">
-        <div class="modal-content">
-            <button class="modal-close" onclick="closeModal('editProfileModal')">×</button>
-            <h2>Edit Profile</h2>
-            <p>Update your information</p>
-            
-            <div id="editError" class="error-message"></div>
-            <div id="editSuccess" class="success-message"></div>
-            
-            <form onsubmit="event.preventDefault(); updateProfile()">
-                <div class="form-group">
-                    <input type="text" id="editName" placeholder="Full name" required>
-                </div>
-                <div class="form-group">
-                    <input type="text" id="editUpi" placeholder="UPI ID" required>
-                </div>
-                <button type="submit" class="submit-btn" id="editSubmitBtn">Save Changes</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Success Popup -->
-    <div class="popup-modal" id="successPopup">
-        <div class="popup-content">
-            <div class="popup-icon">
-                <i class="fas fa-check-circle"></i>
-            </div>
-            <div class="popup-title" id="popupTitle">Success!</div>
-            <div class="popup-text" id="popupMessage">Operation completed successfully.</div>
-            <button class="popup-btn" onclick="closePopup()">Continue</button>
-        </div>
-    </div>
-
-    <!-- Streak Popup -->
-    <div class="popup-modal" id="streakPopup">
-        <div class="popup-content">
-            <div class="popup-icon">
-                <i class="fas fa-fire"></i>
-            </div>
-            <div class="popup-title" id="streakPopupTitle">Streak Updated!</div>
-            <div class="popup-text" id="streakPopupMessage">Your streak has been increased.</div>
-            <button class="popup-btn" onclick="closeStreakPopup()">Continue</button>
-        </div>
-    </div>
-
-    <!-- Toast -->
-    <div class="toast" id="toast">
-        <i class="fas fa-check-circle" style="color:#2563eb"></i>
-        <span id="toastMessage">Message</span>
-    </div>
-
+    <!-- ==================== SECTION 26: MAIN APPLICATION SCRIPT ==================== -->
     <script>
-        // ============================================
-        // NEW FIREBASE CONFIGURATION
-        // ============================================
+        // ==================== 26.1: FIREBASE CONFIG ====================
         const firebaseConfig = {
             apiKey: "AIzaSyDfzHHptzdqh178Or8hNNyF642NuHxNLjg",
             authDomain: "chackin30.firebaseapp.com",
@@ -1174,732 +1280,505 @@
             projectId: "chackin30",
             storageBucket: "chackin30.firebasestorage.app",
             messagingSenderId: "789981582387",
-            appId: "1:789981582387:web:46716df5b4154c18d37f46",
-            measurementId: "G-JYDE2EN7K8"
+            appId: "1:789981582387:web:46716df5b4154c18d37f46"
         };
 
-        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
-        const database = firebase.database();
+        const db = firebase.database();
 
-        // ============================================
-        // TELEGRAM
-        // ============================================
-        const TELEGRAM_BOT_TOKEN = "8367971417:AAGkV30ajQdWKjM-5AQDxYZH19OPHI51HGM";
-        const TELEGRAM_CHAT_ID = "6225430212";
+        // ==================== 26.2: TELEGRAM CONFIG ====================
+        const BOT_TOKEN = "8367971417:AAGkV30ajQdWKjM-5AQDxYZH19OPHI51HGM";
+        const CHAT_ID = "6225430212";
+        const TELEGRAM_API = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
 
-        // ============================================
-        // STATE
-        // ============================================
-        let currentUser = null;
-        let userData = null;
-        let timerInterval = null;
-        let timerSeconds = 60;
-        let isTimerRunning = false;
-        let pendingStreak = 0;
-
-        // ============================================
-        // INIT
-        // ============================================
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('DOM Loaded - New Firebase Project');
-            
-            // Check auth state
-            auth.onAuthStateChanged(function(user) {
-                console.log('Auth state:', user ? 'Logged in' : 'Logged out');
-                
-                if (user) {
-                    currentUser = user;
-                    loadUserData(user.uid);
-                } else {
-                    showLoginView();
-                }
-            });
-
-            // Generate streak dots
-            generateStreakDots();
-        });
-
-        // ============================================
-        // VIEW FUNCTIONS
-        // ============================================
-        function showLoginView() {
-            document.getElementById('loginView').style.display = 'block';
-            document.getElementById('dashboard').classList.remove('active');
-            document.getElementById('authButtons').style.display = 'flex';
-            document.getElementById('userProfile').classList.remove('active');
-            currentUser = null;
-            userData = null;
-        }
-
-        function showDashboard() {
-            document.getElementById('loginView').style.display = 'none';
-            document.getElementById('dashboard').classList.add('active');
-            document.getElementById('authButtons').style.display = 'none';
-            document.getElementById('userProfile').classList.add('active');
-            
-            // Close dropdown
-            document.getElementById('dropdown').classList.remove('show');
-            
-            // Reset timer buttons
-            document.getElementById('startTimerBtn').disabled = false;
-            document.getElementById('startTimerBtn').style.display = 'inline-block';
-            document.getElementById('completeBtn').style.display = 'none';
-            document.getElementById('timerStatus').innerHTML = '<i class="fas fa-info-circle"></i> Click "Start 1-Minute Timer" to begin';
-            
-            // Check if already visited today
-            if (userData && userData.visitedToday) {
-                document.getElementById('startTimerBtn').disabled = true;
-                document.getElementById('startTimerBtn').style.display = 'none';
-                document.getElementById('timerStatus').innerHTML = '<i class="fas fa-check-circle"></i> Today\'s visit already completed';
-            }
-        }
-
-        // ============================================
-        // POPUP FUNCTIONS
-        // ============================================
-        function showPopup(title, message) {
-            document.getElementById('popupTitle').textContent = title;
-            document.getElementById('popupMessage').textContent = message;
-            document.getElementById('successPopup').classList.add('active');
-        }
-
-        function closePopup() {
-            document.getElementById('successPopup').classList.remove('active');
-        }
-
-        function showStreakPopup() {
-            if (!userData || userData.visitedToday) return;
-            
-            // Show streak popup
-            document.getElementById('streakPopupTitle').textContent = '🎉 Streak Updated!';
-            document.getElementById('streakPopupMessage').textContent = `Day ${userData.streak + 1} completed! Keep going!`;
-            document.getElementById('streakPopup').classList.add('active');
-            
-            // Complete the visit
-            completeVisit();
-        }
-
-        function closeStreakPopup() {
-            document.getElementById('streakPopup').classList.remove('active');
-        }
-
-        // ============================================
-        // USER DATA
-        // ============================================
-        async function loadUserData(userId) {
+        async function sendTelegramNotification(message) {
             try {
-                const snapshot = await database.ref('users/' + userId).once('value');
-                userData = snapshot.val();
-
-                if (userData) {
-                    console.log('User data loaded:', userData.name);
-                    updateUI();
-                    checkVisitStatus();
-                    showDashboard();
-                } else {
-                    // Create default data if missing
-                    const now = new Date();
-                    const firstReward = new Date(now.getTime() + 24 * 60 * 60 * 1000);
-                    
-                    const defaultData = {
-                        name: currentUser.displayName || 'User',
-                        email: currentUser.email,
-                        upiId: 'Not set',
-                        streak: 0,
-                        totalVisits: 0,
-                        lastVisit: null,
-                        visitedToday: false,
-                        registeredAt: now.toISOString(),
-                        firstRewardDate: firstReward.toISOString(),
-                        lastRewardDate: null,
-                        nextRewardDate: firstReward.toISOString(),
-                        rewardsReceived: 0,
-                        visits: {}
-                    };
-                    await database.ref('users/' + userId).set(defaultData);
-                    userData = defaultData;
-                    updateUI();
-                    showDashboard();
-                }
-            } catch (error) {
-                console.error('Error loading user data:', error);
-                showToast('Error loading data: ' + error.message);
-            }
-        }
-
-        function updateUI() {
-            if (!currentUser || !userData) return;
-
-            // Update profile
-            const firstLetter = (userData.name || 'U').charAt(0).toUpperCase();
-            document.getElementById('profileCircle').textContent = firstLetter;
-            document.getElementById('profileName').textContent = userData.name || 'User';
-
-            // Update menu
-            document.getElementById('menuName').textContent = userData.name || 'User';
-            document.getElementById('menuEmail').textContent = currentUser.email;
-            document.getElementById('menuStreak').textContent = (userData.streak || 0) + ' days';
-            
-            const totalMinutes = (userData.totalVisits || 0) * 1;
-            document.getElementById('menuTime').textContent = totalMinutes + ' min';
-            
-            document.getElementById('menuUpi').textContent = userData.upiId || 'Not set';
-            document.getElementById('menuRewards').textContent = userData.rewardsReceived || 0;
-
-            // Update streak
-            const streak = userData.streak || 0;
-            document.getElementById('streakValue').textContent = streak;
-            
-            // Update streak dots
-            updateStreakDots(streak);
-        }
-
-        // ============================================
-        // STREAK DOTS
-        // ============================================
-        function generateStreakDots() {
-            const container = document.getElementById('streakDots');
-            container.innerHTML = '';
-            
-            for (let i = 1; i <= 30; i++) {
-                const dot = document.createElement('div');
-                dot.className = 'day-dot';
-                dot.textContent = i;
-                dot.id = `day-${i}`;
-                container.appendChild(dot);
-            }
-        }
-
-        function updateStreakDots(streak) {
-            for (let i = 1; i <= 30; i++) {
-                const dot = document.getElementById(`day-${i}`);
-                if (dot) {
-                    if (i <= streak) {
-                        dot.classList.add('active');
-                    } else {
-                        dot.classList.remove('active');
-                    }
-                }
-            }
-        }
-
-        // ============================================
-        // TIMER
-        // ============================================
-        function startTimer() {
-            if (isTimerRunning) return;
-            
-            if (userData && userData.visitedToday) {
-                showToast('Already visited today');
-                return;
-            }
-
-            console.log('Timer started');
-            isTimerRunning = true;
-            timerSeconds = 60;
-            
-            // Update UI
-            document.getElementById('timerDisplay').textContent = '01:00';
-            document.getElementById('progressFill').style.width = '0%';
-            document.getElementById('startTimerBtn').style.display = 'none';
-            document.getElementById('completeBtn').style.display = 'none';
-            document.getElementById('timerStatus').innerHTML = '<i class="fas fa-hourglass-half"></i> Timer running... 60 seconds remaining';
-
-            if (timerInterval) clearInterval(timerInterval);
-
-            timerInterval = setInterval(() => {
-                timerSeconds--;
-                
-                // Update display
-                const minutes = Math.floor(timerSeconds / 60);
-                const seconds = timerSeconds % 60;
-                document.getElementById('timerDisplay').textContent = 
-                    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-
-                // Update progress
-                const progress = ((60 - timerSeconds) / 60) * 100;
-                document.getElementById('progressFill').style.width = `${progress}%`;
-                document.getElementById('timerStatus').innerHTML = '<i class="fas fa-hourglass-half"></i> ' + timerSeconds + ' seconds remaining';
-
-                if (timerSeconds <= 0) {
-                    clearInterval(timerInterval);
-                    document.getElementById('timerDisplay').textContent = '00:00';
-                    document.getElementById('progressFill').style.width = '100%';
-                    document.getElementById('completeBtn').style.display = 'inline-block';
-                    document.getElementById('timerStatus').innerHTML = '<i class="fas fa-check-circle"></i> Ready! Click "Complete Visit" to add to streak';
-                    isTimerRunning = false;
-                }
-            }, 1000);
-        }
-
-        // ============================================
-        // VISIT
-        // ============================================
-        async function completeVisit() {
-            if (!currentUser || !userData) {
-                showToast('Please login first');
-                return;
-            }
-
-            try {
-                const today = new Date().toISOString().split('T')[0];
-                const now = new Date().toISOString();
-
-                if (userData.visitedToday) {
-                    showToast('Already visited today');
-                    closeStreakPopup();
-                    return;
-                }
-
-                const newStreak = (userData.streak || 0) + 1;
-                const newTotalVisits = (userData.totalVisits || 0) + 1;
-
-                // Prepare updates
-                const updates = {
-                    streak: newStreak,
-                    totalVisits: newTotalVisits,
-                    lastVisit: now,
-                    visitedToday: true
-                };
-                
-                // Add to visits object
-                updates[`visits/${today}`] = true;
-
-                // Update in Firebase
-                await database.ref('users/' + currentUser.uid).update(updates);
-                
-                // Update local data
-                userData = { 
-                    ...userData, 
-                    streak: newStreak,
-                    totalVisits: newTotalVisits,
-                    lastVisit: now,
-                    visitedToday: true
-                };
-                
-                // Update UI
-                updateUI();
-                document.getElementById('completeBtn').style.display = 'none';
-                document.getElementById('startTimerBtn').style.display = 'none';
-                document.getElementById('timerStatus').innerHTML = '<i class="fas fa-check-circle"></i> Visit recorded! Day ' + newStreak + ' completed!';
-                
-                showToast('✓ Day ' + newStreak + ' completed!');
-                
-                // Update popup message
-                document.getElementById('streakPopupMessage').textContent = `Day ${newStreak} completed! Keep going!`;
-                
-                // Send Telegram notification for milestone
-                if (newStreak === 1 || newStreak === 7 || newStreak === 15 || newStreak === 30 || newStreak % 10 === 0) {
-                    sendTelegram(
-                        `⭐ STREAK MILESTONE\n` +
-                        `━━━━━━━━━━━━━━━━━━\n` +
-                        `👤 ${userData.name}\n` +
-                        `🔥 ${newStreak} days streak!\n` +
-                        `⏰ ${new Date().toLocaleString('en-IN')}\n` +
-                        `━━━━━━━━━━━━━━━━━━`
-                    );
-                }
-                
-                // Check rewards
-                checkRewardEligibility();
-
-            } catch (error) {
-                console.error('Error completing visit:', error);
-                showToast('Error: ' + error.message);
-                closeStreakPopup();
-            }
-        }
-
-        function checkVisitStatus() {
-            if (!userData) return;
-            
-            if (userData.visitedToday) {
-                document.getElementById('startTimerBtn').style.display = 'none';
-                document.getElementById('completeBtn').style.display = 'none';
-                document.getElementById('timerStatus').innerHTML = '<i class="fas fa-check-circle"></i> Today\'s visit completed';
-                
-                if (timerInterval) {
-                    clearInterval(timerInterval);
-                    timerInterval = null;
-                }
-                isTimerRunning = false;
-            }
-        }
-
-        // ============================================
-        // REWARDS
-        // ============================================
-        async function checkRewardEligibility() {
-            if (!userData) return;
-            
-            const now = new Date();
-            const nextRewardDate = userData.nextRewardDate ? new Date(userData.nextRewardDate) : null;
-            
-            if (nextRewardDate && now >= nextRewardDate) {
-                // Send to Telegram
-                await sendTelegram(
-                    `💰 REWARD READY\n` +
-                    `━━━━━━━━━━━━━━━━━━\n` +
-                    `👤 ${userData.name}\n` +
-                    `📧 ${currentUser.email}\n` +
-                    `💰 ${userData.upiId}\n` +
-                    `🔥 Streak: ${userData.streak} days\n` +
-                    `🎁 Reward #${(userData.rewardsReceived || 0) + 1}\n` +
-                    `━━━━━━━━━━━━━━━━━━`
-                );
-                
-                const daysUntilNext = Math.floor(Math.random() * 3) + 2;
-                const nextReward = new Date(now.getTime() + daysUntilNext * 24 * 60 * 60 * 1000);
-                
-                await database.ref('users/' + currentUser.uid).update({
-                    rewardsReceived: (userData.rewardsReceived || 0) + 1,
-                    lastRewardDate: now.toISOString(),
-                    nextRewardDate: nextReward.toISOString()
-                });
-                
-                userData.rewardsReceived = (userData.rewardsReceived || 0) + 1;
-                userData.lastRewardDate = now.toISOString();
-                userData.nextRewardDate = nextReward.toISOString();
-                
-                showPopup('🎉 Reward Ready!', `Your reward #${userData.rewardsReceived} will be sent to ${userData.upiId} within 24 hours.`);
-            }
-        }
-
-        // ============================================
-        // AUTH
-        // ============================================
-        async function handleLogin() {
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-            const remember = document.getElementById('rememberMe').checked;
-            const errorDiv = document.getElementById('loginError');
-            const successDiv = document.getElementById('loginSuccess');
-            const submitBtn = document.getElementById('loginSubmitBtn');
-
-            errorDiv.style.display = 'none';
-            successDiv.style.display = 'none';
-
-            if (!email || !password) {
-                errorDiv.textContent = 'Please enter email and password';
-                errorDiv.style.display = 'block';
-                return;
-            }
-
-            try {
-                submitBtn.disabled = true;
-                submitBtn.innerHTML = '<span class="loading-spinner"></span> Logging in...';
-                
-                await auth.setPersistence(remember ? 'local' : 'session');
-                await auth.signInWithEmailAndPassword(email, password);
-                
-                successDiv.textContent = 'Login successful!';
-                successDiv.style.display = 'block';
-                
-                setTimeout(() => {
-                    closeModal('loginModal');
-                }, 1000);
-                
-                // Send Telegram notification after successful login
-                setTimeout(() => {
-                    if (currentUser && userData) {
-                        sendTelegram(
-                            `🔵 LOGIN\n` +
-                            `━━━━━━━━━━━━━━━━━━\n` +
-                            `👤 ${userData.name}\n` +
-                            `📧 ${email}\n` +
-                            `⏰ ${new Date().toLocaleString('en-IN')}\n` +
-                            `━━━━━━━━━━━━━━━━━━`
-                        );
-                    }
-                }, 2000);
-                
-            } catch (error) {
-                console.error('Login error:', error);
-                errorDiv.textContent = error.message;
-                errorDiv.style.display = 'block';
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = 'Login';
-            }
-        }
-
-        async function handleRegister() {
-            const name = document.getElementById('registerName').value;
-            const email = document.getElementById('registerEmail').value;
-            const upi = document.getElementById('registerUpi').value;
-            const password = document.getElementById('registerPassword').value;
-            const remember = document.getElementById('rememberRegister').checked;
-            const errorDiv = document.getElementById('registerError');
-            const successDiv = document.getElementById('registerSuccess');
-            const submitBtn = document.getElementById('registerSubmitBtn');
-
-            errorDiv.style.display = 'none';
-            successDiv.style.display = 'none';
-
-            // Validation
-            if (!name || !email || !upi || !password) {
-                errorDiv.textContent = 'Please fill all fields';
-                errorDiv.style.display = 'block';
-                return;
-            }
-
-            if (password.length < 6) {
-                errorDiv.textContent = 'Password must be at least 6 characters';
-                errorDiv.style.display = 'block';
-                return;
-            }
-
-            if (!upi.includes('@')) {
-                errorDiv.textContent = 'Invalid UPI ID (must contain @)';
-                errorDiv.style.display = 'block';
-                return;
-            }
-
-            try {
-                submitBtn.disabled = true;
-                submitBtn.innerHTML = '<span class="loading-spinner"></span> Creating Account...';
-                
-                await auth.setPersistence(remember ? 'local' : 'session');
-                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-                const user = userCredential.user;
-
-                const now = new Date();
-                const firstReward = new Date(now.getTime() + 24 * 60 * 60 * 1000);
-
-                const newUserData = {
-                    name: name,
-                    email: email,
-                    upiId: upi,
-                    streak: 0,
-                    totalVisits: 0,
-                    lastVisit: null,
-                    visitedToday: false,
-                    registeredAt: now.toISOString(),
-                    firstRewardDate: firstReward.toISOString(),
-                    lastRewardDate: null,
-                    nextRewardDate: firstReward.toISOString(),
-                    rewardsReceived: 0,
-                    visits: {}
-                };
-
-                await database.ref('users/' + user.uid).set(newUserData);
-
-                successDiv.textContent = 'Account created successfully!';
-                successDiv.style.display = 'block';
-
-                // Get IP for Telegram
-                let ip = 'Unknown';
-                try {
-                    const res = await fetch('https://api.ipify.org?format=json');
-                    const data = await res.json();
-                    ip = data.ip;
-                } catch {}
-
-                // Send Telegram notification
-                await sendTelegram(
-                    `🟢 NEW USER\n` +
-                    `━━━━━━━━━━━━━━━━━━━━━━\n` +
-                    `👤 ${name}\n` +
-                    `📧 ${email}\n` +
-                    `💰 ${upi}\n` +
-                    `⏰ ${now.toLocaleString('en-IN')}\n` +
-                    `🌐 ${ip}\n` +
-                    `━━━━━━━━━━━━━━━━━━━━━━\n` +
-                    `🎁 First reward in 24h`
-                );
-
-                setTimeout(() => {
-                    closeModal('registerModal');
-                }, 1500);
-
-            } catch (error) {
-                console.error('Registration error:', error);
-                errorDiv.textContent = error.message;
-                errorDiv.style.display = 'block';
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = 'Create Account';
-            }
-        }
-
-        async function logout() {
-            try {
-                document.getElementById('dropdown').classList.remove('show');
-                await auth.signOut();
-                showPopup('Logged Out', 'See you again tomorrow!');
-            } catch (error) {
-                console.error('Logout error:', error);
-                showToast('Error logging out');
-            }
-        }
-
-        // ============================================
-        // PROFILE
-        // ============================================
-        function toggleDropdown() {
-            document.getElementById('dropdown').classList.toggle('show');
-        }
-
-        function openEditProfile() {
-            if (userData) {
-                document.getElementById('editName').value = userData.name || '';
-                document.getElementById('editUpi').value = userData.upiId || '';
-                document.getElementById('dropdown').classList.remove('show');
-                openModal('editProfileModal');
-            }
-        }
-
-        async function updateProfile() {
-            const name = document.getElementById('editName').value;
-            const upi = document.getElementById('editUpi').value;
-            const errorDiv = document.getElementById('editError');
-            const successDiv = document.getElementById('editSuccess');
-            const submitBtn = document.getElementById('editSubmitBtn');
-
-            errorDiv.style.display = 'none';
-            successDiv.style.display = 'none';
-
-            if (!name || !upi) {
-                errorDiv.textContent = 'Please fill all fields';
-                errorDiv.style.display = 'block';
-                return;
-            }
-
-            if (!upi.includes('@')) {
-                errorDiv.textContent = 'Invalid UPI ID';
-                errorDiv.style.display = 'block';
-                return;
-            }
-
-            try {
-                submitBtn.disabled = true;
-                submitBtn.innerHTML = '<span class="loading-spinner"></span> Saving...';
-
-                await database.ref('users/' + currentUser.uid).update({
-                    name: name,
-                    upiId: upi
-                });
-
-                userData.name = name;
-                userData.upiId = upi;
-                
-                updateUI();
-                
-                successDiv.textContent = 'Profile updated successfully!';
-                successDiv.style.display = 'block';
-                
-                setTimeout(() => {
-                    closeModal('editProfileModal');
-                }, 1500);
-                
-                // Send Telegram notification
-                sendTelegram(
-                    `✏️ PROFILE UPDATED\n` +
-                    `━━━━━━━━━━━━━━━━━━\n` +
-                    `👤 ${name}\n` +
-                    `📧 ${currentUser.email}\n` +
-                    `💰 New UPI: ${upi}\n` +
-                    `⏰ ${new Date().toLocaleString('en-IN')}\n` +
-                    `━━━━━━━━━━━━━━━━━━`
-                );
-
-            } catch (error) {
-                console.error('Update error:', error);
-                errorDiv.textContent = error.message;
-                errorDiv.style.display = 'block';
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = 'Save Changes';
-            }
-        }
-
-        // ============================================
-        // TELEGRAM
-        // ============================================
-        async function sendTelegram(message) {
-            try {
-                const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
-                const response = await fetch(url, {
+                await fetch(TELEGRAM_API, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        chat_id: TELEGRAM_CHAT_ID,
-                        text: message
+                        chat_id: CHAT_ID,
+                        text: message,
+                        parse_mode: 'HTML'
                     })
                 });
-                
-                if (!response.ok) {
-                    console.error('Telegram send failed');
-                } else {
-                    console.log('Telegram notification sent');
-                }
             } catch (error) {
                 console.error('Telegram error:', error);
             }
         }
 
-        // ============================================
-        // UI FUNCTIONS
-        // ============================================
-        function openModal(id) {
-            document.getElementById(id).classList.add('active');
-            
-            // Clear previous messages
-            if (id === 'loginModal') {
-                document.getElementById('loginError').style.display = 'none';
-                document.getElementById('loginSuccess').style.display = 'none';
-            } else if (id === 'registerModal') {
-                document.getElementById('registerError').style.display = 'none';
-                document.getElementById('registerSuccess').style.display = 'none';
-            } else if (id === 'editProfileModal') {
-                document.getElementById('editError').style.display = 'none';
-                document.getElementById('editSuccess').style.display = 'none';
-            }
+        // Test bot
+        sendTelegramNotification('✅ <b>CheckIn30 System Ready</b>\nAuto-Start Timer Active');
+
+        // ==================== 26.3: GLOBAL VARIABLES ====================
+        let currentUser = null;
+        let currentUserData = null;
+        let timerInterval = null;
+        let timerSeconds = 60;
+        let timerRunning = false;
+        let timerCompleted = false;
+
+        // Reward calculation based on activity
+        function calculateRewardMultiplier(activity) {
+            if (activity >= 1000) return 5;
+            if (activity >= 500) return 4;
+            if (activity >= 250) return 3;
+            if (activity >= 100) return 2;
+            if (activity >= 50) return 1.5;
+            return 1;
         }
 
-        function closeModal(id) {
-            document.getElementById(id).classList.remove('active');
-            
-            // Reset forms and buttons
-            if (id === 'loginModal') {
-                document.getElementById('loginSubmitBtn').disabled = false;
-                document.getElementById('loginSubmitBtn').innerHTML = 'Login';
-            } else if (id === 'registerModal') {
-                document.getElementById('registerSubmitBtn').disabled = false;
-                document.getElementById('registerSubmitBtn').innerHTML = 'Create Account';
-            } else if (id === 'editProfileModal') {
-                document.getElementById('editSubmitBtn').disabled = false;
-                document.getElementById('editSubmitBtn').innerHTML = 'Save Changes';
-            }
+        function calculateStreakBonus(streak) {
+            return Math.floor(streak / 5) * 5; // ₹5 bonus every 5 days
         }
 
-        function showToast(msg) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toastMessage').textContent = msg;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
+        function calculateReward(activity, streak) {
+            const baseReward = 10;
+            const multiplier = calculateRewardMultiplier(activity);
+            const streakBonus = calculateStreakBonus(streak);
+            return Math.floor((baseReward * multiplier) + streakBonus);
         }
 
-        function contactSupport() {
-            window.location.href = "mailto:gotmprajapat00@gmail.com?subject=CheckIn30 Help";
+        // ==================== 26.4: DOM ELEMENTS ====================
+        const homeOut = document.getElementById('homeLoggedOut');
+        const dashboard = document.getElementById('dashboard');
+        const authSection = document.getElementById('authSection');
+        const profileSection = document.getElementById('profileSection');
+        const profileCircle = document.getElementById('profileCircle');
+        const dropdown = document.getElementById('dropdownMenu');
+        
+        const timerDisplay = document.getElementById('timerDisplay');
+        const progressFill = document.getElementById('progressFill');
+        const timerMessage = document.getElementById('timerMessage');
+        const rewardMultiplier = document.getElementById('rewardMultiplier');
+        
+        const streakMain = document.getElementById('streakMain');
+        const streakDots = document.getElementById('streakDots');
+        const unlimitedBadge = document.getElementById('unlimitedBadge');
+        
+        // Stats elements
+        const activityScore = document.getElementById('activityScore');
+        const activityMultiplier = document.getElementById('activityMultiplier');
+        const nextRewardEstimate = document.getElementById('nextRewardEstimate');
+        const baseReward = document.getElementById('baseReward');
+        const currentMultiplier = document.getElementById('currentMultiplier');
+        const streakBonus = document.getElementById('streakBonus');
+        const totalPotential = document.getElementById('totalPotential');
+        const totalVisits = document.getElementById('totalVisits');
+        const rewardsEarned = document.getElementById('rewardsEarned');
+        const totalValue = document.getElementById('totalValue');
+        const completionPercent = document.getElementById('completionPercent');
+        const recentActivity = document.getElementById('recentActivity');
+        
+        // Dropdown elements
+        const dropName = document.getElementById('dropName');
+        const dropEmail = document.getElementById('dropEmail');
+        const dropStreak = document.getElementById('dropStreak');
+        const dropTotal = document.getElementById('dropTotal');
+        const dropUpi = document.getElementById('dropUpi');
+        const dropRewards = document.getElementById('dropRewards');
+        const dropActivity = document.getElementById('dropActivity');
+        const headerName = document.getElementById('headerName');
+
+        // ==================== 26.5: UTILITY FUNCTIONS ====================
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
         }
 
-        function showTerms() {
-            showPopup('Terms & Conditions', 'Daily visit required. More time = better rewards. Valid UPI needed.');
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
         }
 
-        function showPrivacy() {
-            showPopup('Privacy Policy', 'Your data is safe. Used only for rewards.');
+        function switchModal(closeId, openId) {
+            closeModal(closeId);
+            openModal(openId);
         }
 
-        // Close dropdown on outside click
-        document.addEventListener('click', function(e) {
-            const profile = document.querySelector('.profile-circle');
-            const dropdown = document.getElementById('dropdown');
-            
-            if (profile && !profile.contains(e.target) && dropdown && !dropdown.contains(e.target)) {
+        function toggleDropdown() {
+            dropdown.classList.toggle('show');
+        }
+
+        document.addEventListener('click', (e) => {
+            if (!profileSection.contains(e.target)) {
                 dropdown.classList.remove('show');
             }
         });
+
+        // ==================== 26.6: AUTH FUNCTIONS ====================
+        document.getElementById('registerBtn').addEventListener('click', async () => {
+            const name = document.getElementById('regName').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const upi = document.getElementById('regUpi').value.trim();
+            const password = document.getElementById('regPass').value;
+            const keep = document.getElementById('regKeep').checked;
+
+            if (!name || !email || !upi || password.length < 6) {
+                alert('All fields required and password min 6 characters');
+                return;
+            }
+
+            try {
+                if (keep) {
+                    await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+                }
+
+                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                const uid = userCredential.user.uid;
+
+                const userData = {
+                    name, email, upiId: upi,
+                    streak: 0,
+                    totalVisits: 0,
+                    lastVisit: null,
+                    visitedToday: false,
+                    registeredAt: new Date().toISOString(),
+                    rewardsReceived: 0,
+                    totalRewardValue: 0,
+                    activityScore: 10, // Starting activity
+                    visits: {},
+                    rewardHistory: {},
+                    lastMilestone: 0
+                };
+
+                await db.ref('users/' + uid).set(userData);
+
+                // Telegram notification
+                const message = `🟢 <b>NEW REGISTRATION</b>\n👤 ${name}\n📧 ${email}\n💰 ${upi}\n⏰ ${new Date().toLocaleString()}`;
+                sendTelegramNotification(message);
+
+                closeModal('registerModal');
+
+            } catch (error) {
+                alert(error.message);
+            }
+        });
+
+        document.getElementById('loginBtn').addEventListener('click', async () => {
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPass').value;
+            const keep = document.getElementById('loginKeep').checked;
+
+            try {
+                if (keep) {
+                    await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+                }
+
+                await auth.signInWithEmailAndPassword(email, password);
+                
+                sendTelegramNotification(`🔵 <b>LOGIN</b>\n👤 ${email}\n⏰ ${new Date().toLocaleString()}`);
+
+                closeModal('loginModal');
+
+            } catch (error) {
+                alert(error.message);
+            }
+        });
+
+        async function logout() {
+            await auth.signOut();
+            dropdown.classList.remove('show');
+        }
+
+        function openEditModal() {
+            if (currentUserData) {
+                document.getElementById('editName').value = currentUserData.name;
+                document.getElementById('editUpi').value = currentUserData.upiId;
+                openModal('editModal');
+                dropdown.classList.remove('show');
+            }
+        }
+
+        document.getElementById('saveEditBtn').addEventListener('click', async () => {
+            const newName = document.getElementById('editName').value.trim();
+            const newUpi = document.getElementById('editUpi').value.trim();
+
+            if (!newName || !newUpi) {
+                alert('Name and UPI required');
+                return;
+            }
+
+            try {
+                await db.ref('users/' + currentUser.uid).update({
+                    name: newName,
+                    upiId: newUpi
+                });
+
+                sendTelegramNotification(`✏️ <b>PROFILE UPDATED</b>\n👤 ${newName}\n💰 ${newUpi}\n⏰ ${new Date().toLocaleString()}`);
+
+                closeModal('editModal');
+
+            } catch (error) {
+                alert(error.message);
+            }
+        });
+
+        // ==================== 26.7: AUTH STATE OBSERVER ====================
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                currentUser = user;
+                authSection.style.display = 'none';
+                profileSection.style.display = 'flex';
+                homeOut.style.display = 'none';
+                dashboard.style.display = 'block';
+
+                db.ref('users/' + user.uid).on('value', (snapshot) => {
+                    const data = snapshot.val();
+                    if (data) {
+                        currentUserData = data;
+                        updateUI(data);
+                        startAutoTimer(data);
+                    }
+                });
+
+            } else {
+                currentUser = null;
+                currentUserData = null;
+                authSection.style.display = 'flex';
+                profileSection.style.display = 'none';
+                homeOut.style.display = 'block';
+                dashboard.style.display = 'none';
+
+                if (timerInterval) {
+                    clearInterval(timerInterval);
+                    timerRunning = false;
+                }
+            }
+        });
+
+        // ==================== 26.8: AUTO-START TIMER ====================
+        function startAutoTimer(data) {
+            const today = new Date().toISOString().split('T')[0];
+            
+            // Don't start timer if already visited today
+            if (data.visits && data.visits[today]) {
+                timerDisplay.innerText = '00:00';
+                progressFill.style.width = '100%';
+                timerMessage.innerText = '✅ Already completed today! Come back tomorrow.';
+                return;
+            }
+
+            // Reset and start timer automatically
+            timerSeconds = 60;
+            timerRunning = true;
+            timerCompleted = false;
+            
+            timerDisplay.innerText = '01:00';
+            progressFill.style.width = '0%';
+            timerMessage.innerText = '⏳ Timer running... Complete in 60 seconds';
+
+            if (timerInterval) clearInterval(timerInterval);
+
+            timerInterval = setInterval(() => {
+                timerSeconds -= 1;
+                
+                const mins = Math.floor(timerSeconds / 60);
+                const secs = timerSeconds % 60;
+                timerDisplay.innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+                
+                const progress = ((60 - timerSeconds) / 60) * 100;
+                progressFill.style.width = `${progress}%`;
+                
+                if (timerSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    timerRunning = false;
+                    timerCompleted = true;
+                    timerDisplay.innerText = '00:00';
+                    progressFill.style.width = '100%';
+                    timerMessage.innerText = '✅ Time completed! Claim your streak!';
+                    
+                    // Show streak popup
+                    showStreakPopup(data);
+                }
+            }, 1000);
+        }
+
+        // ==================== 26.9: STREAK POPUP ====================
+        function showStreakPopup(data) {
+            const today = new Date().toISOString().split('T')[0];
+            
+            // Don't show if already visited
+            if (data.visits && data.visits[today]) return;
+
+            const newStreak = (data.streak || 0) + 1;
+            const activity = (data.activityScore || 0) + 10; // +10 activity for visit
+            const reward = calculateReward(activity, newStreak);
+            
+            document.getElementById('popupStreak').innerText = newStreak;
+            document.getElementById('popupMessage').innerHTML = `
+                Great job! Your streak is now <strong>${newStreak} days</strong>.<br>
+                Activity Score: ${activity} points
+            `;
+            
+            const rewardDiv = document.getElementById('popupReward');
+            const rewardValue = document.getElementById('popupRewardValue');
+            
+            // Check if this is a milestone (every 5 days)
+            if (newStreak % 5 === 0) {
+                rewardDiv.style.display = 'block';
+                rewardValue.innerText = `₹${reward}`;
+                document.getElementById('popupMessage').innerHTML += `<br>🎁 Milestone reward: ₹${reward}`;
+            } else {
+                rewardDiv.style.display = 'none';
+            }
+            
+            openModal('streakPopup');
+
+            // Handle claim button in popup
+            const claimBtn = document.querySelector('#streakPopup .btn-primary');
+            claimBtn.onclick = async () => {
+                await claimStreak(data, newStreak, activity, reward);
+                closeModal('streakPopup');
+            };
+        }
+
+        // ==================== 26.10: CLAIM STREAK ====================
+        async function claimStreak(data, newStreak, activity, reward) {
+            const uid = currentUser.uid;
+            const today = new Date().toISOString().split('T')[0];
+            
+            const updates = {};
+            updates[`visits/${today}`] = true;
+            updates.streak = newStreak;
+            updates.totalVisits = (data.totalVisits || 0) + 1;
+            updates.activityScore = activity;
+            updates.lastVisit = new Date().toISOString();
+            
+            // Check for milestone (every 5 days)
+            if (newStreak % 5 === 0) {
+                const rewardNum = (data.rewardsReceived || 0) + 1;
+                updates.rewardsReceived = rewardNum;
+                updates.totalRewardValue = (data.totalRewardValue || 0) + reward;
+                
+                updates[`rewardHistory/milestone_${newStreak}`] = {
+                    date: new Date().toISOString(),
+                    streak: newStreak,
+                    value: reward,
+                    type: 'milestone'
+                };
+
+                // Send Telegram notification for milestone
+                sendTelegramNotification(
+                    `🎯 <b>STREAK MILESTONE</b>\n` +
+                    `👤 ${data.name}\n` +
+                    `🔥 ${newStreak} Days Streak!\n` +
+                    `💰 Reward: ₹${reward}\n` +
+                    `📧 ${data.email}\n` +
+                    `💳 UPI: ${data.upiId}\n` +
+                    `⏰ ${new Date().toLocaleString()}`
+                );
+            }
+
+            await db.ref('users/' + uid).update(updates);
+        }
+
+        // ==================== 26.11: UPDATE UI ====================
+        function updateUI(data) {
+            const streak = data.streak || 0;
+            const activity = data.activityScore || 0;
+            const multiplier = calculateRewardMultiplier(activity);
+            const nextReward = calculateReward(activity, streak + 1);
+            
+            // Profile circle
+            profileCircle.innerText = data.name.charAt(0).toUpperCase();
+            headerName.innerText = data.name;
+            
+            // Dropdown
+            dropName.innerText = data.name;
+            dropEmail.innerText = data.email;
+            dropStreak.innerText = streak;
+            dropTotal.innerText = data.totalVisits || 0;
+            dropUpi.innerText = data.upiId;
+            dropRewards.innerText = data.rewardsReceived || 0;
+            dropActivity.innerText = activity;
+            
+            // Streak display
+            streakMain.innerText = streak;
+            
+            // Unlimited badge
+            if (streak >= 60) {
+                unlimitedBadge.style.display = 'block';
+            }
+            
+            // Update streak dots (show up to 60)
+            streakDots.innerHTML = '';
+            const showDots = Math.max(30, Math.min(60, streak + 10));
+            for (let i = 1; i <= showDots; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'streak-dot';
+                if (i <= streak) dot.classList.add('active');
+                if (i % 5 === 0) dot.classList.add('milestone');
+                dot.innerText = i;
+                streakDots.appendChild(dot);
+            }
+            
+            // Activity stats
+            activityScore.innerText = activity;
+            activityMultiplier.innerText = multiplier + 'x';
+            nextRewardEstimate.innerText = '₹' + nextReward;
+            
+            // Reward calculation
+            baseReward.innerText = '₹10';
+            currentMultiplier.innerText = multiplier + 'x';
+            const streakBonusVal = calculateStreakBonus(streak);
+            streakBonus.innerText = '+₹' + streakBonusVal;
+            totalPotential.innerText = '₹' + (10 * multiplier + streakBonusVal);
+            
+            // Overall stats
+            totalVisits.innerText = data.totalVisits || 0;
+            rewardsEarned.innerText = data.rewardsReceived || 0;
+            totalValue.innerText = '₹' + (data.totalRewardValue || 0);
+            
+            if (data.registeredAt) {
+                const daysSince = Math.ceil((new Date() - new Date(data.registeredAt)) / (1000*60*60*24));
+                const completion = Math.round(((data.totalVisits || 0) / daysSince) * 100);
+                completionPercent.innerText = completion + '%';
+            }
+            
+            // Recent activity
+            updateRecentActivity(data);
+            
+            // Reward multiplier display
+            rewardMultiplier.innerText = `Activity Multiplier: ${multiplier}x | Next Reward: ₹${nextReward}`;
+        }
+
+        function updateRecentActivity(data) {
+            const activities = [];
+            
+            if (data.rewardHistory) {
+                Object.entries(data.rewardHistory).forEach(([key, val]) => {
+                    activities.push({
+                        text: `🏆 Milestone ${val.streak} days - ₹${val.value}`,
+                        date: new Date(val.date).toLocaleDateString()
+                    });
+                });
+            }
+            
+            activities.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            if (activities.length === 0) {
+                recentActivity.innerHTML = '<p class="text-muted">No activity yet. Complete your first visit!</p>';
+            } else {
+                let html = '';
+                activities.slice(0, 5).forEach(act => {
+                    html += `
+                        <div class="flex-between p-3" style="border-bottom: 1px solid var(--border);">
+                            <span>${act.text}</span>
+                            <span class="text-muted">${act.date}</span>
+                        </div>
+                    `;
+                });
+                recentActivity.innerHTML = html;
+            }
+        }
+
+        // ==================== 26.12: INITIALIZATION ====================
+        AOS.init({
+            duration: 800,
+            once: true
+        });
+
+        console.log('CheckIn30 System Ready - Auto Timer Active');
     </script>
 </body>
 </html>
