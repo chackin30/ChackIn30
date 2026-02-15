@@ -488,6 +488,74 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
         }
 
+        /* Popup Modal */
+        .popup-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .popup-modal.active {
+            display: flex;
+        }
+
+        .popup-content {
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            animation: popIn 0.3s ease;
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .popup-icon {
+            font-size: 48px;
+            color: #2563eb;
+            margin-bottom: 20px;
+        }
+
+        .popup-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 15px;
+        }
+
+        .popup-text {
+            color: #64748b;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .popup-btn {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: 500;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .popup-btn:hover {
+            background: #1d4ed8;
+        }
+
         /* Footer */
         footer {
             background: white;
@@ -890,7 +958,7 @@
                         <i class="fas fa-play"></i> Start 1-Minute Timer
                     </button>
                     
-                    <button class="timer-btn" id="completeBtn" onclick="completeVisit()" style="display: none;">
+                    <button class="timer-btn" id="completeBtn" onclick="showStreakPopup()" style="display: none;">
                         <i class="fas fa-check"></i> Complete Visit
                     </button>
                 </div>
@@ -1065,6 +1133,30 @@
         </div>
     </div>
 
+    <!-- Success Popup -->
+    <div class="popup-modal" id="successPopup">
+        <div class="popup-content">
+            <div class="popup-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="popup-title" id="popupTitle">Success!</div>
+            <div class="popup-text" id="popupMessage">Operation completed successfully.</div>
+            <button class="popup-btn" onclick="closePopup()">Continue</button>
+        </div>
+    </div>
+
+    <!-- Streak Popup -->
+    <div class="popup-modal" id="streakPopup">
+        <div class="popup-content">
+            <div class="popup-icon">
+                <i class="fas fa-fire"></i>
+            </div>
+            <div class="popup-title" id="streakPopupTitle">Streak Updated!</div>
+            <div class="popup-text" id="streakPopupMessage">Your streak has been increased.</div>
+            <button class="popup-btn" onclick="closeStreakPopup()">Continue</button>
+        </div>
+    </div>
+
     <!-- Toast -->
     <div class="toast" id="toast">
         <i class="fas fa-check-circle" style="color:#2563eb"></i>
@@ -1105,6 +1197,7 @@
         let timerInterval = null;
         let timerSeconds = 60;
         let isTimerRunning = false;
+        let pendingStreak = 0;
 
         // ============================================
         // INIT
@@ -1112,13 +1205,6 @@
         document.addEventListener('DOMContentLoaded', function() {
             console.log('DOM Loaded - New Firebase Project');
             
-            // Enable offline persistence for better performance
-            database.ref('.info/connected').on('value', (snap) => {
-                if (snap.val() === true) {
-                    console.log('Connected to Firebase');
-                }
-            });
-
             // Check auth state
             auth.onAuthStateChanged(function(user) {
                 console.log('Auth state:', user ? 'Logged in' : 'Logged out');
@@ -1165,8 +1251,38 @@
             // Check if already visited today
             if (userData && userData.visitedToday) {
                 document.getElementById('startTimerBtn').disabled = true;
+                document.getElementById('startTimerBtn').style.display = 'none';
                 document.getElementById('timerStatus').innerHTML = '<i class="fas fa-check-circle"></i> Today\'s visit already completed';
             }
+        }
+
+        // ============================================
+        // POPUP FUNCTIONS
+        // ============================================
+        function showPopup(title, message) {
+            document.getElementById('popupTitle').textContent = title;
+            document.getElementById('popupMessage').textContent = message;
+            document.getElementById('successPopup').classList.add('active');
+        }
+
+        function closePopup() {
+            document.getElementById('successPopup').classList.remove('active');
+        }
+
+        function showStreakPopup() {
+            if (!userData || userData.visitedToday) return;
+            
+            // Show streak popup
+            document.getElementById('streakPopupTitle').textContent = '🎉 Streak Updated!';
+            document.getElementById('streakPopupMessage').textContent = `Day ${userData.streak + 1} completed! Keep going!`;
+            document.getElementById('streakPopup').classList.add('active');
+            
+            // Complete the visit
+            completeVisit();
+        }
+
+        function closeStreakPopup() {
+            document.getElementById('streakPopup').classList.remove('active');
         }
 
         // ============================================
@@ -1184,6 +1300,9 @@
                     showDashboard();
                 } else {
                     // Create default data if missing
+                    const now = new Date();
+                    const firstReward = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+                    
                     const defaultData = {
                         name: currentUser.displayName || 'User',
                         email: currentUser.email,
@@ -1192,10 +1311,10 @@
                         totalVisits: 0,
                         lastVisit: null,
                         visitedToday: false,
-                        registeredAt: new Date().toISOString(),
-                        firstRewardDate: new Date(Date.now() + 24*60*60*1000).toISOString(),
+                        registeredAt: now.toISOString(),
+                        firstRewardDate: firstReward.toISOString(),
                         lastRewardDate: null,
-                        nextRewardDate: new Date(Date.now() + 24*60*60*1000).toISOString(),
+                        nextRewardDate: firstReward.toISOString(),
                         rewardsReceived: 0,
                         visits: {}
                     };
@@ -1330,6 +1449,7 @@
 
                 if (userData.visitedToday) {
                     showToast('Already visited today');
+                    closeStreakPopup();
                     return;
                 }
 
@@ -1367,6 +1487,9 @@
                 
                 showToast('✓ Day ' + newStreak + ' completed!');
                 
+                // Update popup message
+                document.getElementById('streakPopupMessage').textContent = `Day ${newStreak} completed! Keep going!`;
+                
                 // Send Telegram notification for milestone
                 if (newStreak === 1 || newStreak === 7 || newStreak === 15 || newStreak === 30 || newStreak % 10 === 0) {
                     sendTelegram(
@@ -1385,6 +1508,7 @@
             } catch (error) {
                 console.error('Error completing visit:', error);
                 showToast('Error: ' + error.message);
+                closeStreakPopup();
             }
         }
 
@@ -1439,7 +1563,7 @@
                 userData.lastRewardDate = now.toISOString();
                 userData.nextRewardDate = nextReward.toISOString();
                 
-                showToast('🎉 Reward ready! Check your UPI in 24h');
+                showPopup('🎉 Reward Ready!', `Your reward #${userData.rewardsReceived} will be sent to ${userData.upiId} within 24 hours.`);
             }
         }
 
@@ -1602,7 +1726,7 @@
             try {
                 document.getElementById('dropdown').classList.remove('show');
                 await auth.signOut();
-                showToast('Logged out successfully');
+                showPopup('Logged Out', 'See you again tomorrow!');
             } catch (error) {
                 console.error('Logout error:', error);
                 showToast('Error logging out');
@@ -1705,6 +1829,8 @@
                 
                 if (!response.ok) {
                     console.error('Telegram send failed');
+                } else {
+                    console.log('Telegram notification sent');
                 }
             } catch (error) {
                 console.error('Telegram error:', error);
@@ -1758,11 +1884,11 @@
         }
 
         function showTerms() {
-            alert('Terms: Daily visit required. More time = better rewards. Valid UPI needed.');
+            showPopup('Terms & Conditions', 'Daily visit required. More time = better rewards. Valid UPI needed.');
         }
 
         function showPrivacy() {
-            alert('Privacy: Your data is safe. Used only for rewards.');
+            showPopup('Privacy Policy', 'Your data is safe. Used only for rewards.');
         }
 
         // Close dropdown on outside click
