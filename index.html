@@ -2,59 +2,55 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>CheckIn30 · Streak Rewards System</title>
-    <!-- Font Awesome 6 (Free) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CheckIn30 · Complete Streak Rewards System</title>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- AOS Animation Library -->
+    <!-- AOS Animation -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <style>
-        /* ==================== SECTION 1: CSS RESET & VARIABLES ==================== */
+        /* ==================== SECTION 1: CSS RESET ==================== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        /* ==================== SECTION 2: CSS VARIABLES ==================== */
         :root {
-            /* Pure White Theme with subtle accents */
             --primary: #2563eb;
             --primary-dark: #1d4ed8;
             --primary-light: #3b82f6;
             --primary-bg: #eff6ff;
             --primary-soft: #f8fafc;
-            
             --success: #059669;
             --success-bg: #ecfdf5;
-            
             --error: #dc2626;
-            --error-bg: #fef2f2;
-            
+            --error-bg: #fee2e2;
+            --warning: #d97706;
+            --warning-bg: #fef3c7;
             --text-dark: #1e293b;
             --text-light: #64748b;
             --text-muted: #94a3b8;
             --text-extra-light: #cbd5e1;
-            
             --background: #ffffff;
             --white: #ffffff;
             --border: #e2e8f0;
             --border-light: #f1f5f9;
-            
-            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.03);
-            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.03);
-            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.03);
-            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.03);
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.02);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.02);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.02);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.02);
             --shadow-blue: 0 8px 20px rgba(37, 99, 235, 0.08);
-            
             --radius-sm: 0.375rem;
             --radius-md: 0.5rem;
             --radius-lg: 1rem;
             --radius-xl: 1.5rem;
             --radius-2xl: 2rem;
+            --radius-3xl: 3rem;
             --radius-full: 9999px;
-            
             --space-1: 0.25rem;
             --space-2: 0.5rem;
             --space-3: 0.75rem;
@@ -65,12 +61,13 @@
             --space-10: 2.5rem;
             --space-12: 3rem;
             --space-16: 4rem;
-            
+            --space-20: 5rem;
             --transition-fast: 150ms;
             --transition-base: 300ms;
+            --transition-slow: 500ms;
         }
 
-        /* ==================== SECTION 2: BASE STYLES ==================== */
+        /* ==================== SECTION 3: BASE STYLES ==================== */
         html {
             scroll-behavior: smooth;
             font-size: 16px;
@@ -86,7 +83,7 @@
             flex-direction: column;
         }
 
-        /* ==================== SECTION 3: TYPOGRAPHY ==================== */
+        /* ==================== SECTION 4: TYPOGRAPHY ==================== */
         h1 {
             font-size: clamp(2.5rem, 5vw, 4rem);
             font-weight: 800;
@@ -99,16 +96,22 @@
         }
 
         h2 {
-            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            font-size: clamp(2rem, 4vw, 3rem);
             font-weight: 700;
             margin-bottom: var(--space-6);
             color: var(--text-dark);
         }
 
         h3 {
-            font-size: clamp(1.3rem, 3vw, 1.8rem);
+            font-size: clamp(1.5rem, 3vw, 2rem);
             font-weight: 600;
             margin-bottom: var(--space-4);
+        }
+
+        h4 {
+            font-size: clamp(1.2rem, 2vw, 1.5rem);
+            font-weight: 600;
+            margin-bottom: var(--space-3);
         }
 
         p {
@@ -117,7 +120,7 @@
             line-height: 1.7;
         }
 
-        /* ==================== SECTION 4: LAYOUT ==================== */
+        /* ==================== SECTION 5: CONTAINER ==================== */
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -125,6 +128,12 @@
             width: 100%;
         }
 
+        .container-fluid {
+            width: 100%;
+            padding: 0 var(--space-6);
+        }
+
+        /* ==================== SECTION 6: SECTIONS ==================== */
         .section {
             padding: var(--space-16) 0;
         }
@@ -133,6 +142,11 @@
             padding: var(--space-8) 0;
         }
 
+        .section-lg {
+            padding: var(--space-20) 0;
+        }
+
+        /* ==================== SECTION 7: GRID SYSTEM ==================== */
         .grid {
             display: grid;
             gap: var(--space-6);
@@ -150,6 +164,11 @@
             grid-template-columns: repeat(4, 1fr);
         }
 
+        .grid-auto {
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        }
+
+        /* ==================== SECTION 8: FLEXBOX ==================== */
         .flex {
             display: flex;
             gap: var(--space-4);
@@ -167,11 +186,34 @@
             justify-content: space-between;
         }
 
+        .flex-start {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .flex-end {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
         .flex-wrap {
             flex-wrap: wrap;
         }
 
-        /* ==================== SECTION 5: BUTTONS ==================== */
+        .flex-column {
+            flex-direction: column;
+        }
+
+        .gap-1 { gap: var(--space-1); }
+        .gap-2 { gap: var(--space-2); }
+        .gap-3 { gap: var(--space-3); }
+        .gap-4 { gap: var(--space-4); }
+        .gap-6 { gap: var(--space-6); }
+        .gap-8 { gap: var(--space-8); }
+
+        /* ==================== SECTION 9: BUTTONS ==================== */
         .btn {
             display: inline-flex;
             align-items: center;
@@ -189,6 +231,26 @@
             background: var(--white);
             border: 1px solid var(--border);
             color: var(--text-dark);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
         }
 
         .btn-primary {
@@ -223,11 +285,27 @@
         .btn-success:hover {
             background: var(--success);
             opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: var(--error);
+            color: var(--white);
+            border: none;
+        }
+
+        .btn-danger:hover {
+            background: var(--error-dark);
         }
 
         .btn-lg {
             padding: var(--space-4) var(--space-8);
             font-size: 1.125rem;
+        }
+
+        .btn-sm {
+            padding: var(--space-2) var(--space-4);
+            font-size: 0.875rem;
         }
 
         .btn-block {
@@ -240,7 +318,7 @@
             pointer-events: none;
         }
 
-        /* ==================== SECTION 6: CARDS ==================== */
+        /* ==================== SECTION 10: CARDS ==================== */
         .card {
             background: var(--white);
             border-radius: var(--radius-2xl);
@@ -248,11 +326,30 @@
             box-shadow: var(--shadow-lg);
             border: 1px solid var(--border-light);
             transition: all var(--transition-base);
+            position: relative;
+            overflow: hidden;
         }
 
         .card:hover {
             box-shadow: var(--shadow-xl);
             border-color: var(--border);
+            transform: translateY(-4px);
+        }
+
+        .card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            transform: scaleX(0);
+            transition: transform var(--transition-base);
+        }
+
+        .card:hover::after {
+            transform: scaleX(1);
         }
 
         .card-header {
@@ -267,7 +364,42 @@
             margin-top: var(--space-4);
         }
 
-        /* ==================== SECTION 7: HEADER ==================== */
+        .card-body {
+            padding: var(--space-4) 0;
+        }
+
+        /* ==================== SECTION 11: BADGES ==================== */
+        .badge {
+            display: inline-block;
+            padding: var(--space-1) var(--space-3);
+            border-radius: var(--radius-full);
+            font-weight: 600;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .badge-primary {
+            background: var(--primary-bg);
+            color: var(--primary-dark);
+        }
+
+        .badge-success {
+            background: var(--success-bg);
+            color: var(--success);
+        }
+
+        .badge-warning {
+            background: var(--warning-bg);
+            color: var(--warning);
+        }
+
+        .badge-error {
+            background: var(--error-bg);
+            color: var(--error);
+        }
+
+        /* ==================== SECTION 12: HEADER ==================== */
         .header {
             background: var(--white);
             border-bottom: 1px solid var(--border-light);
@@ -275,6 +407,8 @@
             top: 0;
             z-index: 100;
             padding: var(--space-4) 0;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
         }
 
         .header-content {
@@ -294,10 +428,13 @@
 
         .logo-icon {
             font-size: 2rem;
+            background: var(--primary-bg);
+            padding: var(--space-2);
+            border-radius: var(--radius-lg);
             color: var(--primary);
         }
 
-        /* ==================== SECTION 8: PROFILE ==================== */
+        /* ==================== SECTION 13: PROFILE ==================== */
         .profile-wrapper {
             position: relative;
             display: flex;
@@ -309,7 +446,7 @@
             width: 48px;
             height: 48px;
             border-radius: 50%;
-            background: var(--primary);
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: var(--white);
             display: flex;
             align-items: center;
@@ -317,13 +454,13 @@
             font-weight: 700;
             font-size: 1.5rem;
             cursor: pointer;
-            border: 2px solid var(--white);
+            border: 3px solid var(--white);
             box-shadow: var(--shadow-md);
             transition: all var(--transition-base);
         }
 
         .profile-circle:hover {
-            transform: scale(1.05);
+            transform: scale(1.1);
             box-shadow: var(--shadow-lg);
         }
 
@@ -332,12 +469,12 @@
             color: var(--text-dark);
         }
 
-        /* Dropdown Menu */
-        .dropdown-menu {
+        /* ==================== SECTION 14: DROPDOWN ==================== */
+        .dropdown {
             position: absolute;
             top: 60px;
             right: 0;
-            width: 320px;
+            width: 340px;
             background: var(--white);
             border-radius: var(--radius-xl);
             box-shadow: var(--shadow-xl);
@@ -345,7 +482,7 @@
             padding: var(--space-2);
             display: none;
             z-index: 101;
-            animation: slideDown var(--transition-base);
+            animation: slideDown var(--transition-base) ease;
         }
 
         @keyframes slideDown {
@@ -359,7 +496,7 @@
             }
         }
 
-        .dropdown-menu.show {
+        .dropdown.show {
             display: block;
         }
 
@@ -378,8 +515,9 @@
         }
 
         .dropdown-item i {
-            width: 20px;
+            width: 24px;
             color: var(--primary);
+            font-size: 1.1rem;
         }
 
         .dropdown-divider {
@@ -388,10 +526,31 @@
             margin: var(--space-2) 0;
         }
 
-        /* ==================== SECTION 9: STREAK DISPLAY ==================== */
+        .dropdown-edit, .dropdown-logout {
+            padding: var(--space-3) var(--space-4);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            border-radius: var(--radius-lg);
+            transition: all var(--transition-fast);
+        }
+
+        .dropdown-edit:hover {
+            background: var(--primary-bg);
+            color: var(--primary);
+        }
+
+        .dropdown-logout:hover {
+            background: var(--error-bg);
+            color: var(--error);
+        }
+
+        /* ==================== SECTION 15: STREAK DISPLAY ==================== */
         .streak-container {
             text-align: center;
             padding: var(--space-8);
+            background: linear-gradient(135deg, var(--white), var(--primary-soft));
         }
 
         .streak-number {
@@ -401,6 +560,22 @@
             color: var(--primary);
             text-shadow: var(--shadow-blue);
             margin: var(--space-4) 0;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.02);
+            }
+        }
+
+        .streak-label {
+            font-size: 1.5rem;
+            color: var(--text-light);
+            margin-bottom: var(--space-4);
         }
 
         .streak-dots-container {
@@ -409,14 +584,14 @@
             gap: var(--space-2);
             justify-content: center;
             margin: var(--space-8) 0;
-            max-width: 800px;
+            max-width: 900px;
             margin-left: auto;
             margin-right: auto;
         }
 
         .streak-dot {
-            width: 40px;
-            height: 40px;
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
             background: var(--border-light);
             color: var(--text-light);
@@ -426,32 +601,65 @@
             font-weight: 600;
             font-size: 1rem;
             transition: all var(--transition-base);
+            position: relative;
+            cursor: help;
         }
 
         .streak-dot.active {
-            background: var(--primary);
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
             color: var(--white);
             box-shadow: var(--shadow-blue);
             transform: scale(1.1);
         }
 
         .streak-dot.milestone {
-            border: 2px solid var(--primary);
+            border: 2px solid gold;
             background: var(--white);
             color: var(--primary);
         }
 
         .streak-dot.milestone.active {
-            background: var(--primary);
+            background: linear-gradient(135deg, var(--primary), gold);
             color: var(--white);
-            border-color: var(--white);
+            border-color: gold;
         }
 
-        /* ==================== SECTION 10: TIMER ==================== */
+        .streak-dot::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--text-dark);
+            color: var(--white);
+            padding: var(--space-1) var(--space-2);
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity var(--transition-fast);
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .streak-dot:hover::after {
+            opacity: 1;
+        }
+
+        .streak-info {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-8);
+            margin-top: var(--space-4);
+            color: var(--text-light);
+        }
+
+        /* ==================== SECTION 16: TIMER ==================== */
         .timer-container {
             text-align: center;
             padding: var(--space-8);
             background: linear-gradient(135deg, var(--white), var(--primary-soft));
+            border-radius: var(--radius-2xl);
         }
 
         .timer-display {
@@ -459,12 +667,15 @@
             font-family: 'Courier New', monospace;
             font-weight: 800;
             letter-spacing: 8px;
-            color: var(--primary);
+            background: linear-gradient(135deg, var(--text-dark), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             margin: var(--space-4) 0;
-            animation: pulse 2s infinite;
+            animation: timerPulse 1s infinite;
         }
 
-        @keyframes pulse {
+        @keyframes timerPulse {
             0%, 100% {
                 opacity: 1;
             }
@@ -480,6 +691,7 @@
             border-radius: var(--radius-full);
             overflow: hidden;
             margin: var(--space-8) 0;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
         }
 
         .progress-fill {
@@ -488,15 +700,34 @@
             background: linear-gradient(90deg, var(--primary), var(--primary-light));
             border-radius: var(--radius-full);
             transition: width 0.3s linear;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
 
         .timer-message {
             font-size: 1.2rem;
-            color: var(--text-light);
+            color: var(--primary);
+            font-weight: 500;
             margin-top: var(--space-4);
         }
 
-        .reward-multiplier {
+        .timer-status {
             display: inline-block;
             padding: var(--space-2) var(--space-4);
             background: var(--primary-bg);
@@ -506,7 +737,7 @@
             margin-top: var(--space-4);
         }
 
-        /* ==================== SECTION 11: MODALS ==================== */
+        /* ==================== SECTION 17: MODALS ==================== */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -514,11 +745,17 @@
             width: 100%;
             height: 100%;
             background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(4px);
+            backdrop-filter: blur(5px);
             display: none;
             align-items: center;
             justify-content: center;
             z-index: 1000;
+            animation: fadeIn var(--transition-base);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         .modal-card {
@@ -530,6 +767,9 @@
             box-shadow: var(--shadow-xl);
             border: 1px solid var(--border);
             animation: slideUp var(--transition-base);
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
         @keyframes slideUp {
@@ -543,25 +783,42 @@
             }
         }
 
+        .modal-close {
+            position: absolute;
+            top: var(--space-4);
+            right: var(--space-4);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--border-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .modal-close:hover {
+            background: var(--error);
+            color: var(--white);
+            transform: rotate(90deg);
+        }
+
         .modal-icon {
             font-size: 4rem;
             text-align: center;
             margin-bottom: var(--space-4);
         }
 
-        .modal-close {
-            float: right;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--text-light);
-            transition: color var(--transition-fast);
+        .modal-title {
+            font-size: 2rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: var(--space-6);
+            color: var(--text-dark);
         }
 
-        .modal-close:hover {
-            color: var(--error);
-        }
-
-        /* ==================== SECTION 12: FORMS ==================== */
+        /* ==================== SECTION 18: FORMS ==================== */
         .form-group {
             margin-bottom: var(--space-4);
         }
@@ -571,6 +828,12 @@
             font-weight: 600;
             margin-bottom: var(--space-2);
             color: var(--text-dark);
+            font-size: 0.95rem;
+        }
+
+        .form-label i {
+            color: var(--primary);
+            margin-right: var(--space-2);
         }
 
         .form-input {
@@ -589,11 +852,17 @@
             box-shadow: 0 0 0 4px var(--primary-bg);
         }
 
+        .form-input.error {
+            border-color: var(--error);
+            background: var(--error-bg);
+        }
+
         .form-checkbox {
             display: flex;
             align-items: center;
             gap: var(--space-2);
             cursor: pointer;
+            margin: var(--space-4) 0;
         }
 
         .form-checkbox input {
@@ -602,62 +871,115 @@
             cursor: pointer;
         }
 
-        /* ==================== SECTION 13: STREAK POPUP ==================== */
-        .streak-popup {
-            text-align: center;
+        .form-checkbox label {
+            cursor: pointer;
+            color: var(--text-light);
         }
 
-        .streak-popup-icon {
+        .form-help {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-top: var(--space-1);
+        }
+
+        /* ==================== SECTION 19: POPUP ==================== */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(8px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .popup-card {
+            background: var(--white);
+            border-radius: var(--radius-3xl);
+            padding: var(--space-10);
+            max-width: 450px;
+            width: 90%;
+            text-align: center;
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--border);
+            animation: popIn var(--transition-base);
+        }
+
+        @keyframes popIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .popup-icon {
             font-size: 5rem;
             margin-bottom: var(--space-4);
+            animation: bounce 2s infinite;
         }
 
-        .streak-popup-title {
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .popup-title {
             font-size: 2rem;
             font-weight: 800;
             color: var(--primary);
             margin-bottom: var(--space-2);
         }
 
-        .streak-popup-streak {
+        .popup-streak {
             font-size: 4rem;
             font-weight: 800;
             color: var(--text-dark);
             margin: var(--space-4) 0;
         }
 
-        .streak-popup-message {
+        .popup-message {
             font-size: 1.2rem;
             color: var(--text-light);
             margin-bottom: var(--space-6);
         }
 
-        .streak-popup-reward {
-            background: var(--primary-bg);
+        .popup-milestone {
+            background: linear-gradient(135deg, gold, #fbbf24);
             padding: var(--space-4);
             border-radius: var(--radius-xl);
+            color: var(--text-dark);
+            font-weight: 600;
             margin: var(--space-4) 0;
         }
 
-        .streak-popup-reward-value {
-            font-size: 2rem;
-            font-weight: 800;
-            color: var(--success);
-        }
-
-        /* ==================== SECTION 14: TELEGRAM SECTION ==================== */
+        /* ==================== SECTION 20: TELEGRAM SECTION ==================== */
         .telegram-section {
             background: linear-gradient(135deg, var(--primary-soft), var(--white));
             border-radius: var(--radius-2xl);
             padding: var(--space-8);
             text-align: center;
             border: 1px solid var(--border);
+            margin: var(--space-8) 0;
         }
 
         .telegram-icon {
-            font-size: 4rem;
+            font-size: 5rem;
             color: #0088cc;
             margin-bottom: var(--space-4);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
 
         .telegram-button {
@@ -670,8 +992,10 @@
             border-radius: var(--radius-full);
             text-decoration: none;
             font-weight: 600;
-            margin-top: var(--space-4);
+            margin: var(--space-4) 0;
             transition: all var(--transition-base);
+            border: none;
+            cursor: pointer;
         }
 
         .telegram-button:hover {
@@ -680,47 +1004,106 @@
             box-shadow: var(--shadow-lg);
         }
 
-        /* ==================== SECTION 15: ACTIVITY METER ==================== */
-        .activity-meter {
-            background: var(--white);
-            padding: var(--space-6);
-            border-radius: var(--radius-xl);
-            border: 1px solid var(--border);
-            margin: var(--space-4) 0;
-        }
-
-        .activity-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: var(--space-4);
-        }
-
-        .activity-stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: var(--space-4);
-            text-align: center;
-        }
-
-        .activity-stat {
-            padding: var(--space-4);
-            background: var(--primary-soft);
-            border-radius: var(--radius-lg);
-        }
-
-        .activity-stat-value {
-            font-size: 2rem;
-            font-weight: 800;
-            color: var(--primary);
-        }
-
-        .activity-stat-label {
-            font-size: 0.9rem;
+        .telegram-stats {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-8);
+            margin-top: var(--space-4);
             color: var(--text-light);
         }
 
-        /* ==================== SECTION 16: RESPONSIVE ==================== */
+        /* ==================== SECTION 21: STATS CARDS ==================== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-4);
+            margin: var(--space-8) 0;
+        }
+
+        .stat-card {
+            background: var(--white);
+            padding: var(--space-6);
+            border-radius: var(--radius-xl);
+            text-align: center;
+            border: 1px solid var(--border-light);
+            transition: all var(--transition-base);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            line-height: 1;
+            margin-bottom: var(--space-2);
+        }
+
+        .stat-label {
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .stat-icon {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: var(--space-2);
+        }
+
+        /* ==================== SECTION 22: ACTIVITY TIMELINE ==================== */
+        .timeline {
+            position: relative;
+            padding: var(--space-4) 0;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: var(--space-4);
+            padding: var(--space-4);
+            border-bottom: 1px solid var(--border-light);
+            transition: background var(--transition-fast);
+        }
+
+        .timeline-item:hover {
+            background: var(--primary-soft);
+        }
+
+        .timeline-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+        }
+
+        .timeline-content {
+            flex: 1;
+        }
+
+        .timeline-title {
+            font-weight: 600;
+            margin-bottom: var(--space-1);
+        }
+
+        .timeline-time {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        /* ==================== SECTION 23: RESPONSIVE ==================== */
+        @media (max-width: 1024px) {
+            .grid-4 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 0 var(--space-4);
@@ -742,12 +1125,24 @@
                 display: none;
             }
 
-            .dropdown-menu {
+            .dropdown {
                 width: 280px;
             }
 
-            .activity-stats {
-                grid-template-columns: 1fr;
+            .header-content {
+                flex-direction: column;
+                gap: var(--space-4);
+            }
+
+            .streak-dot {
+                width: 35px;
+                height: 35px;
+                font-size: 0.9rem;
+            }
+
+            .telegram-stats {
+                flex-direction: column;
+                gap: var(--space-2);
             }
         }
 
@@ -761,61 +1156,75 @@
                 letter-spacing: 4px;
             }
 
-            .streak-dot {
-                width: 35px;
-                height: 35px;
-                font-size: 0.9rem;
+            .popup-card {
+                padding: var(--space-6);
+            }
+
+            .popup-streak {
+                font-size: 3rem;
             }
         }
 
-        /* ==================== SECTION 17: UTILITIES ==================== */
+        /* ==================== SECTION 24: UTILITIES ==================== */
         .text-center { text-align: center; }
+        .text-left { text-align: left; }
+        .text-right { text-align: right; }
         .text-primary { color: var(--primary); }
         .text-success { color: var(--success); }
+        .text-error { color: var(--error); }
+        .text-warning { color: var(--warning); }
         .bg-primary-soft { background: var(--primary-soft); }
+        .bg-success-soft { background: var(--success-bg); }
+        .bg-error-soft { background: var(--error-bg); }
+        .mt-1 { margin-top: var(--space-1); }
+        .mt-2 { margin-top: var(--space-2); }
         .mt-4 { margin-top: var(--space-4); }
         .mt-8 { margin-top: var(--space-8); }
+        .mb-1 { margin-bottom: var(--space-1); }
+        .mb-2 { margin-bottom: var(--space-2); }
         .mb-4 { margin-bottom: var(--space-4); }
         .mb-8 { margin-bottom: var(--space-8); }
         .p-4 { padding: var(--space-4); }
         .p-8 { padding: var(--space-8); }
         .rounded-full { border-radius: var(--radius-full); }
+        .rounded-lg { border-radius: var(--radius-lg); }
+        .rounded-xl { border-radius: var(--radius-xl); }
         .font-600 { font-weight: 600; }
+        .font-700 { font-weight: 700; }
         .font-800 { font-weight: 800; }
+        .w-100 { width: 100%; }
+        .h-100 { height: 100%; }
+        .d-none { display: none; }
+        .d-block { display: block; }
+        .d-flex { display: flex; }
+        .d-grid { display: grid; }
+        .position-relative { position: relative; }
+        .position-absolute { position: absolute; }
+        .overflow-hidden { overflow: hidden; }
+        .cursor-pointer { cursor: pointer; }
+        .cursor-default { cursor: default; }
+        .no-select { user-select: none; }
     </style>
 </head>
 <body>
-    <!-- ==================== SECTION 18: STREAK COMPLETION POPUP ==================== -->
-    <div id="streakPopup" class="modal-overlay">
-        <div class="modal-card streak-popup">
-            <div class="modal-close" onclick="closeModal('streakPopup')">
-                <i class="fas fa-times"></i>
+    <!-- ==================== SECTION 25: STREAK POPUP ==================== -->
+    <div class="popup-overlay" id="streakPopup">
+        <div class="popup-card">
+            <div class="popup-icon">🔥</div>
+            <div class="popup-title">Streak Updated!</div>
+            <div class="popup-streak" id="popupStreak">0</div>
+            <div class="popup-message" id="popupMessage">Keep going! Your streak is growing!</div>
+            <div class="popup-milestone" id="popupMilestone" style="display: none;">
+                <i class="fas fa-star"></i> Milestone Reached! <i class="fas fa-star"></i>
             </div>
-            <div class="streak-popup-icon">
-                <i class="fas fa-fire" style="color: var(--primary);"></i>
-            </div>
-            <div class="streak-popup-title">Streak Updated!</div>
-            <div class="streak-popup-streak" id="popupStreak">0</div>
-            <div class="streak-popup-message" id="popupMessage">Keep going! Your streak is growing!</div>
-            
-            <div class="streak-popup-reward" id="popupReward" style="display: none;">
-                <div class="text-muted">Reward Earned</div>
-                <div class="streak-popup-reward-value" id="popupRewardValue">₹0</div>
-            </div>
-            
-            <div class="flex-center gap-4 mt-8">
-                <button class="btn btn-outline" onclick="closeModal('streakPopup')">
-                    Close
-                </button>
-                <button class="btn btn-primary" onclick="closeModal('streakPopup')">
-                    Continue
-                </button>
+            <div class="flex-center gap-4">
+                <button class="btn btn-primary btn-lg" onclick="claimStreak()">Continue</button>
             </div>
         </div>
     </div>
 
-    <!-- ==================== SECTION 19: LOGIN MODAL ==================== -->
-    <div id="loginModal" class="modal-overlay">
+    <!-- ==================== SECTION 26: LOGIN MODAL ==================== -->
+    <div class="modal-overlay" id="loginModal">
         <div class="modal-card">
             <div class="modal-close" onclick="closeModal('loginModal')">
                 <i class="fas fa-times"></i>
@@ -823,38 +1232,40 @@
             <div class="modal-icon">
                 <i class="fas fa-lock text-primary"></i>
             </div>
-            <h2 class="text-center mb-4">Welcome Back!</h2>
+            <h2 class="modal-title">Welcome Back!</h2>
             
             <div class="form-group">
-                <label class="form-label">Email</label>
+                <label class="form-label">
+                    <i class="fas fa-envelope"></i> Email
+                </label>
                 <input type="email" id="loginEmail" class="form-input" placeholder="your@email.com">
             </div>
 
             <div class="form-group">
-                <label class="form-label">Password</label>
-                <input type="password" id="loginPass" class="form-input" placeholder="••••••••">
+                <label class="form-label">
+                    <i class="fas fa-key"></i> Password
+                </label>
+                <input type="password" id="loginPassword" class="form-input" placeholder="••••••••">
             </div>
 
-            <div class="form-checkbox mb-4">
-                <input type="checkbox" id="loginKeep" checked>
+            <div class="form-checkbox">
+                <input type="checkbox" id="loginKeep">
                 <label for="loginKeep">Keep me logged in</label>
             </div>
 
-            <button class="btn btn-primary btn-block btn-lg" id="loginBtn">
-                Login
+            <button class="btn btn-primary btn-block btn-lg" onclick="login()">
+                <i class="fas fa-sign-in-alt"></i> Login
             </button>
 
             <p class="text-center mt-4">
                 Don't have an account? 
-                <a href="#" onclick="switchModal('loginModal', 'registerModal')" class="text-primary">
-                    Register
-                </a>
+                <a href="#" onclick="showRegister()" class="text-primary">Register</a>
             </p>
         </div>
     </div>
 
-    <!-- ==================== SECTION 20: REGISTER MODAL ==================== -->
-    <div id="registerModal" class="modal-overlay">
+    <!-- ==================== SECTION 27: REGISTER MODAL ==================== -->
+    <div class="modal-overlay" id="registerModal">
         <div class="modal-card">
             <div class="modal-close" onclick="closeModal('registerModal')">
                 <i class="fas fa-times"></i>
@@ -862,48 +1273,55 @@
             <div class="modal-icon">
                 <i class="fas fa-user-plus text-primary"></i>
             </div>
-            <h2 class="text-center mb-4">Join CheckIn30</h2>
+            <h2 class="modal-title">Join CheckIn30</h2>
 
             <div class="form-group">
-                <label class="form-label">Full Name</label>
+                <label class="form-label">
+                    <i class="fas fa-user"></i> Full Name
+                </label>
                 <input type="text" id="regName" class="form-input" placeholder="Rajesh Kumar">
             </div>
 
             <div class="form-group">
-                <label class="form-label">Email</label>
+                <label class="form-label">
+                    <i class="fas fa-envelope"></i> Email
+                </label>
                 <input type="email" id="regEmail" class="form-input" placeholder="rajesh@gmail.com">
             </div>
 
             <div class="form-group">
-                <label class="form-label">UPI ID</label>
-                <input type="text" id="regUpi" class="form-input" placeholder="rajesh@okhdfcbank">
+                <label class="form-label">
+                    <i class="fas fa-qrcode"></i> UPI ID
+                </label>
+                <input type="text" id="regUpi" class="form-input" placeholder="gotmprajapat00@okhdfcbank" value="gotmprajapat00@okhdfcbank">
+                <div class="form-help">Your UPI ID for receiving rewards</div>
             </div>
 
             <div class="form-group">
-                <label class="form-label">Password (min 6 characters)</label>
-                <input type="password" id="regPass" class="form-input" placeholder="••••••••">
+                <label class="form-label">
+                    <i class="fas fa-key"></i> Password (min 6)
+                </label>
+                <input type="password" id="regPassword" class="form-input" placeholder="••••••••">
             </div>
 
-            <div class="form-checkbox mb-4">
-                <input type="checkbox" id="regKeep" checked>
+            <div class="form-checkbox">
+                <input type="checkbox" id="regKeep">
                 <label for="regKeep">Keep me logged in</label>
             </div>
 
-            <button class="btn btn-primary btn-block btn-lg" id="registerBtn">
-                Create Account
+            <button class="btn btn-primary btn-block btn-lg" onclick="register()">
+                <i class="fas fa-user-check"></i> Create Account
             </button>
 
             <p class="text-center mt-4">
                 Already have an account? 
-                <a href="#" onclick="switchModal('registerModal', 'loginModal')" class="text-primary">
-                    Login
-                </a>
+                <a href="#" onclick="showLogin()" class="text-primary">Login</a>
             </p>
         </div>
     </div>
 
-    <!-- ==================== SECTION 21: EDIT PROFILE MODAL ==================== -->
-    <div id="editModal" class="modal-overlay">
+    <!-- ==================== SECTION 28: EDIT PROFILE MODAL ==================== -->
+    <div class="modal-overlay" id="editModal">
         <div class="modal-card">
             <div class="modal-close" onclick="closeModal('editModal')">
                 <i class="fas fa-times"></i>
@@ -911,25 +1329,29 @@
             <div class="modal-icon">
                 <i class="fas fa-pen text-primary"></i>
             </div>
-            <h2 class="text-center mb-4">Edit Profile</h2>
+            <h2 class="modal-title">Edit Profile</h2>
 
             <div class="form-group">
-                <label class="form-label">Full Name</label>
+                <label class="form-label">
+                    <i class="fas fa-user"></i> Full Name
+                </label>
                 <input type="text" id="editName" class="form-input">
             </div>
 
             <div class="form-group">
-                <label class="form-label">UPI ID</label>
+                <label class="form-label">
+                    <i class="fas fa-qrcode"></i> UPI ID
+                </label>
                 <input type="text" id="editUpi" class="form-input">
             </div>
 
-            <button class="btn btn-primary btn-block btn-lg" id="saveEditBtn">
-                Save Changes
+            <button class="btn btn-primary btn-block btn-lg" onclick="saveProfile()">
+                <i class="fas fa-save"></i> Save Changes
             </button>
         </div>
     </div>
 
-    <!-- ==================== SECTION 22: HEADER ==================== -->
+    <!-- ==================== SECTION 29: HEADER ==================== -->
     <header class="header">
         <div class="container header-content">
             <div class="logo">
@@ -937,30 +1359,30 @@
                 <span>CheckIn30</span>
             </div>
 
-            <!-- Auth Buttons (Logged Out) -->
-            <div id="authSection" class="flex">
-                <button class="btn btn-outline" onclick="openModal('loginModal')">
-                    Login
+            <!-- Auth Buttons - Visible when logged out (default) -->
+            <div id="authButtons" class="flex">
+                <button class="btn btn-outline" onclick="showLogin()">
+                    <i class="fas fa-sign-in-alt"></i> Login
                 </button>
-                <button class="btn btn-primary" onclick="openModal('registerModal')">
-                    Register
+                <button class="btn btn-primary" onclick="showRegister()">
+                    <i class="fas fa-user-plus"></i> Register
                 </button>
             </div>
 
-            <!-- Profile Section (Logged In) -->
+            <!-- Profile Section - Hidden by default (logged out) -->
             <div id="profileSection" class="profile-wrapper" style="display: none;">
-                <span class="profile-name" id="headerName">User</span>
-                <div class="profile-circle" id="profileCircle" onclick="toggleDropdown()">U</div>
+                <span class="profile-name" id="headerName"></span>
+                <div class="profile-circle" onclick="toggleDropdown()" id="profileCircle">U</div>
                 
                 <!-- Dropdown Menu -->
-                <div class="dropdown-menu" id="dropdownMenu">
+                <div class="dropdown" id="dropdown">
                     <div class="dropdown-item">
-                        <i class="fas fa-user"></i>
-                        <span id="dropName">Full Name</span>
+                        <i class="fas fa-user-circle"></i>
+                        <span id="dropName"></span>
                     </div>
                     <div class="dropdown-item">
                         <i class="fas fa-envelope"></i>
-                        <span id="dropEmail">email@example.com</span>
+                        <span id="dropEmail"></span>
                     </div>
                     <div class="dropdown-item">
                         <i class="fas fa-fire"></i>
@@ -972,22 +1394,22 @@
                     </div>
                     <div class="dropdown-item">
                         <i class="fas fa-qrcode"></i>
-                        <span>UPI: <span id="dropUpi">-</span></span>
+                        <span>UPI: <span id="dropUpi"></span></span>
                     </div>
                     <div class="dropdown-item">
                         <i class="fas fa-gift"></i>
                         <span>Rewards: <span id="dropRewards">0</span></span>
                     </div>
                     <div class="dropdown-item">
-                        <i class="fas fa-chart-line"></i>
-                        <span>Activity: <span id="dropActivity">0</span> points</span>
+                        <i class="fas fa-calendar"></i>
+                        <span>Joined: <span id="dropJoined"></span></span>
                     </div>
                     <div class="dropdown-divider"></div>
-                    <div class="dropdown-item" onclick="openEditModal()">
+                    <div class="dropdown-edit" onclick="showEditModal()">
                         <i class="fas fa-pencil-alt"></i>
                         <span>Edit Profile</span>
                     </div>
-                    <div class="dropdown-item" onclick="logout()">
+                    <div class="dropdown-logout" onclick="logout()">
                         <i class="fas fa-sign-out-alt"></i>
                         <span>Logout</span>
                     </div>
@@ -996,30 +1418,33 @@
         </div>
     </header>
 
-    <!-- ==================== SECTION 23: MAIN CONTENT ==================== -->
-    <main class="container" id="mainContent">
-        <!-- LOGGED OUT HOME PAGE (Scrollable) -->
-        <div id="homeLoggedOut">
+    <!-- ==================== SECTION 30: MAIN CONTENT ==================== -->
+    <main class="container">
+        <!-- HOME PAGE - Visible when logged out (default) -->
+        <div id="homePage">
             <!-- Hero Section -->
             <section class="section" data-aos="fade-up">
                 <div class="card text-center">
-                    <h1>More Activity = Bigger Rewards</h1>
+                    <h1>Daily Streak Rewards</h1>
                     <p class="text-xl" style="font-size: 1.3rem; color: var(--primary);">
-                        The more you engage, the more you earn!
+                        Jitni lambi streak, utna bada reward
                     </p>
                     
-                    <div class="grid grid-3 mt-8">
-                        <div class="activity-stat" data-aos="zoom-in" data-aos-delay="100">
-                            <div class="activity-stat-value">1 min</div>
-                            <div class="activity-stat-label">Daily Time</div>
+                    <div class="stats-grid">
+                        <div class="stat-card" data-aos="zoom-in" data-aos-delay="100">
+                            <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                            <div class="stat-value">1 min</div>
+                            <div class="stat-label">Daily Time</div>
                         </div>
-                        <div class="activity-stat" data-aos="zoom-in" data-aos-delay="200">
-                            <div class="activity-stat-value">↑ More</div>
-                            <div class="activity-stat-label">Activity = Bigger Rewards</div>
+                        <div class="stat-card" data-aos="zoom-in" data-aos-delay="200">
+                            <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
+                            <div class="stat-value">∞</div>
+                            <div class="stat-label">Unlimited Streak</div>
                         </div>
-                        <div class="activity-stat" data-aos="zoom-in" data-aos-delay="300">
-                            <div class="activity-stat-value">24h</div>
-                            <div class="activity-stat-label">First Reward</div>
+                        <div class="stat-card" data-aos="zoom-in" data-aos-delay="300">
+                            <div class="stat-icon"><i class="fas fa-gift"></i></div>
+                            <div class="stat-value">24h</div>
+                            <div class="stat-label">First Reward</div>
                         </div>
                     </div>
                 </div>
@@ -1032,116 +1457,100 @@
                     <div class="card" data-aos="flip-left" data-aos-delay="100">
                         <i class="fas fa-user-plus text-primary" style="font-size: 2rem;"></i>
                         <h3 class="mt-4">1. Register</h3>
-                        <p>Sign up with your name, email, and UPI ID to start earning</p>
+                        <p>Sign up with your name, email and UPI ID</p>
                     </div>
                     <div class="card" data-aos="flip-left" data-aos-delay="200">
                         <i class="fas fa-clock text-primary" style="font-size: 2rem;"></i>
-                        <h3 class="mt-4">2. Timer Auto-Starts</h3>
-                        <p>Timer starts automatically when you visit - no buttons needed!</p>
+                        <h3 class="mt-4">2. Visit Daily</h3>
+                        <p>Timer starts automatically when you visit</p>
                     </div>
                     <div class="card" data-aos="flip-left" data-aos-delay="300">
                         <i class="fas fa-hourglass-half text-primary" style="font-size: 2rem;"></i>
                         <h3 class="mt-4">3. Wait 1 Minute</h3>
-                        <p>Timer runs for 60 seconds - you can browse other sections</p>
+                        <p>Timer runs for 60 seconds</p>
                     </div>
                     <div class="card" data-aos="flip-left" data-aos-delay="400">
                         <i class="fas fa-fire text-primary" style="font-size: 2rem;"></i>
-                        <h3 class="mt-4">4. Popup Appears</h3>
-                        <p>When timer ends, popup asks you to claim your streak</p>
+                        <h3 class="mt-4">4. Claim Streak</h3>
+                        <p>Popup appears, click to add to your streak</p>
                     </div>
                     <div class="card" data-aos="flip-left" data-aos-delay="500">
-                        <i class="fas fa-gift text-primary" style="font-size: 2rem;"></i>
-                        <h3 class="mt-4">5. Claim Streak</h3>
-                        <p>Click to add to your streak and see potential reward</p>
+                        <i class="fas fa-trophy text-primary" style="font-size: 2rem;"></i>
+                        <h3 class="mt-4">5. Milestones</h3>
+                        <p>Every 5 days = Special milestone</p>
                     </div>
                     <div class="card" data-aos="flip-left" data-aos-delay="600">
-                        <i class="fas fa-chart-line text-primary" style="font-size: 2rem;"></i>
-                        <h3 class="mt-4">6. Bigger Rewards</h3>
-                        <p>More activity = bigger rewards. Never stops growing!</p>
+                        <i class="fas fa-infinity text-primary" style="font-size: 2rem;"></i>
+                        <h3 class="mt-4">6. Unlimited</h3>
+                        <p>Streak continues beyond 30 days forever</p>
                     </div>
                 </div>
             </section>
 
-            <!-- Activity Reward Explanation -->
+            <!-- Features -->
             <section class="section" data-aos="fade-up">
-                <div class="card bg-primary-soft">
-                    <h2 class="text-center">📈 Activity = Bigger Rewards</h2>
-                    <p class="text-center text-lg">
-                        Every action you take on the website increases your activity score. 
-                        The more you engage, the bigger your rewards become!
-                    </p>
-                    
-                    <div class="grid grid-4 mt-8">
-                        <div class="text-center">
-                            <div class="stat-number text-primary">1x</div>
-                            <div>Daily Visit</div>
+                <div class="grid grid-2">
+                    <div class="card">
+                        <i class="fas fa-calendar-check text-primary" style="font-size: 2rem;"></i>
+                        <h3 class="mt-4">30+ Day Streak</h3>
+                        <p>Your streak keeps growing even after 30 days. Never resets!</p>
+                        <div class="streak-dots-container mt-4">
+                            <div class="streak-dot active">1</div>
+                            <div class="streak-dot active">2</div>
+                            <div class="streak-dot active">3</div>
+                            <div class="streak-dot">4</div>
+                            <div class="streak-dot">5</div>
+                            <div class="streak-dot milestone">30</div>
+                            <div class="streak-dot">→</div>
                         </div>
-                        <div class="text-center">
-                            <div class="stat-number text-primary">2x</div>
-                            <div>Profile Complete</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="stat-number text-primary">3x</div>
-                            <div>7-Day Streak</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="stat-number text-primary">5x</div>
-                            <div>30-Day Streak</div>
+                    </div>
+                    <div class="card">
+                        <i class="fas fa-gift text-primary" style="font-size: 2rem;"></i>
+                        <h3 class="mt-4">5-Day Milestones</h3>
+                        <p>Every 5 days is a special milestone with reward</p>
+                        <div class="stats-grid mt-4">
+                            <div class="stat-card">5</div>
+                            <div class="stat-card">10</div>
+                            <div class="stat-card">15</div>
+                            <div class="stat-card">20</div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Telegram Channel Section (Prominent) -->
+            <!-- Telegram Section -->
             <section class="section" data-aos="fade-up">
                 <div class="telegram-section">
                     <i class="fab fa-telegram telegram-icon"></i>
                     <h2>Join Our Telegram Channel</h2>
-                    <p class="text-lg">Get instant updates about your rewards, streak milestones, and special offers!</p>
+                    <p class="text-lg">Get instant updates about your streak and milestone rewards</p>
                     <a href="https://t.me/chackin30" target="_blank" class="telegram-button">
-                        <i class="fab fa-telegram"></i>
-                        Join @chackin30 Now
+                        <i class="fab fa-telegram"></i> Join @chackin30
                     </a>
-                    <p class="mt-4 text-muted">500+ members already earning daily!</p>
-                </div>
-            </section>
-
-            <!-- Why Choose Us -->
-            <section class="section" data-aos="fade-up">
-                <div class="grid grid-2">
-                    <div class="card">
-                        <i class="fas fa-infinity text-primary" style="font-size: 2rem;"></i>
-                        <h3 class="mt-4">Unlimited Streak</h3>
-                        <p>Your streak never stops growing. Keep going beyond 30, 60, 100 days!</p>
-                    </div>
-                    <div class="card">
-                        <i class="fas fa-rocket text-primary" style="font-size: 2rem;"></i>
-                        <h3 class="mt-4">Growing Rewards</h3>
-                        <p>The more active you are, the bigger your rewards become. Simple!</p>
+                    <div class="telegram-stats">
+                        <span><i class="fas fa-users"></i> 500+ Members</span>
+                        <span><i class="fas fa-bell"></i> Daily Updates</span>
+                        <span><i class="fas fa-gift"></i> Reward Alerts</span>
                     </div>
                 </div>
             </section>
         </div>
 
-        <!-- LOGGED IN DASHBOARD -->
+        <!-- DASHBOARD - Hidden by default (shown after login) -->
         <div id="dashboard" style="display: none;">
-            <!-- Auto-Starting Timer Section -->
+            <!-- Timer Section -->
             <section class="section" data-aos="fade-up">
                 <div class="timer-container card">
-                    <h2><i class="fas fa-clock"></i> Daily Timer</h2>
+                    <h2><i class="fas fa-clock"></i> Today's Visit</h2>
                     
                     <div class="timer-display" id="timerDisplay">01:00</div>
                     
                     <div class="progress-bar">
-                        <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+                        <div class="progress-fill" id="progressFill"></div>
                     </div>
                     
                     <div class="timer-message" id="timerMessage">
-                        ⏳ Timer running automatically...
-                    </div>
-                    
-                    <div class="reward-multiplier" id="rewardMultiplier">
-                        Current Multiplier: 1x
+                        <span class="timer-status">⏳ Timer starts automatically...</span>
                     </div>
                 </div>
             </section>
@@ -1149,111 +1558,92 @@
             <!-- Streak Display -->
             <section class="section" data-aos="fade-up">
                 <div class="card streak-container">
-                    <span class="badge" style="background: var(--primary-bg); color: var(--primary); padding: var(--space-2) var(--space-4); border-radius: var(--radius-full);">
+                    <div class="badge badge-primary">
                         <i class="fas fa-fire"></i> CURRENT STREAK
-                    </span>
-                    
-                    <div class="streak-number" id="streakMain">0</div>
-                    <p class="text-xl font-600">days</p>
-                    
-                    <!-- Unlimited Streak Indicator -->
-                    <div id="unlimitedBadge" style="display: none; color: var(--primary); font-weight: 600; margin: var(--space-4) 0;">
-                        <i class="fas fa-infinity"></i> UNLIMITED STREAK MODE
                     </div>
-
-                    <!-- Streak Dots (Shows up to 60 days) -->
+                    
+                    <div class="streak-number" id="streakDisplay">0</div>
+                    <div class="streak-label">days</div>
+                    
+                    <div class="streak-info">
+                        <span><i class="fas fa-calendar"></i> <span id="streakStart"></span></span>
+                        <span><i class="fas fa-infinity"></i> Unlimited</span>
+                    </div>
+                    
+                    <!-- Streak Dots -->
                     <div class="streak-dots-container" id="streakDots"></div>
-                </div>
-            </section>
-
-            <!-- Activity Meter & Reward Potential -->
-            <section class="section" data-aos="fade-up">
-                <div class="grid grid-2">
-                    <!-- Activity Meter -->
-                    <div class="card">
-                        <h3><i class="fas fa-chart-line text-primary"></i> Your Activity Score</h3>
-                        <div class="activity-meter">
-                            <div class="activity-title">Activity Level</div>
-                            <div class="activity-stats">
-                                <div class="activity-stat">
-                                    <div class="activity-stat-value" id="activityScore">0</div>
-                                    <div class="activity-stat-label">Points</div>
-                                </div>
-                                <div class="activity-stat">
-                                    <div class="activity-stat-value" id="activityMultiplier">1x</div>
-                                    <div class="activity-stat-label">Multiplier</div>
-                                </div>
-                                <div class="activity-stat">
-                                    <div class="activity-stat-value" id="nextRewardEstimate">₹0</div>
-                                    <div class="activity-stat-label">Next Reward</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Reward Info -->
-                    <div class="card">
-                        <h3><i class="fas fa-gift text-primary"></i> Reward Potential</h3>
-                        <div class="mt-4">
-                            <div class="flex-between p-3" style="border-bottom: 1px solid var(--border);">
-                                <span>Base Reward:</span>
-                                <span class="font-600" id="baseReward">₹10</span>
-                            </div>
-                            <div class="flex-between p-3" style="border-bottom: 1px solid var(--border);">
-                                <span>Activity Multiplier:</span>
-                                <span class="font-600 text-primary" id="currentMultiplier">1x</span>
-                            </div>
-                            <div class="flex-between p-3" style="border-bottom: 1px solid var(--border);">
-                                <span>Streak Bonus:</span>
-                                <span class="font-600" id="streakBonus">+₹0</span>
-                            </div>
-                            <div class="flex-between p-3" style="font-size: 1.2rem;">
-                                <span class="font-600">Total Potential:</span>
-                                <span class="font-800 text-success" id="totalPotential">₹10</span>
-                            </div>
-                        </div>
+                    
+                    <div class="badge badge-success mt-4" id="unlimitedBadge" style="display: none;">
+                        <i class="fas fa-infinity"></i> UNLIMITED STREAK MODE
                     </div>
                 </div>
             </section>
 
             <!-- Stats Overview -->
             <section class="section" data-aos="fade-up">
-                <div class="grid grid-4">
-                    <div class="card text-center">
-                        <div class="stat-number text-primary" id="totalVisits">0</div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                        <div class="stat-value" id="totalVisits">0</div>
                         <div class="stat-label">Total Visits</div>
                     </div>
-                    <div class="card text-center">
-                        <div class="stat-number text-primary" id="rewardsEarned">0</div>
-                        <div class="stat-label">Rewards Earned</div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-gift"></i></div>
+                        <div class="stat-value" id="totalRewards">0</div>
+                        <div class="stat-label">Rewards</div>
                     </div>
-                    <div class="card text-center">
-                        <div class="stat-number text-primary" id="totalValue">₹0</div>
-                        <div class="stat-label">Total Value</div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-calendar"></i></div>
+                        <div class="stat-value" id="memberDays">0</div>
+                        <div class="stat-label">Member Days</div>
                     </div>
-                    <div class="card text-center">
-                        <div class="stat-number text-primary" id="completionPercent">0%</div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
+                        <div class="stat-value" id="completionRate">0%</div>
                         <div class="stat-label">Completion</div>
                     </div>
                 </div>
             </section>
 
-            <!-- Recent Activity -->
+            <!-- Milestones & Activity -->
             <section class="section" data-aos="fade-up">
-                <div class="card">
-                    <h3><i class="fas fa-history"></i> Recent Activity</h3>
-                    <div id="recentActivity" class="mt-4">
-                        <!-- Dynamically filled -->
+                <div class="grid grid-2">
+                    <!-- Milestones Card -->
+                    <div class="card">
+                        <h3><i class="fas fa-trophy"></i> Your Milestones</h3>
+                        <div class="timeline" id="milestonesList">
+                            <div class="timeline-item">
+                                <div class="timeline-icon"><i class="fas fa-star"></i></div>
+                                <div class="timeline-content">
+                                    <div class="timeline-title">Complete visits to earn milestones</div>
+                                    <div class="timeline-time">Every 5 days</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="card">
+                        <h3><i class="fas fa-history"></i> Recent Activity</h3>
+                        <div class="timeline" id="activityList">
+                            <div class="timeline-item">
+                                <div class="timeline-icon"><i class="fas fa-info"></i></div>
+                                <div class="timeline-content">
+                                    <div class="timeline-title">No activity yet</div>
+                                    <div class="timeline-time">Complete your first visit</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Telegram Channel (Always visible) -->
+            <!-- Telegram Section in Dashboard -->
             <section class="section" data-aos="fade-up">
                 <div class="telegram-section">
                     <i class="fab fa-telegram telegram-icon"></i>
                     <h3>Stay Updated on Telegram</h3>
-                    <p>Get instant notifications about your streak milestones and rewards</p>
+                    <p>Get notified about your streak milestones</p>
                     <a href="https://t.me/chackin30" target="_blank" class="telegram-button">
                         <i class="fab fa-telegram"></i> Join @chackin30
                     </a>
@@ -1262,17 +1652,17 @@
         </div>
     </main>
 
-    <!-- ==================== SECTION 24: FIREBASE SDK ==================== -->
+    <!-- ==================== SECTION 31: FIREBASE SDK ==================== -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     
-    <!-- ==================== SECTION 25: AOS LIBRARY ==================== -->
+    <!-- ==================== SECTION 32: AOS LIBRARY ==================== -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
-    <!-- ==================== SECTION 26: MAIN APPLICATION SCRIPT ==================== -->
+    <!-- ==================== SECTION 33: MAIN APPLICATION SCRIPT ==================== -->
     <script>
-        // ==================== 26.1: FIREBASE CONFIG ====================
+        // ==================== 33.1: FIREBASE CONFIGURATION ====================
         const firebaseConfig = {
             apiKey: "AIzaSyDfzHHptzdqh178Or8hNNyF642NuHxNLjg",
             authDomain: "chackin30.firebaseapp.com",
@@ -1283,18 +1673,18 @@
             appId: "1:789981582387:web:46716df5b4154c18d37f46"
         };
 
+        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.database();
 
-        // ==================== 26.2: TELEGRAM CONFIG ====================
+        // ==================== 33.2: TELEGRAM CONFIGURATION ====================
         const BOT_TOKEN = "8367971417:AAGkV30ajQdWKjM-5AQDxYZH19OPHI51HGM";
         const CHAT_ID = "6225430212";
-        const TELEGRAM_API = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
 
-        async function sendTelegramNotification(message) {
+        async function sendTelegram(message) {
             try {
-                await fetch(TELEGRAM_API, {
+                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -1303,73 +1693,45 @@
                         parse_mode: 'HTML'
                     })
                 });
+                console.log('Telegram sent');
             } catch (error) {
                 console.error('Telegram error:', error);
             }
         }
 
-        // Test bot
-        sendTelegramNotification('✅ <b>CheckIn30 System Ready</b>\nAuto-Start Timer Active');
+        // Test Telegram on load
+        sendTelegram('✅ <b>CheckIn30 System Started</b>\nUser is logged out by default');
 
-        // ==================== 26.3: GLOBAL VARIABLES ====================
+        // ==================== 33.3: GLOBAL VARIABLES ====================
         let currentUser = null;
-        let currentUserData = null;
+        let currentData = null;
         let timerInterval = null;
         let timerSeconds = 60;
-        let timerRunning = false;
-        let timerCompleted = false;
+        let timerActive = false;
 
-        // Reward calculation based on activity
-        function calculateRewardMultiplier(activity) {
-            if (activity >= 1000) return 5;
-            if (activity >= 500) return 4;
-            if (activity >= 250) return 3;
-            if (activity >= 100) return 2;
-            if (activity >= 50) return 1.5;
-            return 1;
-        }
-
-        function calculateStreakBonus(streak) {
-            return Math.floor(streak / 5) * 5; // ₹5 bonus every 5 days
-        }
-
-        function calculateReward(activity, streak) {
-            const baseReward = 10;
-            const multiplier = calculateRewardMultiplier(activity);
-            const streakBonus = calculateStreakBonus(streak);
-            return Math.floor((baseReward * multiplier) + streakBonus);
-        }
-
-        // ==================== 26.4: DOM ELEMENTS ====================
-        const homeOut = document.getElementById('homeLoggedOut');
+        // ==================== 33.4: DOM ELEMENTS ====================
+        const homePage = document.getElementById('homePage');
         const dashboard = document.getElementById('dashboard');
-        const authSection = document.getElementById('authSection');
+        const authButtons = document.getElementById('authButtons');
         const profileSection = document.getElementById('profileSection');
-        const profileCircle = document.getElementById('profileCircle');
-        const dropdown = document.getElementById('dropdownMenu');
+        const dropdown = document.getElementById('dropdown');
+        const streakPopup = document.getElementById('streakPopup');
         
+        // Timer elements
         const timerDisplay = document.getElementById('timerDisplay');
         const progressFill = document.getElementById('progressFill');
         const timerMessage = document.getElementById('timerMessage');
-        const rewardMultiplier = document.getElementById('rewardMultiplier');
         
-        const streakMain = document.getElementById('streakMain');
+        // Streak elements
+        const streakDisplay = document.getElementById('streakDisplay');
         const streakDots = document.getElementById('streakDots');
         const unlimitedBadge = document.getElementById('unlimitedBadge');
         
         // Stats elements
-        const activityScore = document.getElementById('activityScore');
-        const activityMultiplier = document.getElementById('activityMultiplier');
-        const nextRewardEstimate = document.getElementById('nextRewardEstimate');
-        const baseReward = document.getElementById('baseReward');
-        const currentMultiplier = document.getElementById('currentMultiplier');
-        const streakBonus = document.getElementById('streakBonus');
-        const totalPotential = document.getElementById('totalPotential');
         const totalVisits = document.getElementById('totalVisits');
-        const rewardsEarned = document.getElementById('rewardsEarned');
-        const totalValue = document.getElementById('totalValue');
-        const completionPercent = document.getElementById('completionPercent');
-        const recentActivity = document.getElementById('recentActivity');
+        const totalRewards = document.getElementById('totalRewards');
+        const memberDays = document.getElementById('memberDays');
+        const completionRate = document.getElementById('completionRate');
         
         // Dropdown elements
         const dropName = document.getElementById('dropName');
@@ -1378,12 +1740,30 @@
         const dropTotal = document.getElementById('dropTotal');
         const dropUpi = document.getElementById('dropUpi');
         const dropRewards = document.getElementById('dropRewards');
-        const dropActivity = document.getElementById('dropActivity');
+        const dropJoined = document.getElementById('dropJoined');
         const headerName = document.getElementById('headerName');
+        const profileCircle = document.getElementById('profileCircle');
+        
+        // Milestone and activity
+        const milestonesList = document.getElementById('milestonesList');
+        const activityList = document.getElementById('activityList');
 
-        // ==================== 26.5: UTILITY FUNCTIONS ====================
-        function openModal(modalId) {
-            document.getElementById(modalId).style.display = 'flex';
+        // ==================== 33.5: MODAL FUNCTIONS ====================
+        function showLogin() {
+            document.getElementById('loginModal').style.display = 'flex';
+        }
+
+        function showRegister() {
+            document.getElementById('registerModal').style.display = 'flex';
+        }
+
+        function showEditModal() {
+            if (currentData) {
+                document.getElementById('editName').value = currentData.name || '';
+                document.getElementById('editUpi').value = currentData.upiId || 'gotmprajapat00@okhdfcbank';
+                document.getElementById('editModal').style.display = 'flex';
+                dropdown.classList.remove('show');
+            }
         }
 
         function closeModal(modalId) {
@@ -1395,106 +1775,166 @@
             openModal(openId);
         }
 
+        // Close modals on outside click
+        window.addEventListener('click', function(e) {
+            if (e.target.classList.contains('modal-overlay')) {
+                e.target.style.display = 'none';
+            }
+            if (e.target === streakPopup) {
+                streakPopup.style.display = 'none';
+            }
+        });
+
+        // ==================== 33.6: DROPDOWN FUNCTIONS ====================
         function toggleDropdown() {
             dropdown.classList.toggle('show');
         }
 
-        document.addEventListener('click', (e) => {
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
             if (!profileSection.contains(e.target)) {
                 dropdown.classList.remove('show');
             }
         });
 
-        // ==================== 26.6: AUTH FUNCTIONS ====================
-        document.getElementById('registerBtn').addEventListener('click', async () => {
+        // ==================== 33.7: AUTH FUNCTIONS ====================
+        async function register() {
             const name = document.getElementById('regName').value.trim();
             const email = document.getElementById('regEmail').value.trim();
-            const upi = document.getElementById('regUpi').value.trim();
-            const password = document.getElementById('regPass').value;
+            const upi = document.getElementById('regUpi').value.trim() || 'gotmprajapat00@okhdfcbank';
+            const password = document.getElementById('regPassword').value;
             const keep = document.getElementById('regKeep').checked;
 
-            if (!name || !email || !upi || password.length < 6) {
-                alert('All fields required and password min 6 characters');
+            // Validation
+            if (!name || !email || !password) {
+                alert('Please fill all fields');
+                return;
+            }
+
+            if (password.length < 6) {
+                alert('Password must be at least 6 characters');
+                return;
+            }
+
+            if (!email.includes('@') || !email.includes('.')) {
+                alert('Please enter a valid email');
                 return;
             }
 
             try {
+                // Set persistence based on checkbox
                 if (keep) {
                     await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+                } else {
+                    await auth.setPersistence(firebase.auth.Auth.Persistence.SESSION);
                 }
 
+                // Create user
                 const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-                const uid = userCredential.user.uid;
+                const user = userCredential.user;
 
+                // User data structure
                 const userData = {
-                    name, email, upiId: upi,
+                    name: name,
+                    email: email,
+                    upiId: upi,
                     streak: 0,
                     totalVisits: 0,
+                    registeredAt: new Date().toISOString(),
                     lastVisit: null,
                     visitedToday: false,
-                    registeredAt: new Date().toISOString(),
                     rewardsReceived: 0,
-                    totalRewardValue: 0,
-                    activityScore: 10, // Starting activity
+                    milestones: {},
                     visits: {},
-                    rewardHistory: {},
                     lastMilestone: 0
                 };
 
-                await db.ref('users/' + uid).set(userData);
+                // Save to database
+                await db.ref('users/' + user.uid).set(userData);
 
-                // Telegram notification
-                const message = `🟢 <b>NEW REGISTRATION</b>\n👤 ${name}\n📧 ${email}\n💰 ${upi}\n⏰ ${new Date().toLocaleString()}`;
-                sendTelegramNotification(message);
+                // Send Telegram notification
+                const message = 
+                    '🟢 <b>NEW REGISTRATION</b>\n' +
+                    '━━━━━━━━━━━━━━━━━━━━━━\n' +
+                    '👤 Name: ' + name + '\n' +
+                    '📧 Email: ' + email + '\n' +
+                    '💰 UPI: ' + upi + '\n' +
+                    '⏰ Time: ' + new Date().toLocaleString() + '\n' +
+                    '━━━━━━━━━━━━━━━━━━━━━━';
+
+                await sendTelegram(message);
 
                 closeModal('registerModal');
+                alert('Registration successful!');
 
             } catch (error) {
-                alert(error.message);
+                alert('Error: ' + error.message);
             }
-        });
+        }
 
-        document.getElementById('loginBtn').addEventListener('click', async () => {
+        async function login() {
             const email = document.getElementById('loginEmail').value.trim();
-            const password = document.getElementById('loginPass').value;
+            const password = document.getElementById('loginPassword').value;
             const keep = document.getElementById('loginKeep').checked;
 
+            if (!email || !password) {
+                alert('Please enter email and password');
+                return;
+            }
+
             try {
+                // Set persistence
                 if (keep) {
                     await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+                } else {
+                    await auth.setPersistence(firebase.auth.Auth.Persistence.SESSION);
                 }
 
+                // Sign in
                 await auth.signInWithEmailAndPassword(email, password);
-                
-                sendTelegramNotification(`🔵 <b>LOGIN</b>\n👤 ${email}\n⏰ ${new Date().toLocaleString()}`);
+
+                // Send Telegram notification
+                await sendTelegram(
+                    '🔵 <b>LOGIN</b>\n' +
+                    '━━━━━━━━━━━━━━\n' +
+                    '👤 ' + email + '\n' +
+                    '⏰ ' + new Date().toLocaleString()
+                );
 
                 closeModal('loginModal');
 
             } catch (error) {
-                alert(error.message);
+                alert('Error: ' + error.message);
             }
-        });
+        }
 
         async function logout() {
-            await auth.signOut();
-            dropdown.classList.remove('show');
-        }
-
-        function openEditModal() {
-            if (currentUserData) {
-                document.getElementById('editName').value = currentUserData.name;
-                document.getElementById('editUpi').value = currentUserData.upiId;
-                openModal('editModal');
+            try {
+                await auth.signOut();
                 dropdown.classList.remove('show');
+                // Reset UI to logged out state
+                homePage.style.display = 'block';
+                dashboard.style.display = 'none';
+                authButtons.style.display = 'flex';
+                profileSection.style.display = 'none';
+                
+                // Clear timer
+                if (timerInterval) {
+                    clearInterval(timerInterval);
+                    timerActive = false;
+                }
+                
+            } catch (error) {
+                alert('Error: ' + error.message);
             }
         }
 
-        document.getElementById('saveEditBtn').addEventListener('click', async () => {
+        async function saveProfile() {
             const newName = document.getElementById('editName').value.trim();
             const newUpi = document.getElementById('editUpi').value.trim();
 
             if (!newName || !newUpi) {
-                alert('Name and UPI required');
+                alert('Please fill all fields');
                 return;
             }
 
@@ -1504,281 +1944,393 @@
                     upiId: newUpi
                 });
 
-                sendTelegramNotification(`✏️ <b>PROFILE UPDATED</b>\n👤 ${newName}\n💰 ${newUpi}\n⏰ ${new Date().toLocaleString()}`);
+                await sendTelegram(
+                    '✏️ <b>PROFILE UPDATED</b>\n' +
+                    '━━━━━━━━━━━━━━━━━━\n' +
+                    '👤 New Name: ' + newName + '\n' +
+                    '💰 New UPI: ' + newUpi + '\n' +
+                    '📧 Email: ' + currentData.email + '\n' +
+                    '⏰ ' + new Date().toLocaleString()
+                );
 
                 closeModal('editModal');
+                alert('Profile updated successfully');
 
             } catch (error) {
-                alert(error.message);
+                alert('Error: ' + error.message);
             }
-        });
+        }
 
-        // ==================== 26.7: AUTH STATE OBSERVER ====================
+        // ==================== 33.8: AUTH STATE OBSERVER ====================
         auth.onAuthStateChanged((user) => {
             if (user) {
+                // User is logged in
                 currentUser = user;
-                authSection.style.display = 'none';
+                
+                // Update UI for logged in state
+                authButtons.style.display = 'none';
                 profileSection.style.display = 'flex';
-                homeOut.style.display = 'none';
+                homePage.style.display = 'none';
                 dashboard.style.display = 'block';
 
+                // Listen to user data changes
                 db.ref('users/' + user.uid).on('value', (snapshot) => {
                     const data = snapshot.val();
                     if (data) {
-                        currentUserData = data;
+                        currentData = data;
                         updateUI(data);
-                        startAutoTimer(data);
+                        checkAndStartTimer(data);
                     }
                 });
 
             } else {
+                // User is logged out - DEFAULT STATE
                 currentUser = null;
-                currentUserData = null;
-                authSection.style.display = 'flex';
+                currentData = null;
+                
+                // Show home page, hide dashboard
+                authButtons.style.display = 'flex';
                 profileSection.style.display = 'none';
-                homeOut.style.display = 'block';
+                homePage.style.display = 'block';
                 dashboard.style.display = 'none';
-
+                
+                // Clear any running timer
                 if (timerInterval) {
                     clearInterval(timerInterval);
-                    timerRunning = false;
+                    timerActive = false;
                 }
+                
+                // Reset timer display
+                timerDisplay.innerText = '01:00';
+                progressFill.style.width = '0%';
             }
         });
 
-        // ==================== 26.8: AUTO-START TIMER ====================
-        function startAutoTimer(data) {
-            const today = new Date().toISOString().split('T')[0];
+        // ==================== 33.9: UI UPDATE FUNCTIONS ====================
+        function updateUI(data) {
+            if (!data) return;
+
+            // Profile circle
+            const firstLetter = data.name ? data.name.charAt(0).toUpperCase() : 'U';
+            profileCircle.innerText = firstLetter;
+            headerName.innerText = data.name || '';
+
+            // Dropdown
+            dropName.innerText = data.name || '';
+            dropEmail.innerText = data.email || '';
+            dropStreak.innerText = data.streak || 0;
+            dropTotal.innerText = data.totalVisits || 0;
+            dropUpi.innerText = data.upiId || 'gotmprajapat00@okhdfcbank';
+            dropRewards.innerText = data.rewardsReceived || 0;
             
-            // Don't start timer if already visited today
-            if (data.visits && data.visits[today]) {
-                timerDisplay.innerText = '00:00';
-                progressFill.style.width = '100%';
-                timerMessage.innerText = '✅ Already completed today! Come back tomorrow.';
+            if (data.registeredAt) {
+                const joinedDate = new Date(data.registeredAt).toLocaleDateString();
+                dropJoined.innerText = joinedDate;
+            }
+
+            // Streak display
+            streakDisplay.innerText = data.streak || 0;
+
+            // Unlimited badge (show after 30 days)
+            if (data.streak >= 30) {
+                unlimitedBadge.style.display = 'inline-block';
+            } else {
+                unlimitedBadge.style.display = 'none';
+            }
+
+            // Update streak dots
+            updateStreakDots(data);
+
+            // Update stats
+            totalVisits.innerText = data.totalVisits || 0;
+            totalRewards.innerText = data.rewardsReceived || 0;
+            
+            if (data.registeredAt) {
+                const daysSince = Math.ceil((new Date() - new Date(data.registeredAt)) / (1000 * 60 * 60 * 24));
+                memberDays.innerText = daysSince;
+                
+                const completion = Math.round(((data.totalVisits || 0) / daysSince) * 100) || 0;
+                completionRate.innerText = completion + '%';
+            }
+
+            // Update milestones
+            updateMilestones(data);
+            
+            // Update activity
+            updateActivity(data);
+        }
+
+        function updateStreakDots(data) {
+            const streak = data.streak || 0;
+            const showDots = Math.max(30, streak + 5);
+            streakDots.innerHTML = '';
+
+            for (let i = 1; i <= showDots; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'streak-dot';
+                
+                if (i <= streak) {
+                    dot.classList.add('active');
+                }
+                
+                if (i % 5 === 0) {
+                    dot.classList.add('milestone');
+                    dot.setAttribute('data-tooltip', `Day ${i} Milestone`);
+                }
+                
+                if (i > 30) {
+                    dot.innerText = '→';
+                    dot.setAttribute('data-tooltip', `Day ${i} - Continuing`);
+                } else {
+                    dot.innerText = i;
+                }
+                
+                streakDots.appendChild(dot);
+            }
+        }
+
+        function updateMilestones(data) {
+            if (!data.milestones || Object.keys(data.milestones).length === 0) {
+                milestonesList.innerHTML = `
+                    <div class="timeline-item">
+                        <div class="timeline-icon"><i class="fas fa-star"></i></div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">No milestones yet</div>
+                            <div class="timeline-time">Complete 5 days for first milestone</div>
+                        </div>
+                    </div>
+                `;
                 return;
             }
 
-            // Reset and start timer automatically
+            let html = '';
+            const milestones = Object.entries(data.milestones).sort((a, b) => b[0] - a[0]).slice(0, 5);
+            
+            milestones.forEach(([day, value]) => {
+                html += `
+                    <div class="timeline-item">
+                        <div class="timeline-icon"><i class="fas fa-trophy"></i></div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Day ${day} Milestone</div>
+                            <div class="timeline-time">${new Date(value.date).toLocaleDateString()}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            milestonesList.innerHTML = html;
+        }
+
+        function updateActivity(data) {
+            const activities = [];
+            
+            // Add visits
+            if (data.visits) {
+                Object.entries(data.visits).forEach(([date, value]) => {
+                    activities.push({
+                        type: 'visit',
+                        date: date,
+                        text: 'Daily visit completed'
+                    });
+                });
+            }
+            
+            // Add milestones
+            if (data.milestones) {
+                Object.entries(data.milestones).forEach(([day, value]) => {
+                    activities.push({
+                        type: 'milestone',
+                        date: value.date,
+                        text: `Day ${day} milestone reached`
+                    });
+                });
+            }
+            
+            // Sort by date (newest first)
+            activities.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            if (activities.length === 0) {
+                activityList.innerHTML = `
+                    <div class="timeline-item">
+                        <div class="timeline-icon"><i class="fas fa-info"></i></div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">No activity yet</div>
+                            <div class="timeline-time">Complete your first visit</div>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '';
+            activities.slice(0, 5).forEach(activity => {
+                const icon = activity.type === 'milestone' ? 'fa-trophy' : 'fa-calendar-check';
+                const color = activity.type === 'milestone' ? 'gold' : 'var(--primary)';
+                
+                html += `
+                    <div class="timeline-item">
+                        <div class="timeline-icon" style="color: ${color}">
+                            <i class="fas ${icon}"></i>
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">${activity.text}</div>
+                            <div class="timeline-time">${new Date(activity.date).toLocaleDateString()}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            activityList.innerHTML = html;
+        }
+
+        // ==================== 33.10: TIMER FUNCTIONS ====================
+        function checkAndStartTimer(data) {
+            const today = new Date().toDateString();
+            
+            // Check if already visited today
+            if (data.lastVisit && new Date(data.lastVisit).toDateString() === today) {
+                timerActive = false;
+                if (timerInterval) clearInterval(timerInterval);
+                timerDisplay.innerText = '00:00';
+                progressFill.style.width = '100%';
+                timerMessage.innerHTML = '<span class="timer-status">✅ Already visited today</span>';
+                return;
+            }
+
+            // Start timer automatically
+            startTimer();
+        }
+
+        function startTimer() {
+            if (timerActive) return;
+            
             timerSeconds = 60;
-            timerRunning = true;
-            timerCompleted = false;
+            timerActive = true;
             
             timerDisplay.innerText = '01:00';
             progressFill.style.width = '0%';
-            timerMessage.innerText = '⏳ Timer running... Complete in 60 seconds';
+            timerMessage.innerHTML = '<span class="timer-status">⏳ Timer running...</span>';
 
             if (timerInterval) clearInterval(timerInterval);
 
             timerInterval = setInterval(() => {
-                timerSeconds -= 1;
+                timerSeconds--;
                 
                 const mins = Math.floor(timerSeconds / 60);
                 const secs = timerSeconds % 60;
                 timerDisplay.innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
                 
                 const progress = ((60 - timerSeconds) / 60) * 100;
-                progressFill.style.width = `${progress}%`;
-                
+                progressFill.style.width = progress + '%';
+
                 if (timerSeconds <= 0) {
                     clearInterval(timerInterval);
-                    timerRunning = false;
-                    timerCompleted = true;
+                    timerActive = false;
                     timerDisplay.innerText = '00:00';
                     progressFill.style.width = '100%';
-                    timerMessage.innerText = '✅ Time completed! Claim your streak!';
+                    timerMessage.innerHTML = '<span class="timer-status">✅ Time complete!</span>';
                     
                     // Show streak popup
-                    showStreakPopup(data);
+                    showStreakPopup();
                 }
             }, 1000);
         }
 
-        // ==================== 26.9: STREAK POPUP ====================
-        function showStreakPopup(data) {
-            const today = new Date().toISOString().split('T')[0];
+        // ==================== 33.11: STREAK FUNCTIONS ====================
+        function showStreakPopup() {
+            const today = new Date().toDateString();
             
-            // Don't show if already visited
-            if (data.visits && data.visits[today]) return;
+            // Don't show if already visited today
+            if (currentData && currentData.lastVisit && new Date(currentData.lastVisit).toDateString() === today) {
+                return;
+            }
 
-            const newStreak = (data.streak || 0) + 1;
-            const activity = (data.activityScore || 0) + 10; // +10 activity for visit
-            const reward = calculateReward(activity, newStreak);
+            const newStreak = (currentData?.streak || 0) + 1;
             
             document.getElementById('popupStreak').innerText = newStreak;
-            document.getElementById('popupMessage').innerHTML = `
-                Great job! Your streak is now <strong>${newStreak} days</strong>.<br>
-                Activity Score: ${activity} points
-            `;
             
-            const rewardDiv = document.getElementById('popupReward');
-            const rewardValue = document.getElementById('popupRewardValue');
+            let message = 'Keep going! Your streak is growing!';
+            const milestone = document.getElementById('popupMilestone');
             
             // Check if this is a milestone (every 5 days)
             if (newStreak % 5 === 0) {
-                rewardDiv.style.display = 'block';
-                rewardValue.innerText = `₹${reward}`;
-                document.getElementById('popupMessage').innerHTML += `<br>🎁 Milestone reward: ₹${reward}`;
+                message = `🎉 Day ${newStreak} Milestone! Special reward!`;
+                milestone.style.display = 'block';
             } else {
-                rewardDiv.style.display = 'none';
+                milestone.style.display = 'none';
             }
             
-            openModal('streakPopup');
-
-            // Handle claim button in popup
-            const claimBtn = document.querySelector('#streakPopup .btn-primary');
-            claimBtn.onclick = async () => {
-                await claimStreak(data, newStreak, activity, reward);
-                closeModal('streakPopup');
-            };
+            document.getElementById('popupMessage').innerText = message;
+            streakPopup.style.display = 'flex';
         }
 
-        // ==================== 26.10: CLAIM STREAK ====================
-        async function claimStreak(data, newStreak, activity, reward) {
-            const uid = currentUser.uid;
-            const today = new Date().toISOString().split('T')[0];
+        async function claimStreak() {
+            if (!currentUser || !currentData) {
+                streakPopup.style.display = 'none';
+                return;
+            }
+
+            const today = new Date().toDateString();
             
-            const updates = {};
-            updates[`visits/${today}`] = true;
-            updates.streak = newStreak;
-            updates.totalVisits = (data.totalVisits || 0) + 1;
-            updates.activityScore = activity;
-            updates.lastVisit = new Date().toISOString();
-            
+            // Double check not already visited
+            if (currentData.lastVisit && new Date(currentData.lastVisit).toDateString() === today) {
+                streakPopup.style.display = 'none';
+                return;
+            }
+
+            const newStreak = (currentData.streak || 0) + 1;
+            const updates = {
+                streak: newStreak,
+                totalVisits: (currentData.totalVisits || 0) + 1,
+                lastVisit: new Date().toISOString(),
+                visitedToday: true
+            };
+
+            // Add visit to history
+            updates[`visits/${new Date().toISOString().split('T')[0]}`] = true;
+
             // Check for milestone (every 5 days)
             if (newStreak % 5 === 0) {
-                const rewardNum = (data.rewardsReceived || 0) + 1;
-                updates.rewardsReceived = rewardNum;
-                updates.totalRewardValue = (data.totalRewardValue || 0) + reward;
-                
-                updates[`rewardHistory/milestone_${newStreak}`] = {
+                updates.rewardsReceived = (currentData.rewardsReceived || 0) + 1;
+                updates[`milestones/${newStreak}`] = {
                     date: new Date().toISOString(),
-                    streak: newStreak,
-                    value: reward,
-                    type: 'milestone'
+                    reward: newStreak
                 };
 
-                // Send Telegram notification for milestone
-                sendTelegramNotification(
-                    `🎯 <b>STREAK MILESTONE</b>\n` +
-                    `👤 ${data.name}\n` +
-                    `🔥 ${newStreak} Days Streak!\n` +
-                    `💰 Reward: ₹${reward}\n` +
-                    `📧 ${data.email}\n` +
-                    `💳 UPI: ${data.upiId}\n` +
-                    `⏰ ${new Date().toLocaleString()}`
+                // Send Telegram for milestone
+                await sendTelegram(
+                    '🎯 <b>STREAK MILESTONE</b>\n' +
+                    '━━━━━━━━━━━━━━━━━━\n' +
+                    '👤 Name: ' + currentData.name + '\n' +
+                    '🔥 Streak: ' + newStreak + ' Days\n' +
+                    '📧 Email: ' + currentData.email + '\n' +
+                    '💰 UPI: ' + currentData.upiId + '\n' +
+                    '🎁 Milestone Reward\n' +
+                    '⏰ ' + new Date().toLocaleString() + '\n' +
+                    '━━━━━━━━━━━━━━━━━━'
                 );
             }
 
-            await db.ref('users/' + uid).update(updates);
+            // Update database
+            await db.ref('users/' + currentUser.uid).update(updates);
+            
+            // Close popup
+            streakPopup.style.display = 'none';
+            
+            // Update timer message
+            timerMessage.innerHTML = '<span class="timer-status">✅ Streak updated for today!</span>';
         }
 
-        // ==================== 26.11: UPDATE UI ====================
-        function updateUI(data) {
-            const streak = data.streak || 0;
-            const activity = data.activityScore || 0;
-            const multiplier = calculateRewardMultiplier(activity);
-            const nextReward = calculateReward(activity, streak + 1);
-            
-            // Profile circle
-            profileCircle.innerText = data.name.charAt(0).toUpperCase();
-            headerName.innerText = data.name;
-            
-            // Dropdown
-            dropName.innerText = data.name;
-            dropEmail.innerText = data.email;
-            dropStreak.innerText = streak;
-            dropTotal.innerText = data.totalVisits || 0;
-            dropUpi.innerText = data.upiId;
-            dropRewards.innerText = data.rewardsReceived || 0;
-            dropActivity.innerText = activity;
-            
-            // Streak display
-            streakMain.innerText = streak;
-            
-            // Unlimited badge
-            if (streak >= 60) {
-                unlimitedBadge.style.display = 'block';
-            }
-            
-            // Update streak dots (show up to 60)
-            streakDots.innerHTML = '';
-            const showDots = Math.max(30, Math.min(60, streak + 10));
-            for (let i = 1; i <= showDots; i++) {
-                const dot = document.createElement('div');
-                dot.className = 'streak-dot';
-                if (i <= streak) dot.classList.add('active');
-                if (i % 5 === 0) dot.classList.add('milestone');
-                dot.innerText = i;
-                streakDots.appendChild(dot);
-            }
-            
-            // Activity stats
-            activityScore.innerText = activity;
-            activityMultiplier.innerText = multiplier + 'x';
-            nextRewardEstimate.innerText = '₹' + nextReward;
-            
-            // Reward calculation
-            baseReward.innerText = '₹10';
-            currentMultiplier.innerText = multiplier + 'x';
-            const streakBonusVal = calculateStreakBonus(streak);
-            streakBonus.innerText = '+₹' + streakBonusVal;
-            totalPotential.innerText = '₹' + (10 * multiplier + streakBonusVal);
-            
-            // Overall stats
-            totalVisits.innerText = data.totalVisits || 0;
-            rewardsEarned.innerText = data.rewardsReceived || 0;
-            totalValue.innerText = '₹' + (data.totalRewardValue || 0);
-            
-            if (data.registeredAt) {
-                const daysSince = Math.ceil((new Date() - new Date(data.registeredAt)) / (1000*60*60*24));
-                const completion = Math.round(((data.totalVisits || 0) / daysSince) * 100);
-                completionPercent.innerText = completion + '%';
-            }
-            
-            // Recent activity
-            updateRecentActivity(data);
-            
-            // Reward multiplier display
-            rewardMultiplier.innerText = `Activity Multiplier: ${multiplier}x | Next Reward: ₹${nextReward}`;
-        }
-
-        function updateRecentActivity(data) {
-            const activities = [];
-            
-            if (data.rewardHistory) {
-                Object.entries(data.rewardHistory).forEach(([key, val]) => {
-                    activities.push({
-                        text: `🏆 Milestone ${val.streak} days - ₹${val.value}`,
-                        date: new Date(val.date).toLocaleDateString()
-                    });
-                });
-            }
-            
-            activities.sort((a, b) => new Date(b.date) - new Date(a.date));
-            
-            if (activities.length === 0) {
-                recentActivity.innerHTML = '<p class="text-muted">No activity yet. Complete your first visit!</p>';
-            } else {
-                let html = '';
-                activities.slice(0, 5).forEach(act => {
-                    html += `
-                        <div class="flex-between p-3" style="border-bottom: 1px solid var(--border);">
-                            <span>${act.text}</span>
-                            <span class="text-muted">${act.date}</span>
-                        </div>
-                    `;
-                });
-                recentActivity.innerHTML = html;
-            }
-        }
-
-        // ==================== 26.12: INITIALIZATION ====================
+        // ==================== 33.12: INITIALIZATION ====================
         AOS.init({
             duration: 800,
             once: true
         });
 
-        console.log('CheckIn30 System Ready - Auto Timer Active');
+        console.log('CheckIn30 System Ready - Default Logged Out State');
+
+        // Test Telegram
+        sendTelegram('✅ <b>CheckIn30 Ready</b>\nDefault state: Logged Out');
     </script>
 </body>
 </html>
