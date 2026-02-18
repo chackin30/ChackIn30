@@ -1881,38 +1881,6 @@
             timerMessage.innerText = '✅ Streak updated for today!';
         }
     </script>
-    <div id="appPopup" style="display:none; position:fixed; bottom:20px; left:50%; transform:translateX(-50%);
-background:#ff5722; color:white; padding:15px 20px; border-radius:10px;
-box-shadow:0 5px 15px rgba(0,0,0,0.3); z-index:9999; font-family:sans-serif;">
-
-  📲 Install CheckIn30 App for Faster Access!
-
-  <a href="app3928277-n0l2m8.apk" id="downloadBtn"
-     style="color:yellow; font-weight:bold; margin-left:10px;">
-     Download
-  </a>
-
-  <span onclick="closePopup()" 
-        style="margin-left:10px; cursor:pointer;">✖</span>
-</div>
-
-<script>
-function closePopup() {
-  document.getElementById("appPopup").style.display = "none";
-}
-
-// Show popup only if not downloaded
-if (!localStorage.getItem("appInstalled")) {
-  setTimeout(function() {
-    document.getElementById("appPopup").style.display = "block";
-  }, 3000);
-}
-
-// When user clicks download
-document.getElementById("downloadBtn").addEventListener("click", function() {
-  localStorage.setItem("appInstalled", "yes");
-});
-</script>
     <script src="https://pl28732651.effectivegatecpm.com/4d/ea/0e/4dea0e8f8beb35c2c268f4543fc42799.js"></script>
 </body>
 </html>
