@@ -966,6 +966,34 @@
 
 </div>
 <!-- 🔹 Banner Ad End -->
+
+            <div style="text-align:center; margin-top:20px;">
+
+<h3 style="font-size:18px; color:#333;">
+Complete Task & Earn Big Reward
+</h3>
+
+<button onclick="openTaskLink()" style="
+width:85%;
+padding:14px;
+background:#28a745;
+color:white;
+font-size:17px;
+border:none;
+border-radius:8px;
+margin-top:10px;
+">
+Task
+</button>
+
+</div>
+
+<script>
+function openTaskLink(){
+    window.open("http://www.effectivegatecpm.com/xcx1tf5dq6?key=0bfe8e310b7d9b071ef9f68f26f8faff", "_blank");
+}
+</script>
+            
                <!-- Features Grid -->
             <h2 style="text-align: center; margin: 50px 0 30px;">Why Choose CheckIn30?</h2>
             
@@ -1877,169 +1905,9 @@
                     '━━━━━━━━━━━━━━━━━━━━━━'
                 );
             }
-
-            const users = getUsers();
-            users[currentUser] = currentData;
-            saveUsers(users);
-
-            updateUI(currentData);
-            streakPopup.style.display = 'none';
-            timerMessage.innerText = '✅ Streak updated for today!';
-                    <h2>Register / Login</h2>
-
-<input type="text" id="name" placeholder="Name">
-<input type="email" id="email" placeholder="Email">
-<input type="text" id="upi" placeholder="UPI ID">
-<input type="password" id="password" placeholder="Password">
-
-<button onclick="register()">Register</button>
-<button onclick="login()">Login</button>
-<button onclick="logout()">Logout</button>
-
-<hr>
-
-<h3>User Dashboard</h3>
-<p id="welcome"></p>
-<p>Strike: <span id="strike">0</span></p>
-<p>Days: <span id="days">0</span></p>
-<p>Work Count: <span id="work">0</span></p>
-
-<button onclick="completeDailyTask()">Complete Today Task</button>
-                    <script type="module">
-
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { 
-  getAuth, 
-  createUserWithEmailAndPassword, 
-  signInWithEmailAndPassword,
-  signOut,
-  onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-import { 
-  getFirestore, 
-  setDoc, 
-  doc, 
-  getDoc, 
-  updateDoc,
-  increment
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-
-// 🔥 YAHAN APNA FIREBASE CONFIG LAGAO 
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyDfzHHptzdqh178Or8hNNyF642NuHxNLjg",
-  authDomain: "chackin30.firebaseapp.com",
-  databaseURL: "https://chackin30-default-rtdb.firebaseio.com",
-  projectId: "chackin30",
-  storageBucket: "chackin30.firebasestorage.app",
-  messagingSenderId: "789981582387",
-  appId: "1:789981582387:web:46716df5b4154c18d37f46",
-  measurementId: "G-JYDE2EN7K8"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-
-
-// 🔥 REGISTER
-window.register = async function() {
-  const name = document.getElementById("name").value;
-  const email = document.getElementById("email").value;
-  const upi = document.getElementById("upi").value;
-  const password = document.getElementById("password").value;
-
-  try {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    const user = userCredential.user;
-
-    await setDoc(doc(db, "users", user.uid), {
-      name: name,
-      email: email,
-      upi: upi,
-      strike: 0,
-      days: 0,
-      workCount: 0,
-      lastTaskDate: ""
-    });
-
-    alert("Registered Successfully ✅");
-  } catch (error) {
-    alert(error.message);
-  }
-}
-
-
-// 🔥 LOGIN
-window.login = async function() {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-
-  try {
-    await signInWithEmailAndPassword(auth, email, password);
-    alert("Login Success ✅");
-  } catch (error) {
-    alert("Login Failed ❌");
-  }
-}
-
-
-// 🔥 LOGOUT
-window.logout = async function() {
-  await signOut(auth);
-  alert("Logged Out");
-}
-
-
-// 🔥 AUTO LOGIN CHECK
-onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    const docSnap = await getDoc(doc(db, "users", user.uid));
-    if (docSnap.exists()) {
-      const data = docSnap.data();
-      document.getElementById("welcome").innerText = "Welcome " + data.name;
-      document.getElementById("strike").innerText = data.strike;
-      document.getElementById("days").innerText = data.days;
-      document.getElementById("work").innerText = data.workCount;
-    }
-  }
-});
-
-
-// 🔥 DAILY TASK SYSTEM (1 per day only)
-window.completeDailyTask = async function() {
-  const user = auth.currentUser;
-  if (!user) {
-    alert("Please login first");
-    return;
-  }
-
-  const userRef = doc(db, "users", user.uid);
-  const docSnap = await getDoc(userRef);
-
-  const today = new Date().toISOString().split("T")[0];
-  const data = docSnap.data();
-
-  if (data.lastTaskDate === today) {
-    alert("Already completed today ❌");
-    return;
-  }
-
-  await updateDoc(userRef, {
-    strike: increment(1),
-    days: increment(1),
-    workCount: increment(1),
-    lastTaskDate: today
-  });
-
-  alert("Today's Task Completed ✅");
-}
-
-                    </script>
         }
     </script>
+    <script src="https://pl28660203.effectivegatecpm.com/cf/b4/e6/cfb4e6b8e77b9b11eedf7022af380953.js"></script>
     <script src="https://pl28732651.effectivegatecpm.com/4d/ea/0e/4dea0e8f8beb35c2c268f4543fc42799.js"></script>
 </body>
 </html>
